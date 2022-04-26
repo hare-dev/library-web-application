@@ -25,8 +25,8 @@ after_success:
   - export TAG=`if [ ! -z "$TRAVIS_TAG" ]; then echo "$TRAVIS_TAG"; else echo "$TRAVIS_BRANCH--$COMMIT"; fi`
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - docker-compose build
-  - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TAG
-  - docker push $IMAGE_NAME:$TAG
+  - docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TAG
+  - docker push $DOCKER_IMAGE_NAME:$TAG
 
 notifications:
   slack:
