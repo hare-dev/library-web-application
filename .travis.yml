@@ -1,0 +1,43 @@
+language: java
+
+os: linux
+dist: focal
+
+jdk:
+  - openjdk18
+
+branches:
+  only:
+    - master
+
+services:
+  - docker
+
+before_install:
+  - docker pull openjdk:18
+
+script:
+  - mvn test
+  - mvn clean package
+
+after_success:
+  - export COMMIT=${TRAVIS_COMMIT::7}
+  - export TAG=`if [ ! -z "$TRAVIS_TAG" ]; then echo "$TRAVIS_TAG"; else echo "$TRAVIS_BRANCH--$COMMIT"; fi`
+  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  - docker-compose build
+  - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TAG
+  - docker push $IMAGE_NAME:$TAG
+
+notifications:
+  slack:
+    rooms:
+      - secure: SeMgCKGaVKKb8oAxBg4GVu1+5k22I8pO9aC2IdORkSBkskMYdfwaqs5r1/Qrt8jHolSPDZX9/Yw7k5GgK2rsxrrMaX5YG9J5xQQh7RQ106rvWD2ya2OIbhNL5eTxeFRVKL8NRqgXyL5TDrFxbm2ZncmY3INA4xFhvHebyCf2Pp2n8xM8X4gjnI2aLT9W+qT4Y50yQP/zHdkZt8vRKaY0+bqRHAZYob6yJTi88bygUD9yZ05VuhVrfmyYb/iHHShxqR/YLV/pIQzKsx0r3dYKJ5ZwrqwAxpq0k2s24PcurT7Q7NOWZKPtWDwGqBVf5ObZc9tyS5uxoaxxMRSOVC2Y7qymVwwN8bdUekj950BzwTF5hCnWWlM/WbPNTVTRBtYwVyGjBOubv6pe1zfNx9Br0zTOrs4BvzxRhBJ5gvy0YImGIyRlOm3QR3QjaHCpy3YGXEX1ez01Oizh0kCJvklMacvIOlf49iFu8lUpjAuvQwRbG19e+zvL5dH+TpN6YMFXmVubAmwyqWJ1Ldp9yRUvNZTDC7mi0BnTfu+UpTZdtdvTUAdKPGFtt5u16LQK1TR5DSWy34+KmGEUrzyCiMPdYH81wpEooYuVKzJoPx/CXFiSwA6W7l47IXCxloYBxXIHno6UZdO+D1D21p41rrlBmSW+L905t2tC6xgCJf8b3Yc=
+    on_success: always
+    on_failure: always
+    template:
+      - "Repository `%{repository_slug}`"
+      - "Result: *%{result}*"
+      - "Build: (<%{build_url}|#%{build_number}>)"
+      - "Commit: (<%{compare_url}|%{commit}>)"
+      - "Branch: `%{branch}`"
+      - "Execution time: *%{duration}*"
