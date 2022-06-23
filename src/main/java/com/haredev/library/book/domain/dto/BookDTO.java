@@ -11,13 +11,13 @@ public class BookDTO {
     private final UUID bookId;
     private String title;
     private String author;
-    private String description;
-    private Integer yearPublication;
-    private Integer pageNumber;
     private String isbn;
     private String publisher;
+    private Integer yearPublication;
+    private Integer pageNumber;
     private String language;
     private BookType bookType;
     private BookCover bookCover;
     private BookStatus bookStatus;
+    private String description;
 }

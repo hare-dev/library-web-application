@@ -12,7 +12,7 @@ class InMemoryBookRepository implements BookRepository {
     @Override
     public Book save(Book book) {
         requireNonNull(book);
-        inMemory.put(book.dto().getBookId(), book);
+        inMemory.put(book.toDTO().getBookId(), book);
         return book;
     }
 
