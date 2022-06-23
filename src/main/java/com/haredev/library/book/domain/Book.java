@@ -1,9 +1,9 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.domain.dto.BookCover;
-import com.haredev.library.book.domain.dto.NewBookDto;
-import com.haredev.library.book.domain.dto.BookStatus;
-import com.haredev.library.book.domain.dto.BookType;
+import com.haredev.library.book.dto.BookCover;
+import com.haredev.library.book.dto.NewBookDto;
+import com.haredev.library.book.dto.BookStatus;
+import com.haredev.library.book.dto.BookType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

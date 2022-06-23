@@ -1,6 +1,6 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.domain.dto.NewBookDto;
+import com.haredev.library.book.dto.NewBookDto;
 
 class BookCreator {
     Book fromDTO(NewBookDto bookDto) {

@@ -1,4 +1,4 @@
-package com.haredev.library.book.domain.dto;
+package com.haredev.library.book.dto;
 
 import lombok.Builder;
 import lombok.Getter;
