@@ -1,11 +1,12 @@
 package com.haredev.library.book.domain;
 
 import com.haredev.library.book.domain.dto.BookCover;
-import com.haredev.library.book.domain.dto.BookDTO;
+import com.haredev.library.book.domain.dto.NewBookDto;
 import com.haredev.library.book.domain.dto.BookStatus;
 import com.haredev.library.book.domain.dto.BookType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Document(collection = "books")
 @AllArgsConstructor
 @Builder
+@Getter
 class Book {
         @Id
         private final UUID bookId;
@@ -29,8 +31,8 @@ class Book {
         private BookStatus bookStatus;
         private String description;
 
-        BookDTO toDTO() {
-                return BookDTO.builder()
+        NewBookDto toDTO() {
+                return NewBookDto.builder()
                         .bookId(bookId)
                         .title(title)
                         .author(author)

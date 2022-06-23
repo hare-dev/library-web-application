@@ -1,9 +1,9 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.domain.dto.BookDTO;
+import com.haredev.library.book.domain.dto.NewBookDto;
 
 class BookCreator {
-    Book fromDTO(BookDTO bookDto) {
+    Book fromDTO(NewBookDto bookDto) {
         return Book.builder()
                 .bookId(bookDto.getBookId())
                 .title(bookDto.getTitle())
