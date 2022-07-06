@@ -5,11 +5,13 @@ import com.haredev.library.book.dto.BookStatus;
 import com.haredev.library.book.dto.BookType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
 @Builder
+@Getter
 public class BookResponse {
     private UUID bookId;
     private String title;
