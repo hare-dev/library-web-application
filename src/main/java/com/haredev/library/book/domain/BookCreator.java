@@ -1,22 +1,22 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.dto.NewBookDto;
+import com.haredev.library.book.controller.input.BookRequest;
 
 class BookCreator {
-    Book fromDTO(NewBookDto bookDto) {
+    Book from(BookRequest request) {
         return Book.builder()
-                .bookId(bookDto.getBookId())
-                .title(bookDto.getTitle())
-                .author(bookDto.getAuthor())
-                .isbn(bookDto.getIsbn())
-                .publisher(bookDto.getPublisher())
-                .yearPublication(bookDto.getYearPublication())
-                .pageNumber(bookDto.getPageNumber())
-                .language(bookDto.getLanguage())
-                .bookType(bookDto.getBookType())
-                .bookCover(bookDto.getBookCover())
-                .bookCover(bookDto.getBookCover())
-                .description(bookDto.getDescription())
+                .bookId(request.getBookId())
+                .title(request.getTitle())
+                .author(request.getAuthor())
+                .isbn(request.getIsbn())
+                .publisher(request.getPublisher())
+                .yearPublication(request.getYearPublication())
+                .pageNumber(request.getPageNumber())
+                .language(request.getLanguage())
+                .bookType(request.getBookType())
+                .bookCover(request.getBookCover())
+                .bookCover(request.getBookCover())
+                .description(request.getDescription())
                 .build();
     }
 }

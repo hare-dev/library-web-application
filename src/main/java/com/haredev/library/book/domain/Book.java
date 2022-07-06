@@ -1,5 +1,6 @@
 package com.haredev.library.book.domain;
 
+import com.haredev.library.book.controller.output.BookResponse;
 import com.haredev.library.book.dto.BookCover;
 import com.haredev.library.book.dto.NewBookDto;
 import com.haredev.library.book.dto.BookStatus;
@@ -19,20 +20,20 @@ import java.util.UUID;
 class Book {
         @Id
         private final UUID bookId;
-        private String title;
-        private String author;
-        private String isbn;
-        private String publisher;
-        private Integer yearPublication;
-        private Integer pageNumber;
-        private String language;
-        private BookType bookType;
-        private BookCover bookCover;
-        private BookStatus bookStatus;
-        private String description;
+        private final String title;
+        private final String author;
+        private final String isbn;
+        private final String publisher;
+        private final Integer yearPublication;
+        private final Integer pageNumber;
+        private final String language;
+        private final BookType bookType;
+        private final BookCover bookCover;
+        private final BookStatus bookStatus;
+        private final String description;
 
-        NewBookDto toDTO() {
-                return NewBookDto.builder()
+        BookResponse toResponse() {
+                return BookResponse.builder()
                         .bookId(bookId)
                         .title(title)
                         .author(author)

@@ -1,20 +1,18 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.domain.api.BookError;
-import com.haredev.library.book.dto.NewBookDto;
+import com.haredev.library.book.controller.input.BookRequest;
+import com.haredev.library.book.controller.output.BookResponse;
+import com.haredev.library.infrastructure.errors.ErrorsConsumer;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
+
 
 @AllArgsConstructor
 public class BookFacade {
     private final BookRepository bookRepository;
     private final BookCreator bookCreator;
-    private final BookValidation bookValidation;
 
-    Either<BookError, NewBookDto> addBook(NewBookDto newBookDto) {
-        Book book = bookCreator.fromDTO(newBookDto);
-        return bookValidation
-                .validate(book)
-                .map(book -> bookRepository.save(book)).map(book.toDTO());
+    Either<ErrorsConsumer, BookResponse> addBook(BookRequest request) {
+        return null;
     }
 }
