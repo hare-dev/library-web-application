@@ -1,9 +1,10 @@
 package com.haredev.library.book.domain;
 
 import com.haredev.library.book.controller.input.BookRequest;
+import org.springframework.lang.NonNull;
 
 class BookCreator {
-    Book from(BookRequest request) {
+    Book from(@NonNull BookRequest request) {
         return Book.builder()
                 .bookId(request.getBookId())
                 .title(request.getTitle())

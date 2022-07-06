@@ -2,7 +2,6 @@ package com.haredev.library.book.domain;
 
 import com.haredev.library.book.controller.output.BookResponse;
 import com.haredev.library.book.dto.BookCover;
-import com.haredev.library.book.dto.NewBookDto;
 import com.haredev.library.book.dto.BookStatus;
 import com.haredev.library.book.dto.BookType;
 import lombok.AllArgsConstructor;
@@ -32,7 +31,7 @@ class Book {
         private final BookStatus bookStatus;
         private final String description;
 
-        BookResponse toResponse() {
+        BookResponse response() {
                 return BookResponse.builder()
                         .bookId(bookId)
                         .title(title)

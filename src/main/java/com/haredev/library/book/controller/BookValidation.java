@@ -1,4 +1,4 @@
-package com.haredev.library.book.domain;
+package com.haredev.library.book.controller;
 
 import com.haredev.library.book.controller.input.BookRequest;
 import io.vavr.collection.Seq;
