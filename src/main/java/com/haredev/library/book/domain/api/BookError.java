@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum BookError implements ResponseError {
-    ISBN_CODE_IS_INVALID("Isbn code is invalid", 400);
+    BOOK_NOT_FOUND("Book not found in database", 400);
 
     private final String message;
     private final int code;
