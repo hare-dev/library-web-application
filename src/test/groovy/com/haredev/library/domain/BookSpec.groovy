@@ -1,5 +1,6 @@
 package com.haredev.library.domain
 
+import com.haredev.library.book.controller.validation.BookValidation
 import com.haredev.library.book.domain.BookConfiguration
 import com.haredev.library.book.domain.BookFacade
 import spock.lang.Specification
@@ -12,7 +13,7 @@ class BookSpec extends Specification implements SampleBooks {
         facade.addBook(twilight)
 
         expect: "System has one book"
-        facade.findBook(twilight.bookId) == twilight
+        twilight == facade.findBook(twilight.bookId)
     }
 
     def "Remove book from system"() {
