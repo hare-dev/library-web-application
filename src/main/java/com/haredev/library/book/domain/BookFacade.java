@@ -11,6 +11,6 @@ public class BookFacade {
 
     public BookResponse addBook(BookRequest request) {
         Book book = bookCreator.from(request);
-        return bookRepository.save(book).response();
+        return bookRepository.insert(book).response();
     }
 }

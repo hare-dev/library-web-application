@@ -1,4 +1,4 @@
-package com.haredev.library.book.controller;
+package com.haredev.library.book.controller.validation;
 
 import com.haredev.library.book.controller.input.BookRequest;
 import io.vavr.collection.Seq;
@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.validator.routines.ISBNValidator;
 
 @AllArgsConstructor
-public class BookValidation {
+public final class BookValidation {
     private static final int MAX_AUTHOR_LENGTH = 50;
     private static final int MAX_TITLE_LENGTH = 100;
     private static final int MAX_LANGUAGE_LENGTH = 30;
