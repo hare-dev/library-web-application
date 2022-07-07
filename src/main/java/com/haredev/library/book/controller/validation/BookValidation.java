@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.validator.routines.ISBNValidator;
 
 @AllArgsConstructor
-class BookValidation {
+public class BookValidation {
     private static final int MAX_AUTHOR_LENGTH = 50;
     private static final int MAX_TITLE_LENGTH = 100;
     private static final int MAX_LANGUAGE_LENGTH = 30;
