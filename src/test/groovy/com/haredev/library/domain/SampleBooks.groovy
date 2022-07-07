@@ -1,13 +1,15 @@
 package com.haredev.library.domain
 
-import com.haredev.library.book.controller.output.BookResponse
+import com.haredev.library.book.controller.input.BookRequest
 import groovy.transform.CompileStatic
 
 @CompileStatic
 trait SampleBooks {
-    BookResponse twilight = createBookSample("Twilight", "Stephenie Meyer")
-    static private BookResponse createBookSample(String title, String author) {
-        return BookResponse.builder()
+    BookRequest twilight = createBookSample("Twilight", "Stephenie Meyer")
+    BookRequest django = createBookSample("Django", "Quentin Tarantino")
+
+    static private BookRequest createBookSample(String title, String author) {
+        return BookRequest.builder()
                 .title(title)
                 .author(author)
                 .build()
