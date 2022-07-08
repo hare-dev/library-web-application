@@ -36,9 +36,19 @@ class BookController {
         );
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     ResponseEntity<BookResponse> findBookById(@PathVariable UUID bookId) {
         Option<BookResponse> response = bookFacade.findBook(bookId);
         return ResponseResolver.resolve(response);
+    }
+
+    @GetMapping
+    List<BookResponse> fechAllBooksFromInventory() {
+       return bookFacade.fetchAllBooks();
+    }
+
+    @DeleteMapping("/{id}")
+    void removeBookFromSystem(@PathVariable UUID bookId) {
+        bookFacade.removeBook(bookId);
     }
 }
