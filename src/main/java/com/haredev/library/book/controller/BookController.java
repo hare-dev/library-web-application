@@ -9,6 +9,7 @@ import com.haredev.library.infrastructure.errors.ResponseResolver;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,6 @@ import static io.vavr.Patterns.$Valid;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("books")
 class BookController {
     private final BookFacade bookFacade;
     private final BookValidation bookValidation;
@@ -36,19 +36,19 @@ class BookController {
         );
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<BookResponse> findBookById(@PathVariable UUID bookId) {
+    @GetMapping("book/{id}")
+    ResponseEntity findBookById(@RequestParam UUID bookId) {
         Option<BookResponse> response = bookFacade.findBook(bookId);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping
+    @GetMapping("books")
     List<BookResponse> fechAllBooksFromInventory() {
        return bookFacade.fetchAllBooks();
     }
 
-    @DeleteMapping("/{id}")
-    void removeBookFromSystem(@PathVariable UUID bookId) {
+    @DeleteMapping("book/{id}")
+    void removeBookFromSystem(@RequestParam UUID bookId) {
         bookFacade.removeBook(bookId);
     }
 }
