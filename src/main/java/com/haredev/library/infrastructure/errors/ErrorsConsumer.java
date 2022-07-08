@@ -1,4 +1,4 @@
-package com.haredev.library.book.controller.validation;
+package com.haredev.library.infrastructure.errors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vavr.collection.List;
