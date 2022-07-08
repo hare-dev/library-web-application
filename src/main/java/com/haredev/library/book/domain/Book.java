@@ -37,14 +37,7 @@ class Book {
                         .title(title)
                         .author(author)
                         .isbn(isbn)
-                        .publisher(publisher)
-                        .yearPublication(yearPublication)
-                        .pageNumber(pageNumber)
-                        .language(language)
-                        .bookType(bookType)
-                        .bookCover(bookCover)
                         .bookStatus(bookStatus)
-                        .description(description)
                         .build();
         }
 }
