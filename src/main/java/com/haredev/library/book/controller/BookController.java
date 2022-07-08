@@ -42,7 +42,7 @@ class BookController {
     }
 
     @GetMapping("books")
-    List<BookResponse> fechAllBooksFromInventory() {
+    List<BookResponse> fetchAllBooksFromInventory() {
        return bookFacade.fetchAllBooks();
     }
 
