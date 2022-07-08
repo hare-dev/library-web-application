@@ -12,18 +12,18 @@ class BookSpec extends Specification implements SampleBooks {
         given: "Add book to system"
         facade.addBook(twilight)
 
-        expect: "System has one book"
-        twilight == facade.findBook(twilight.bookId)
+        expect: "System should have one book"
+        facade.findBook(twilight.bookId).equals(twilight)
     }
 
     def "Remove book from system"() {
-        given: "Add book to system"
+        given: "Add one book to system"
         facade.addBook(twilight)
 
-        when: "Remove book from system"
+        when: "Remove one book from system"
         facade.removeBook(twilight.bookId)
 
-        then: "System is empty"
+        then: "System should be empty"
         facade.fetchAllBooks().size() == 0
     }
 
@@ -32,7 +32,7 @@ class BookSpec extends Specification implements SampleBooks {
         facade.addBook(twilight)
         facade.addBook(django)
 
-        expect: "System has two books"
+        expect: "System should have two books"
         facade.fetchAllBooks().size() == 2
     }
 
@@ -45,7 +45,7 @@ class BookSpec extends Specification implements SampleBooks {
         facade.removeBook(django.bookId)
         facade.removeBook(twilight.bookId)
 
-        then: "System is empty"
+        then: "System should be empty"
         facade.fetchAllBooks().size() == 0
     }
 }
