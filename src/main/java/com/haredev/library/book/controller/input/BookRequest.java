@@ -5,12 +5,9 @@ import com.haredev.library.book.dto.BookStatus;
 import com.haredev.library.book.dto.BookType;
 import lombok.*;
 
-import java.util.UUID;
-
 @Getter
 @Builder
 public class BookRequest {
-    private UUID bookId;
     private String title;
     private String author;
     private String isbn;
@@ -23,10 +20,9 @@ public class BookRequest {
     private BookStatus bookStatus;
     private String description;
 
-    public BookRequest(UUID bookId, String title, String author, String isbn, String publisher,
+    public BookRequest(String title, String author, String isbn, String publisher,
                        Integer yearPublication, Integer pageNumber, String language,
                        BookType bookType, BookCover bookCover, BookStatus bookStatus, String description) {
-        this.bookId = UUID.randomUUID();
         this.title = title;
         this.author = author;
         this.isbn = isbn;

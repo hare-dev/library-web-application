@@ -3,10 +3,12 @@ package com.haredev.library.book.domain;
 import com.haredev.library.book.controller.input.BookRequest;
 import org.springframework.lang.NonNull;
 
+import java.util.UUID;
+
 class BookCreator {
     Book from(@NonNull BookRequest request) {
         return Book.builder()
-                .bookId(request.getBookId())
+                .bookId(UUID.randomUUID())
                 .title(request.getTitle())
                 .author(request.getAuthor())
                 .isbn(request.getIsbn())

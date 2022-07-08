@@ -28,7 +28,6 @@ public final class BookValidation {
                         validationLanguage(request.getLanguage()),
                         validationDescription(request.getDescription())
         ).ap((title, author, isbn, publisher, pageNumber, language, description) -> BookRequest.builder()
-                        .bookId(request.getBookId())
                         .title(title)
                         .author(author)
                         .isbn(isbn)
