@@ -79,7 +79,7 @@ public final class BookValidation {
     }
 
     private Validation<String, String> validationTitle(String title) {
-        return title.length() > MAX_TITLE_LENGTH
+        return (title.length() > MAX_TITLE_LENGTH || title.isEmpty())
                 ? Validation.invalid("Title length is longer than " + title.length() + " words")
                 : Validation.valid(title);
     }
