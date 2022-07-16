@@ -4,7 +4,7 @@ import com.haredev.library.book.controller.input.BookRequest;
 import com.haredev.library.book.controller.output.BookResponse;
 import com.haredev.library.book.controller.validation.BookValidation;
 import com.haredev.library.book.domain.BookFacade;
-import com.haredev.library.book.controller.validation.ErrorsConsumer;
+import com.haredev.library.infrastructure.errors.ValidationErrorsConsumer;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static com.haredev.library.book.controller.validation.ErrorsConsumer.*;
+import static com.haredev.library.infrastructure.errors.ValidationErrorsConsumer.*;
 import static io.vavr.API.*;
 import static io.vavr.Patterns.$Invalid;
 import static io.vavr.Patterns.$Valid;
@@ -29,7 +29,7 @@ class BookController {
     private final BookValidation bookValidation;
 
     @PostMapping
-    ResponseEntity<Either<ErrorsConsumer, BookResponse>> addBookToInventory(
+    ResponseEntity<Either<ValidationErrorsConsumer, BookResponse>> addBookToInventory(
             @RequestBody BookRequest request) {
         return Match(bookValidation.validate(request)).of(
                 Case($Valid($()), valid(request)),
@@ -53,11 +53,11 @@ class BookController {
         bookFacade.removeBook(bookId);
     }
 
-    private Function<Seq<String>, ResponseEntity<Either<ErrorsConsumer, BookResponse>>> invalid() {
-        return errors -> ResponseEntity.badRequest().body(Either.left(of((errors))));
+    private Function<Seq<String>, ResponseEntity<Either<ValidationErrorsConsumer, BookResponse>>> invalid() {
+        return errors -> ResponseEntity.badRequest().body(Either.left(errorsAsJson((errors))));
     }
 
-    private ResponseEntity<Either<ErrorsConsumer, BookResponse>> valid(BookRequest request) {
+    private ResponseEntity<Either<ValidationErrorsConsumer, BookResponse>> valid(BookRequest request) {
         return ResponseEntity.ok(Either.right(bookFacade.addBook(request)));
     }
 }
