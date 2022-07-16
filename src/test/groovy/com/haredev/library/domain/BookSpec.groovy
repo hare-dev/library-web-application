@@ -1,6 +1,5 @@
 package com.haredev.library.domain
 
-import com.haredev.library.book.controller.validation.BookValidation
 import com.haredev.library.book.domain.BookConfiguration
 import com.haredev.library.book.domain.BookFacade
 import spock.lang.Specification

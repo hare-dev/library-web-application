@@ -4,12 +4,8 @@ import com.haredev.library.book.controller.input.BookRequest;
 import com.haredev.library.book.controller.output.BookResponse;
 import com.haredev.library.book.controller.validation.BookValidation;
 import com.haredev.library.book.domain.BookFacade;
-<<<<<<< HEAD
-import com.haredev.library.infrastructure.errors.ErrorsConsumer;
-=======
-import com.haredev.library.infrastructure.errors.ValidationErrorsConsumer;
->>>>>>> feature
 import com.haredev.library.infrastructure.errors.ResponseResolver;
+import com.haredev.library.infrastructure.errors.ValidationErrorsConsumer;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -21,11 +17,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
-<<<<<<< HEAD
-import static com.haredev.library.infrastructure.errors.ErrorsConsumer.*;
-=======
-import static com.haredev.library.infrastructure.errors.ValidationErrorsConsumer.*;
->>>>>>> feature
+import static com.haredev.library.infrastructure.errors.ValidationErrorsConsumer.errorsAsJson;
 import static io.vavr.API.*;
 import static io.vavr.Patterns.$Invalid;
 import static io.vavr.Patterns.$Valid;
