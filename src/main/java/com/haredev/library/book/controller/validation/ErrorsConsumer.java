@@ -10,16 +10,16 @@ import static io.vavr.Predicates.isNull;
 
 @Getter
 public final class ErrorsConsumer {
-    private final Seq<String> messages;
+    private final Seq<String> errors;
 
-    ErrorsConsumer(@JsonProperty("messages") Seq<String> messages) {
-        this.messages = messages;
+    ErrorsConsumer(@JsonProperty("messages") Seq<String> errors) {
+        this.errors = errors;
     }
 
-    public static ErrorsConsumer of(Seq<String> messages) {
-        return Match(messages).of(
+    public static ErrorsConsumer of(Seq<String> errors) {
+        return Match(errors).of(
                 Case($(isNull()), () -> new ErrorsConsumer(List.empty())),
-                Case($(), () -> new ErrorsConsumer(messages))
+                Case($(), () -> new ErrorsConsumer(errors))
         );
     }
 }
