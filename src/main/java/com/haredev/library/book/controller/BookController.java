@@ -4,8 +4,13 @@ import com.haredev.library.book.controller.input.BookRequest;
 import com.haredev.library.book.controller.output.BookResponse;
 import com.haredev.library.book.controller.validation.BookValidation;
 import com.haredev.library.book.domain.BookFacade;
+<<<<<<< HEAD
 import com.haredev.library.infrastructure.errors.ErrorsConsumer;
+=======
+import com.haredev.library.infrastructure.errors.ValidationErrorsConsumer;
+>>>>>>> feature
 import com.haredev.library.infrastructure.errors.ResponseResolver;
+import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
@@ -14,8 +19,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
+<<<<<<< HEAD
 import static com.haredev.library.infrastructure.errors.ErrorsConsumer.*;
+=======
+import static com.haredev.library.infrastructure.errors.ValidationErrorsConsumer.*;
+>>>>>>> feature
 import static io.vavr.API.*;
 import static io.vavr.Patterns.$Invalid;
 import static io.vavr.Patterns.$Valid;
@@ -27,11 +37,11 @@ class BookController {
     private final BookValidation bookValidation;
 
     @PostMapping
-    ResponseEntity<Either<ErrorsConsumer, BookResponse>> addBookToInventory(
+    ResponseEntity<Either<ValidationErrorsConsumer, BookResponse>> addBookToInventory(
             @RequestBody BookRequest request) {
         return Match(bookValidation.validate(request)).of(
-                Case($Valid($()), ResponseEntity.ok(Either.right(bookFacade.addBook(request)))),
-                Case($Invalid($()), errors -> ResponseEntity.badRequest().body(Either.left(of((errors)))))
+                Case($Valid($()), valid(request)),
+                Case($Invalid($()), invalid())
         );
     }
 
@@ -49,5 +59,13 @@ class BookController {
     @DeleteMapping("book/{id}")
     void removeBookFromSystem(@RequestParam UUID bookId) {
         bookFacade.removeBook(bookId);
+    }
+
+    private Function<Seq<String>, ResponseEntity<Either<ValidationErrorsConsumer, BookResponse>>> invalid() {
+        return errors -> ResponseEntity.badRequest().body(Either.left(errorsAsJson((errors))));
+    }
+
+    private ResponseEntity<Either<ValidationErrorsConsumer, BookResponse>> valid(BookRequest request) {
+        return ResponseEntity.ok(Either.right(bookFacade.addBook(request)));
     }
 }
