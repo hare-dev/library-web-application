@@ -4,13 +4,12 @@ import io.vavr.control.Option;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
 
 class InMemoryBookRepository implements BookRepository {
-    private final ConcurrentHashMap<UUID, Book> inMemory = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Book> inMemory = new ConcurrentHashMap<>();
 
     @Override
     public Book insert(Book book) {
@@ -20,8 +19,7 @@ class InMemoryBookRepository implements BookRepository {
     }
 
     @Override
-    public Option<Book> findById(UUID bookId) {
-        requireNonNull(bookId);
+    public Option<Book> findById(String bookId) {
         return Option.of(inMemory.get(bookId));
     }
 
@@ -31,7 +29,7 @@ class InMemoryBookRepository implements BookRepository {
     }
 
     @Override
-    public void deleteById(UUID bookId) {
+    public void deleteById(String bookId) {
         requireNonNull(bookId);
         inMemory.remove(bookId);
     }

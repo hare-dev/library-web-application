@@ -1,11 +1,10 @@
 package com.haredev.library.book.controller.validation;
 
-import com.haredev.library.book.controller.input.BookRequest;
+import com.haredev.library.book.dto.BookCreateDto;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.ISBNValidator;
-
 
 @RequiredArgsConstructor
 public final class BookValidation {
@@ -17,28 +16,28 @@ public final class BookValidation {
 
     private final ISBNValidator isbnValidator;
 
-    public Validation<Seq<String>, BookRequest> validate(BookRequest request) {
+    public Validation<Seq<String>, BookCreateDto> validate(BookCreateDto bookCreateDto) {
 
         return Validation
                .combine(
-                        validationTitle(request.getTitle()),
-                        validationAuthor(request.getAuthor()),
-                        validationIsbn(request.getIsbn()),
-                        validationPublisher(request.getPublisher()),
-                        validationPageNumber(request.getPageNumber()),
-                        validationLanguage(request.getLanguage()),
-                        validationDescription(request.getDescription())
-        ).ap((title, author, isbn, publisher, pageNumber, language, description) -> BookRequest.builder()
+                        validationTitle(bookCreateDto.getTitle()),
+                        validationAuthor(bookCreateDto.getAuthor()),
+                        validationIsbn(bookCreateDto.getIsbn()),
+                        validationPublisher(bookCreateDto.getPublisher()),
+                        validationPageNumber(bookCreateDto.getPageNumber()),
+                        validationLanguage(bookCreateDto.getLanguage()),
+                        validationDescription(bookCreateDto.getDescription())
+        ).ap((title, author, isbn, publisher, pageNumber, language, description) -> BookCreateDto.builder()
                         .title(title)
                         .author(author)
                         .isbn(isbn)
                         .publisher(publisher)
-                        .yearPublication(request.getYearPublication())
+                        .yearPublication(bookCreateDto.getYearPublication())
                         .pageNumber(pageNumber)
                         .language(language)
-                        .bookType(request.getBookType())
-                        .bookCover(request.getBookCover())
-                        .bookStatus(request.getBookStatus())
+                        .bookType(bookCreateDto.getBookType())
+                        .bookCover(bookCreateDto.getBookCover())
+                        .bookStatus(bookCreateDto.getBookStatus())
                         .description(description)
                         .build());
     }
@@ -68,9 +67,9 @@ public final class BookValidation {
     }
 
     private Validation<String, String> validationIsbn(String isbn) {
-        return isbnValidator.isValid(isbn)
-                ? Validation.valid(isbn)
-                : Validation.invalid("Isbn code: " + isbn + " is not correct");
+        return isNotValid(isbn)
+                ? Validation.invalid("Isbn code: " + isbn + " is not correct")
+                : Validation.valid(isbn);
     }
 
     private Validation<String, String> validationAuthor(String author) {
@@ -81,8 +80,12 @@ public final class BookValidation {
 
     private Validation<String, String> validationTitle(String title) {
         return (isLongerThanMaximum(title, MAX_TITLE_LENGTH) || isEmpty(title))
-                ? Validation.invalid("Title length is longer than " + title.length() + " words")
+                ? Validation.invalid("Title length is longer than " + title.length() + " words " + "or is empty")
                 : Validation.valid(title);
+    }
+
+    private boolean isNotValid(String isbn) {
+        return !isbnValidator.isValid(isbn);
     }
 
     private boolean isLongerThanMaximum(String value, int maximum) {

@@ -1,12 +1,10 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.controller.input.BookRequest;
-import com.haredev.library.book.controller.output.BookResponse;
+import com.haredev.library.book.dto.BookCreateDto;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -14,20 +12,20 @@ public class BookFacade {
     private final BookRepository bookRepository;
     private final BookCreator bookCreator;
 
-    public BookResponse addBook(BookRequest request) {
+    public BookCreateDto addBook(BookCreateDto request) {
         Book book = bookCreator.from(request);
         return bookRepository.insert(book).response();
     }
 
-    public Option<BookResponse> findBook(UUID bookid) {
+    public Option<BookCreateDto> findBook(String bookid) {
         return bookRepository.findById(bookid).map(Book::response);
     }
 
-    public List<BookResponse> fetchAllBooks() {
+    public List<BookCreateDto> fetchAllBooks() {
         return bookRepository.findAll().stream().map(Book::response).collect(Collectors.toList());
     }
 
-    public void removeBook(UUID bookId) {
+    public void removeBook(String bookId) {
         bookRepository.deleteById(bookId);
     }
 }

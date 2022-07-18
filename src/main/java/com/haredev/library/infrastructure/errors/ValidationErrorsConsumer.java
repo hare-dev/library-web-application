@@ -3,16 +3,16 @@ package com.haredev.library.infrastructure.errors;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
-import lombok.Getter;
+import lombok.Value;
 
 import static io.vavr.API.*;
 import static io.vavr.Predicates.isNull;
 
-@Getter
-public final class ValidationErrorsConsumer {
-    private final Seq<String> errors;
+@Value
+public class ValidationErrorsConsumer {
+    Seq<String> errors;
 
-    ValidationErrorsConsumer(@JsonProperty("errors") Seq<String> errors) {
+    ValidationErrorsConsumer(@JsonProperty("messages") Seq<String> errors) {
         this.errors = errors;
     }
 
