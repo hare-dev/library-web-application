@@ -26,7 +26,7 @@ final class BookController {
     private final BookValidation bookValidation;
 
     @PostMapping
-    ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>> addBookToInventory(
+    ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>> addBook(
             @RequestBody BookCreateDto bookCreateDto) {
         return Match(bookValidation.validate(bookCreateDto)).of(
                 Case($Invalid($()), this::invalid),
@@ -44,18 +44,18 @@ final class BookController {
     }
 
     @GetMapping("book/{id}")
-    ResponseEntity findBookByIdFromInventory(@RequestParam String bookId) {
+    ResponseEntity findBookById(@RequestParam String bookId) {
         Option<BookCreateDto> response = bookFacade.findBook(bookId);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("books")
-    List<BookCreateDto> fetchAllBooksFromInventory() {
+    List<BookCreateDto> fetchAllBooks() {
        return bookFacade.fetchAllBooks();
     }
 
     @DeleteMapping("book/{id}")
-    void removeBookFromInventory(@RequestParam String bookId) {
+    void removeBook(@RequestParam String bookId) {
         bookFacade.removeBook(bookId);
     }
 }
