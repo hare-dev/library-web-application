@@ -7,17 +7,18 @@ import lombok.*;
 @Getter
 @Builder
 @AllArgsConstructor
+@EqualsAndHashCode
 public class BookCreateDto {
-    private String bookId;
-    private String title;
-    private String author;
-    private String isbn;
-    private String publisher;
-    private Integer yearPublication;
-    private Integer pageNumber;
-    private String language;
-    private BookType bookType;
-    private BookCover bookCover;
-    private BookStatus bookStatus;
-    private String description;
+    private final String bookId;
+    private final String title;
+    private final String author;
+    private final String isbn;
+    private final String publisher;
+    private final Integer yearPublication;
+    private final Integer pageNumber;
+    private final String language;
+    private final BookType bookType;
+    private final BookCover bookCover;
+    private final BookStatus bookStatus;
+    private final String description;
 }

@@ -2,7 +2,7 @@ package com.haredev.library.book.domain
 import spock.lang.Specification
 
 class BookSpec extends Specification {
-    BookFacade facade = new BookConfiguration().bookFacade()
+    def facade = new BookConfiguration().bookFacade()
 
     def final twilight = SampleBooks.createBookSample("Twilight", "Stephenie Meyer")
     def final django = SampleBooks.createBookSample("Django", "Quentin Tarantino")

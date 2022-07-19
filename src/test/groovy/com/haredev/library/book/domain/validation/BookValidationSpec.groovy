@@ -1,12 +1,12 @@
 package com.haredev.library.book.domain.validation
 
+import com.haredev.library.book.domain.BookConfiguration
 import com.haredev.library.book.dto.BookCreateDto
-import com.haredev.library.book.controller.validation.BookValidation
 import io.vavr.control.Validation
 import spock.lang.Specification
 
 class BookValidationSpec extends Specification {
-    BookValidation bookValidation;
+    def facade = new BookConfiguration().bookFacade()
 
     def "All fields of validation are valid"() {
         given:
@@ -21,7 +21,7 @@ class BookValidationSpec extends Specification {
                 .build()
 
         when:
-        def validation = bookValidation.validate(request)
+        def validation = facade.validateBook(request)
 
         then:
         validation == Validation.valid(BookCreateDto.builder()
