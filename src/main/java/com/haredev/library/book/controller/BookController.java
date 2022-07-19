@@ -1,7 +1,6 @@
 package com.haredev.library.book.controller;
 
 import com.haredev.library.book.dto.BookCreateDto;
-import com.haredev.library.book.controller.validation.BookValidation;
 import com.haredev.library.book.domain.BookFacade;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.infrastructure.errors.ValidationErrorsConsumer;
@@ -23,12 +22,11 @@ import static io.vavr.Patterns.$Valid;
 @RestController
 final class BookController {
     private final BookFacade bookFacade;
-    private final BookValidation bookValidation;
 
     @PostMapping
     ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>> addBook(
             @RequestBody BookCreateDto bookCreateDto) {
-        return Match(bookValidation.validate(bookCreateDto)).of(
+        return Match(bookFacade.validateBook(bookCreateDto)).of(
                 Case($Invalid($()), this::invalid),
                 Case($Valid($()), valid(bookCreateDto))
         );
@@ -51,7 +49,7 @@ final class BookController {
 
     @GetMapping("books")
     List<BookCreateDto> fetchAllBooks() {
-       return bookFacade.fetchAllBooks();
+        return bookFacade.fetchAllBooks();
     }
 
     @DeleteMapping("book/{id}")
