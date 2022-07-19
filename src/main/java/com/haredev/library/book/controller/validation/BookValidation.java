@@ -79,8 +79,8 @@ public final class BookValidation {
     }
 
     private Validation<String, String> validationTitle(String title) {
-        return (isLongerThanMaximum(title, MAX_TITLE_LENGTH) || isEmpty(title))
-                ? Validation.invalid("Title length is longer than " + title.length() + " words " + "or is empty")
+        return (isLongerThanMaximum(title, MAX_TITLE_LENGTH))
+                ? Validation.invalid("Title length is longer than " + title.length() + " words")
                 : Validation.valid(title);
     }
 
