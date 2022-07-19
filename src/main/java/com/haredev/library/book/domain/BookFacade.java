@@ -14,11 +14,11 @@ public class BookFacade {
 
     public BookCreateDto addBook(BookCreateDto request) {
         Book book = bookCreator.from(request);
-        return bookRepository.insert(book).response();
+        return bookRepository.save(book).response();
     }
 
-    public Option<BookCreateDto> findBook(String bookid) {
-        return bookRepository.findById(bookid).map(Book::response);
+    public Option<BookCreateDto> findBook(String bookId) {
+        return bookRepository.findById(bookId).map(Book::response);
     }
 
     public List<BookCreateDto> fetchAllBooks() {

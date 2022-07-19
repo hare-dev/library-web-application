@@ -6,7 +6,7 @@ import org.springframework.data.repository.Repository;
 import java.util.List;
 
 interface BookRepository extends Repository<Book, String> {
-    Book insert(Book book);
+    Book save(Book book);
     Option<Book> findById(String bookId);
     List<Book> findAll();
     void deleteById(String bookId);

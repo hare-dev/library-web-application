@@ -12,15 +12,10 @@ class InMemoryBookRepository implements BookRepository {
     private final ConcurrentHashMap<String, Book> inMemory = new ConcurrentHashMap<>();
 
     @Override
-    public Book insert(Book book) {
+    public Book save(Book book) {
         requireNonNull(book);
         inMemory.put(book.response().getBookId(), book);
         return book;
-    }
-
-    @Override
-    public Option<Book> findById(String bookId) {
-        return Option.of(inMemory.get(bookId));
     }
 
     @Override
@@ -32,5 +27,10 @@ class InMemoryBookRepository implements BookRepository {
     public void deleteById(String bookId) {
         requireNonNull(bookId);
         inMemory.remove(bookId);
+    }
+
+    @Override
+    public Option<Book> findById(String bookId) {
+        return Option.of(inMemory.get(bookId));
     }
 }

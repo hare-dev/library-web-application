@@ -1,33 +1,37 @@
-package com.haredev.library.domain
-
-import com.haredev.library.book.domain.BookConfiguration
-import com.haredev.library.book.domain.BookFacade
+package com.haredev.library.book.domain
 import spock.lang.Specification
 
-class BookSpec extends Specification implements SampleBooks {
+class BookSpec extends Specification {
     BookFacade facade = new BookConfiguration().bookFacade()
 
-    def "Add one book to system"() {
-        given: "Add book to system"
+    def final twilight = SampleBooks.createBookSample("Twilight", "Stephenie Meyer")
+    def final django = SampleBooks.createBookSample("Django", "Quentin Tarantino")
+
+    def "System should have one book"() {
+        given: "Should add book to system"
         facade.addBook(twilight)
 
         expect: "System should have one book"
-        facade.findBook(twilight.bookId).equals(twilight)
+        facade.fetchAllBooks().size() == 1
     }
 
-    def "Remove book from system"() {
-        given: "Add one book to system"
-        facade.addBook(twilight)
+    def "System should be empty"() {
+        expect: facade.fetchAllBooks().isEmpty()
+    }
 
-        when: "Remove one book from system"
-        facade.removeBook(twilight.bookId)
+    def "Should remove book from system"() {
+        given: "Should add one book to system"
+        final String twilightBookId = facade.addBook(twilight).bookId
+
+        when: "Should remove one book from system"
+        facade.removeBook(twilightBookId)
 
         then: "System should be empty"
         facade.fetchAllBooks().size() == 0
     }
 
-    def "Add two books to system"() {
-        given: "Add two books to system"
+    def "Should have two books to system"() {
+        given: "Should add two books to system"
         facade.addBook(twilight)
         facade.addBook(django)
 
@@ -36,13 +40,13 @@ class BookSpec extends Specification implements SampleBooks {
     }
 
     def "Remove two books from system"() {
-        given: "Add two books to system"
-        facade.addBook(twilight)
-        facade.addBook(django)
+        given: "Should add two books to system"
+        final String twilightBookId = facade.addBook(twilight).bookId
+        final String djangoBookId = facade.addBook(django).bookId
 
-        when: "Remove two books from system"
-        facade.removeBook(django.bookId)
-        facade.removeBook(twilight.bookId)
+        when: "Should remove two books from system"
+        facade.removeBook(twilightBookId)
+        facade.removeBook(djangoBookId)
 
         then: "System should be empty"
         facade.fetchAllBooks().size() == 0

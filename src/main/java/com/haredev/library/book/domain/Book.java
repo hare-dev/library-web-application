@@ -6,13 +6,11 @@ import com.haredev.library.book.domain.api.BookStatus;
 import com.haredev.library.book.domain.api.BookType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "books")
 @Builder
-@Getter
 @AllArgsConstructor
 class Book {
         @Id

@@ -10,7 +10,7 @@ class BookCreator {
     Book from(BookCreateDto bookCreateDto) {
         requireNonNull(bookCreateDto);
         return Book.builder()
-                .bookId(String.valueOf(UUID.randomUUID()))
+                .bookId(generateBookId())
                 .title(bookCreateDto.getTitle())
                 .author(bookCreateDto.getAuthor())
                 .isbn(bookCreateDto.getIsbn())
@@ -23,5 +23,9 @@ class BookCreator {
                 .bookStatus(bookCreateDto.getBookStatus())
                 .description(bookCreateDto.getDescription())
                 .build();
+    }
+
+    private String generateBookId() {
+        return UUID.randomUUID().toString();
     }
 }
