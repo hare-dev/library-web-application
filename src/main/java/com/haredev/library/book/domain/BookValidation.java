@@ -18,8 +18,7 @@ final class BookValidation {
 
     public Validation<Seq<String>, BookCreateDto> validate(BookCreateDto bookCreateDto) {
 
-        return Validation
-               .combine(
+        return Validation.combine(
                         validationTitle(bookCreateDto.getTitle()),
                         validationAuthor(bookCreateDto.getAuthor()),
                         validationIsbn(bookCreateDto.getIsbn()),
@@ -42,45 +41,45 @@ final class BookValidation {
                         .build());
     }
 
-    private Validation<String, String> validationDescription(String description) {
+    public Validation<String, String> validationDescription(String description) {
         return isLongerThanMaximum(description, MAX_DESCRIPTION_LENGTH)
                 ? Validation.invalid("Description length is longer than " + description.length() + " words")
                 : Validation.valid(description);
     }
 
-    private Validation<String, String> validationLanguage(String language) {
+    public Validation<String, String> validationLanguage(String language) {
         return isLongerThanMaximum(language, MAX_LANGUAGE_LENGTH)
                 ? Validation.invalid("Language length is longer than " + language.length() + " words")
                 : Validation.valid(language);
     }
 
-    private Validation<String, Integer> validationPageNumber(Integer pageNumber) {
+    public Validation<String, Integer> validationPageNumber(Integer pageNumber) {
         return isEmpty(pageNumber.toString())
                 ? Validation.invalid("Page number cannot be empty")
                 : Validation.valid(pageNumber);
     }
 
-    private Validation<String, String> validationPublisher(String publisher) {
+    public Validation<String, String> validationPublisher(String publisher) {
         return isLongerThanMaximum(publisher, MAX_PUBLISHER_LENGTH)
                 ? Validation.invalid("Publisher length is longer than " + publisher.length() + " words")
                 : Validation.valid(publisher);
     }
 
-    private Validation<String, String> validationIsbn(String isbn) {
+    public Validation<String, String> validationIsbn(String isbn) {
         return isNotValid(isbn)
                 ? Validation.invalid("Isbn code: " + isbn + " is not correct")
                 : Validation.valid(isbn);
     }
 
-    private Validation<String, String> validationAuthor(String author) {
+    public Validation<String, String> validationAuthor(String author) {
         return isLongerThanMaximum(author, MAX_AUTHOR_LENGTH)
                 ? Validation.invalid("Author length is longer than " + author.length() + " words")
                 : Validation.valid(author);
     }
 
-    private Validation<String, String> validationTitle(String title) {
-        return (isLongerThanMaximum(title, MAX_TITLE_LENGTH))
-                ? Validation.invalid("Title length is longer than " + title.length() + " words")
+    public Validation<String, String> validationTitle(String title) {
+        return (isEmpty(title))
+                ? Validation.invalid("Title cannot be empty")
                 : Validation.valid(title);
     }
 
