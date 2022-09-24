@@ -5,7 +5,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 final class SampleBooks {
-    static BookCreateDto createBookSample(String bookId, String title, String author) {
+    static BookCreateDto createBookSample(Long bookId, String title, String author) {
         return BookCreateDto.builder()
                 .bookId(bookId)
                 .title(title)

@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.util.Objects.requireNonNull;
 
 class InMemoryBookRepository implements BookRepository {
-    private final ConcurrentHashMap<String, Book> inMemory = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, Book> inMemory = new ConcurrentHashMap<>();
 
     @Override
     public Book save(Book book) {
@@ -24,14 +24,19 @@ class InMemoryBookRepository implements BookRepository {
     }
 
     @Override
-    public void deleteById(String bookId) {
+    public void deleteById(Long bookId) {
         requireNonNull(bookId);
         inMemory.remove(bookId);
     }
 
     @Override
-    public Option<Book> findById(String bookId) {
+    public Option<Book> findById(Long bookId) {
         Book book = inMemory.get(bookId);
         return Option.of(book);
+    }
+
+    @Override
+    public boolean existsById(Long bookId) {
+        return inMemory.contains(bookId);
     }
 }

@@ -6,26 +6,33 @@ import com.haredev.library.book.domain.api.BookStatus;
 import com.haredev.library.book.domain.api.BookType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-@Document(collection = "books")
+import javax.persistence.*;
+
+@Entity(name = "Book")
 @Builder
 @AllArgsConstructor
+@EqualsAndHashCode
+@NoArgsConstructor
 class Book {
-        @Id
-        private final String bookId;
-        private final String title;
-        private final String author;
-        private final String isbn;
-        private final String publisher;
-        private final Integer yearPublication;
-        private final Integer pageNumber;
-        private final String language;
-        private final BookType bookType;
-        private final BookCover bookCover;
-        private final BookStatus bookStatus;
-        private final String description;
+        @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+        private Long bookId;
+        private String title;
+        private String author;
+        private String isbn;
+        private String publisher;
+        private Integer yearPublication;
+        private Integer pageNumber;
+        private String language;
+        @Enumerated(EnumType.STRING)
+        private BookType bookType;
+        @Enumerated(EnumType.STRING)
+        private BookCover bookCover;
+        @Enumerated(EnumType.STRING)
+        private BookStatus bookStatus;
+        private String description;
 
         BookCreateDto response() {
                 return BookCreateDto.builder()

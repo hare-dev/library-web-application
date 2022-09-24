@@ -1,5 +1,6 @@
 package com.haredev.library.book.controller;
 
+import com.haredev.library.book.domain.api.BookError;
 import com.haredev.library.book.dto.BookCreateDto;
 import com.haredev.library.book.domain.BookFacade;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
@@ -42,7 +43,7 @@ final class BookController {
     }
 
     @GetMapping("book/{id}")
-    ResponseEntity findBookById(@RequestParam String bookId) {
+    ResponseEntity findBookById(@RequestParam Long bookId) {
         Option<BookCreateDto> response = bookFacade.findBook(bookId);
         return ResponseResolver.resolve(response);
     }
@@ -53,7 +54,8 @@ final class BookController {
     }
 
     @DeleteMapping("book/{id}")
-    void removeBook(@RequestParam String bookId) {
-        bookFacade.removeBook(bookId);
+    ResponseEntity removeBook(@RequestParam Long bookId) {
+        Either<BookError, BookError> response = bookFacade.removeBook(bookId);
+        return ResponseResolver.resolve(response);
     }
 }

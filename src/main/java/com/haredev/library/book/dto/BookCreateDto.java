@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class BookCreateDto {
-    private final String bookId;
+    private final Long bookId;
     private final String title;
     private final String author;
     private final String isbn;

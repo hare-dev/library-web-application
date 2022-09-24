@@ -2,15 +2,13 @@ package com.haredev.library.book.domain;
 
 import com.haredev.library.book.dto.BookCreateDto;
 
-import java.util.UUID;
-
 import static java.util.Objects.requireNonNull;
 
 class BookCreator {
     Book from(BookCreateDto bookCreateDto) {
         requireNonNull(bookCreateDto);
         return Book.builder()
-                .bookId(generateBookId())
+                .bookId(bookCreateDto.getBookId())
                 .title(bookCreateDto.getTitle())
                 .author(bookCreateDto.getAuthor())
                 .isbn(bookCreateDto.getIsbn())
@@ -23,9 +21,5 @@ class BookCreator {
                 .bookStatus(bookCreateDto.getBookStatus())
                 .description(bookCreateDto.getDescription())
                 .build();
-    }
-
-    private String generateBookId() {
-        return UUID.randomUUID().toString();
     }
 }
