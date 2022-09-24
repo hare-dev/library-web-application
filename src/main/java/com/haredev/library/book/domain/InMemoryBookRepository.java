@@ -31,6 +31,7 @@ class InMemoryBookRepository implements BookRepository {
 
     @Override
     public Option<Book> findById(String bookId) {
-        return Option.of(inMemory.get(bookId));
+        Book book = inMemory.get(bookId);
+        return Option.of(book);
     }
 }

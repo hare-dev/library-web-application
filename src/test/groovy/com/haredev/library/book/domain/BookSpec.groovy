@@ -1,11 +1,13 @@
 package com.haredev.library.book.domain
 import spock.lang.Specification
 
+import static java.util.UUID.randomUUID
+
 class BookSpec extends Specification {
     def facade = new BookConfiguration().bookFacade()
 
-    def final twilight = SampleBooks.createBookSample("Twilight", "Stephenie Meyer")
-    def final django = SampleBooks.createBookSample("Django", "Quentin Tarantino")
+    def final twilight = SampleBooks.createBookSample(randomUUID().toString(), "Twilight", "Stephenie Meyer")
+    def final django = SampleBooks.createBookSample(randomUUID().toString(), "Django", "Quentin Tarantino")
 
     def "System should have one book"() {
         given: "Should add book to system"

@@ -5,9 +5,9 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 final class SampleBooks {
-    static BookCreateDto createBookSample(String title, String author) {
+    static BookCreateDto createBookSample(String bookId, String title, String author) {
         return BookCreateDto.builder()
-                .bookId(UUID.randomUUID().toString())
+                .bookId(bookId)
                 .title(title)
                 .author(author)
                 .build()

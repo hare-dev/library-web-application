@@ -1,6 +1,6 @@
 package com.haredev.library.book.domain;
 
-import org.apache.commons.validator.routines.ISBNValidator;
+import com.haredev.library.book.controller.validation.BookValidation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,8 +13,7 @@ class BookConfiguration {
     @Bean
     BookFacade bookFacade(BookRepository bookRepository) {
         BookCreator bookCreator = new BookCreator();
-        ISBNValidator isbnValidator = new ISBNValidator();
-        BookValidation bookValidation = new BookValidation(isbnValidator);
+        BookValidation bookValidation = new BookValidation();
         return new BookFacade(bookRepository, bookValidation, bookCreator);
     }
 }

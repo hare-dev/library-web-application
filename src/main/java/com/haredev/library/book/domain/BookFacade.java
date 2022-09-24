@@ -1,5 +1,6 @@
 package com.haredev.library.book.domain;
 
+import com.haredev.library.book.controller.validation.BookValidation;
 import com.haredev.library.book.dto.BookCreateDto;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
@@ -31,7 +32,6 @@ public class BookFacade {
     public List<BookCreateDto> fetchAllBooks() {
         return bookRepository.findAll().stream().map(Book::response).collect(Collectors.toList());
     }
-
     public void removeBook(String bookId) {
         bookRepository.deleteById(bookId);
     }
