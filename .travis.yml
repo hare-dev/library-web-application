@@ -15,6 +15,7 @@ services:
 
 before_install:
   - docker pull openjdk:18
+  - docker pull mysql:latest
 
 script:
   - mvn test

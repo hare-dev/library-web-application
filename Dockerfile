@@ -1,6 +1,6 @@
 FROM openjdk:18
 
-ENV APP_ROOT /app
+ENV APP_ROOT /application
 
 RUN mkdir ${APP_ROOT}
 
