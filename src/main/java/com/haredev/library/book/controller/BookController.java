@@ -1,6 +1,5 @@
 package com.haredev.library.book.controller;
 
-import com.haredev.library.book.domain.api.BookError;
 import com.haredev.library.book.dto.BookCreateDto;
 import com.haredev.library.book.domain.BookFacade;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
@@ -9,6 +8,7 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +21,11 @@ import static io.vavr.Patterns.$Valid;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("books")
 final class BookController {
     private final BookFacade bookFacade;
 
-    @PostMapping
+    @PostMapping("/add")
     ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>> addBook(
             @RequestBody BookCreateDto bookCreateDto) {
         return Match(bookFacade.validateBook(bookCreateDto)).of(
@@ -38,24 +39,24 @@ final class BookController {
                 Either.left(ValidationErrorsConsumer.errorsAsJson(errors)));
     }
 
-    private Supplier<ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>>> valid(BookCreateDto bookCreateDto) {
-        return () -> ResponseEntity.ok(Either.right(bookFacade.addBook(bookCreateDto)));
+    private Supplier<ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>>> valid(BookCreateDto book) {
+        return () -> new ResponseEntity<>(Either.right(bookFacade.addBook(book)), HttpStatus.CREATED);
     }
 
-    @GetMapping("book/{id}")
+    @GetMapping("/{id}")
     ResponseEntity findBookById(@RequestParam Long bookId) {
-        Option<BookCreateDto> response = bookFacade.findBook(bookId);
+        Option<BookCreateDto> response = bookFacade.findBookById(bookId);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("books")
+    @GetMapping()
     List<BookCreateDto> fetchAllBooks() {
         return bookFacade.fetchAllBooks();
     }
 
-    @DeleteMapping("book/{id}")
-    ResponseEntity removeBook(@RequestParam Long bookId) {
-        Either<BookError, BookError> response = bookFacade.removeBook(bookId);
-        return ResponseResolver.resolve(response);
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> removeBook(@RequestParam Long bookId) {
+        bookFacade.removeBookById(bookId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -4,7 +4,7 @@ import com.haredev.library.infrastructure.errors.ResponseError;
 
 public enum BookError implements ResponseError {
     BOOK_NOT_FOUND("Book not found in database", 404),
-    OPERATION_SUCCESS("Book is removed from database", 200);
+    BOOK_IS_REMOVED("Book is removed from database", 200);
 
     private final int httpCode;
     private final String message;

@@ -1,8 +1,8 @@
 package com.haredev.library.infrastructure.errors;
 
 import io.vavr.control.Either;
-import lombok.NoArgsConstructor;
 import io.vavr.control.Option;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

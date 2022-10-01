@@ -1,9 +1,10 @@
 package com.haredev.library.book.domain;
 
-import io.vavr.control.Option;
+import com.haredev.library.book.domain.api.BookError;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
@@ -30,13 +31,8 @@ class InMemoryBookRepository implements BookRepository {
     }
 
     @Override
-    public Option<Book> findById(Long bookId) {
-        Book book = inMemory.get(bookId);
-        return Option.of(book);
-    }
-
-    @Override
-    public boolean existsById(Long bookId) {
-        return inMemory.contains(bookId);
+    public Optional<Book> findById(Long bookId) {
+        requireNonNull(bookId);
+        return Optional.ofNullable(inMemory.get(bookId));
     }
 }
