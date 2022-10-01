@@ -1,25 +1,46 @@
-version: "3.0"
-
+version: "3.8"
 services:
-  application:
-    build: .
-    restart: always
+  backend-spring-boot:
+    build:
+      context: .
+    container_name: library-spring-boot
     image: haredev/library-web-application:latest
-    container_name: library-web-application
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql-database
-
-  mysql-database:
-    image: "mysql:8.0.30"
-    restart: always
-    container_name: 'library-web-application-database'
-    ports:
-    - "9999:9999"
     environment:
-      MYSQL_DATABASE: library-database
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-      MYSQL_ROOT_PASSWORD: admin
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database-postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
 
+    ports:
+      - "9090:9090"
+    networks:
+      - spring-boot-postgres
+    depends_on:
+      database-postgres:
+        condition: service_healthy
+    restart: on-failure
+
+  database-postgres:
+    image: postgres:14.5
+    container_name: library-postgresql
+    networks:
+      - spring-boot-postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DATABASE=postgres
+    volumes:
+      - database-data:/var/lib/postgresql
+    ports:
+      - "5555:5555"
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  spring-boot-postgres:
+volumes:
+  database-data:
