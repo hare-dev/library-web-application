@@ -6,11 +6,9 @@ services:
     container_name: library-spring-boot
     image: haredev/library-web-application:latest
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://database-postgres:5432/postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database-postgres:5555/postgres
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
-
     ports:
       - "9090:9090"
     networks:
