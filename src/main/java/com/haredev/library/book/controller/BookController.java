@@ -43,19 +43,20 @@ final class BookController {
         return () -> new ResponseEntity<>(Either.right(bookFacade.addBook(book)), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity findBookById(@RequestParam Long bookId) {
+    @GetMapping("/{bookId}")
+    ResponseEntity findBookById(@PathVariable Long bookId) {
         Option<BookCreateDto> response = bookFacade.findBookById(bookId);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping()
-    List<BookCreateDto> fetchAllBooks() {
-        return bookFacade.fetchAllBooks();
+    @GetMapping("/books")
+    List<BookCreateDto> fetchAllBooks(@RequestParam(required = false) Integer page) {
+        int pageNumber = page != null && page >= 0 ? page : 0;
+        return bookFacade.fetchAllBooks(pageNumber);
     }
 
-    @DeleteMapping("/{id}")
-    ResponseEntity<Void> removeBook(@RequestParam Long bookId) {
+    @DeleteMapping("/{bookId}")
+    ResponseEntity<Void> removeBook(@PathVariable Long bookId) {
         bookFacade.removeBookById(bookId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

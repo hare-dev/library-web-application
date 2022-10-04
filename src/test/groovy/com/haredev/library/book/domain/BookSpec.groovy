@@ -1,55 +1,83 @@
 package com.haredev.library.book.domain
+
+import com.haredev.library.book.dto.BookCreateDto
+import io.vavr.control.Option
 import spock.lang.Specification
 
 class BookSpec extends Specification {
     def facade = new BookConfiguration().bookFacade()
 
-    def final twilight = SampleBooks.createBookSample(1L, "Twilight", "Stephenie Meyer")
-    def final django = SampleBooks.createBookSample(2L, "Django", "Quentin Tarantino")
+    private static final int PAGE_SIZE = 10
 
-    def "System should have one book"() {
-        given: "Should add book to system"
-        facade.addBook(twilight)
-
-        expect: "System should have one book"
-        facade.fetchAllBooks().size() == 1
-    }
+    def final twilight = SampleBooks.createBookSample(0L, "Twilight", "Stephenie Meyer")
+    def final django = SampleBooks.createBookSample(1L, "Django", "Quentin Tarantino")
 
     def "System should be empty"() {
         expect:
-        facade.fetchAllBooks().isEmpty()
+        facade.fetchAllBooks(PAGE_SIZE).isEmpty()
     }
 
-    /* def "Should remove book from system"() {
-        given: "Should add one book to system"
+    def "One book is in the system"() {
+        given: "Should add book to system"
         facade.addBook(twilight)
 
-        when: "Should remove one book from system"
-        facade.removeBook(twilight.bookId)
+        when: "System should have one book"
+        Option<BookCreateDto> result = facade.findBookById(twilight.bookId)
 
-        then: "System should be empty"
-        facade.fetchAllBooks().size() == 1
-    } */
+        then:
+        result.get() == twilight
+    }
 
-    def "Should have two books to system"() {
+    def "Two books are in the system"() {
         given: "Should add two books to system"
         facade.addBook(twilight)
         facade.addBook(django)
 
-        expect: "System should have two books"
-        facade.fetchAllBooks().size() == 2
+        when: "System should return two books"
+        Option<BookCreateDto> twilight_result = facade.findBookById(twilight.bookId)
+        Option<BookCreateDto> django_result = facade.findBookById(django.bookId)
+
+        then:
+        twilight_result.get() == twilight
+        django_result.get() == django
     }
 
-    /* def "Should remove two books from system"() {
-        given: "Should add two books to system"
-        final String twilightBookId = facade.addBook(twilight).bookId
-        final String djangoBookId = facade.addBook(django).bookId
+    def "Should return all films from system"() {
+        given: "System should add two books"
+        facade.addBook(twilight)
+        facade.addBook(django)
 
-        when: "Should remove two books from system"
-        facade.removeBook(twilightBookId as Long)
-        facade.removeBook(djangoBookId as Long)
+        when: "We ask system to get books"
+        List<BookCreateDto> foundBooks = facade.fetchAllBooks(PAGE_SIZE)
+
+        then: "System should return books we have added"
+        foundBooks.contains(twilight)
+        foundBooks.contains(django)
+    }
+
+    def "Should remove book from system"() {
+        given: "Should add one book to system"
+        facade.addBook(twilight)
+
+        when: "Should remove one book from system"
+        facade.removeBookById(twilight.bookId)
 
         then: "System should be empty"
-        facade.fetchAllBooks().size() == 0
-    } */
+        facade.fetchAllBooks(PAGE_SIZE).isEmpty()
+    }
+
+    def "Should remove two books from system"() {
+        given: "Should add two books to system"
+        facade.addBook(twilight)
+        facade.addBook(django)
+
+        when: "Should remove two books from system"
+        facade.removeBookById(django.bookId)
+        facade.removeBookById(twilight.bookId)
+
+        then: "System should be empty"
+        facade.fetchAllBooks(PAGE_SIZE).isEmpty()
+    }
+
+
 }

@@ -5,13 +5,14 @@ import com.haredev.library.book.dto.BookCreateDto;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 import io.vavr.control.Validation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional
 public class BookFacade {
     private final BookRepository bookRepository;
@@ -34,7 +35,12 @@ public class BookFacade {
         bookRepository.deleteById(bookId);
     }
 
-    public List<BookCreateDto> fetchAllBooks() {
-        return bookRepository.findAll().stream().map(Book::response).collect(Collectors.toList());
+    public List<BookCreateDto> fetchAllBooks(int page) {
+        final int PAGE_SIZE = 10;
+        return bookRepository.findAll(PageRequest
+                        .of(page, PAGE_SIZE))
+                        .stream()
+                        .map(Book::response)
+                        .collect(Collectors.toList());
     }
 }
