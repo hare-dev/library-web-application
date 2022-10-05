@@ -4,7 +4,7 @@ os: linux
 dist: focal
 
 jdk:
-  - openjdk:17
+  - openjdk17
 
 branches:
   only:
@@ -14,7 +14,7 @@ services:
   - docker
 
 before_install:
-  - docker pull openjdk:17
+  - docker pull openjdk17
 
 script:
   - mvn test
