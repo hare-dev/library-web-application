@@ -9,8 +9,10 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database-postgres:5555/postgres
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_PROFILES_ACTIVE=prod
     ports:
       - "9090:9090"
+    command: --spring.profiles.active=prod
     networks:
       - spring-boot-postgres
     depends_on:
