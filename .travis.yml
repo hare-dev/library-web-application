@@ -14,7 +14,7 @@ services:
   - docker
 
 before_install:
-  - docker pull openjdk17
+  - docker pull openjdk:17
 
 script:
   - mvn test
