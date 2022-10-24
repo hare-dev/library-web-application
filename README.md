@@ -1,1 +1,1 @@
-[![Build Status](https://travis-ci.com/haredev/library-web-application.svg?branch=master)](https://travis-ci.com/haredev/library-web-application)
+[![Build Status](https://app.travis-ci.com/hare-dev/library-web-application.svg?token=1X5G4z3wyCFRry24jpCu&branch=master)](https://app.travis-ci.com/hare-dev/library-web-application)
