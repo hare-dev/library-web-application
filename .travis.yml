@@ -12,7 +12,7 @@ branches:
 
 env:
   global:
-    - CODE_CLIMATE_TEST_REPORTER_ID = $CODE_CLIMATE_TEST_REPORTER_ID
+    - CC_TEST_REPORTER_ID = $CODE_CLIMATE_TEST_REPORTER_ID
 
 services:
   - docker
