@@ -3,7 +3,7 @@ language: java
 os: linux
 dist: focal
 
-install: false
+install: true
 addons:
   sonarcloud:
     organization: "haredev-github"
