@@ -8,7 +8,7 @@ addons:
   sonarcloud:
     organization: "haredev-github"
     token:
-      secure: "$SONAR_TOKEN"
+      secure: $SONAR_TOKEN
 
 jdk:
   - openjdk17
