@@ -45,12 +45,11 @@
 		<dependency>
 			<groupId>io.vavr</groupId>
 			<artifactId>vavr</artifactId>
-			<version>0.10.4</version>
+			<version>0.10.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.13.3</version>
 		</dependency>
 		<dependency>
 			<groupId>io.vavr</groupId>
@@ -117,7 +116,24 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M6</version>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.4.0.905</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<profiles>
@@ -137,5 +153,4 @@
 			</properties>
 		</profile>
 	</profiles>
-
 </project>

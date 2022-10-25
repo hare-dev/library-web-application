@@ -17,7 +17,7 @@ class BookSpec extends Specification {
         facade.fetchAllBooks(PAGE_SIZE).isEmpty()
     }
 
-    def "One book is in the system"() {
+    def "System has one book"() {
         given: "Should add book to system"
         facade.addBook(twilight)
 
@@ -28,7 +28,7 @@ class BookSpec extends Specification {
         result.get() == twilight
     }
 
-    def "Two books are in the system"() {
+    def "System has two books"() {
         given: "Should add two books to system"
         facade.addBook(twilight)
         facade.addBook(django)
