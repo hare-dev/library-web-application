@@ -17,7 +17,7 @@ branches:
 
 env:
   global:
-    - CC_TEST_REPORTER_ID = $CODE_CLIMATE_TEST_REPORTER_ID
+    - CC_TEST_REPORTER_ID = aa7bd13a1ed950ae67eb4b5dffa66fde0274424b13c2dd4e4391326c37d87096
 
 services:
   - docker
