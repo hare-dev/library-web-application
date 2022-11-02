@@ -33,11 +33,10 @@ before_script:
 script:
   - mvn clean install
   - mvn test
-  - mvn clean package
-  -  - bash <(curl -s https://codecov.io/bash)
+  - mvn package
 
 after_script:
-  - ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-ut/jacoco.xml
+  - ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-report/jacoco.xml
   - ./cc-test-reporter upload-coverage -d
 
 after_success:
@@ -47,7 +46,6 @@ after_success:
   - DOCKER_BUILDKIT=1 docker-compose build
   - docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TAG
   - docker push $DOCKER_IMAGE_NAME:$TAG
-
 
 notifications:
   slack:
