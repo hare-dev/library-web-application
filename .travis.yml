@@ -1,10 +1,15 @@
 language: java
 
+install: true
 os: linux
 dist: focal
 
 jdk:
   - openjdk17
+
+cache:
+  directories:
+    - $HOME/.m2
 
 branches:
   only:
@@ -26,8 +31,10 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - mvn clean test
+  - mvn clean install
+  - mvn test
   - mvn clean package
+  -  - bash <(curl -s https://codecov.io/bash)
 
 after_script:
   - ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-ut/jacoco.xml
@@ -40,6 +47,7 @@ after_success:
   - DOCKER_BUILDKIT=1 docker-compose build
   - docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TAG
   - docker push $DOCKER_IMAGE_NAME:$TAG
+
 
 notifications:
   slack:
