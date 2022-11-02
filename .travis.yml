@@ -30,7 +30,8 @@ script:
   - mvn clean package
 
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-ut/jacoco.xml
+  - ./cc-test-reporter upload-coverage -d
 
 after_success:
   - export COMMIT=${TRAVIS_COMMIT::7}
