@@ -7,6 +7,10 @@ dist: focal
 jdk:
   - openjdk17
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=aa7bd13a1ed950ae67eb4b5dffa66fde0274424b13c2dd4e4391326c37d87096
+
 cache:
   directories:
     - $HOME/.m2
@@ -14,11 +18,7 @@ cache:
 branches:
   only:
     - master
-
-env:
-  global:
-    - CC_TEST_REPORTER_ID = aa7bd13a1ed950ae67eb4b5dffa66fde0274424b13c2dd4e4391326c37d87096
-
+    -
 services:
   - docker
 
@@ -36,8 +36,8 @@ script:
   - mvn package
 
 after_script:
-  - ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-report/jacoco.xml
-  - ./cc-test-reporter upload-coverage -d
+  - ./cc-test-reporter format-coverage -r -t jacoco ./target/jacoco-report/jacoco.xml
+  - ./cc-test-reporter upload-coverage -r
 
 after_success:
   - export COMMIT=${TRAVIS_COMMIT::7}
