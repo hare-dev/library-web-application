@@ -13,12 +13,17 @@ env:
 
 cache:
   directories:
+    - .autoconf
     - $HOME/.m2
+    - $HOME/.cache/pip
+
+before_cache:
+  - rm -f $HOME/.cache/pip/log/debug.log
 
 branches:
   only:
     - master
-    -
+
 services:
   - docker
 
