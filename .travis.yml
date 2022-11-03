@@ -59,9 +59,10 @@ notifications:
     on_success: always
     on_failure: always
     template:
+      - "Author: *%{author}*"
       - "Repository `%{repository_slug}`"
       - "Result: *%{result}*"
-      - "Build: (<%{build_url}|#%{build_number}>)"
-      - "Commit: (<%{compare_url}|%{commit}>)"
+      - "Build: <%{build_url}|#%{build_number}>"
       - "Branch: `%{branch}`"
+      - "Commit: <%{compare_url}|%{commit}>"
       - "Execution time: *%{duration}*"
