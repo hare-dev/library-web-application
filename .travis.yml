@@ -36,8 +36,8 @@ script:
   - mvn package
 
 after_script:
-  - ./cc-test-reporter format-coverage -r -t jacoco ./target/jacoco-report/jacoco.xml
-  - ./cc-test-reporter upload-coverage -r
+  - ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-report/jacoco.xml
+  - ./cc-test-reporter upload-coverage -d
 
 after_success:
   - export COMMIT=${TRAVIS_COMMIT::7}
