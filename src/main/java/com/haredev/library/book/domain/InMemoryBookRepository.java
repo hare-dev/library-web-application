@@ -1,6 +1,5 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.domain.api.BookError;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;

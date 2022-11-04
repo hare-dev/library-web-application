@@ -78,6 +78,4 @@ class BookSpec extends Specification {
         then: "System should be empty"
         facade.fetchAllBooks(PAGE_SIZE).isEmpty()
     }
-
-
 }

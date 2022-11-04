@@ -65,4 +65,8 @@ public class BookFacade {
     public Option<CategoryCreateDto> findCategoryById(Long categoryId) {
         return Option.ofOptional(categoryRepository.findById(categoryId).map(Category::response));
     }
+
+    public void removeCategoryById(Long categoryId) {
+        categoryRepository.deleteById(categoryId);
+    }
 }

@@ -1,6 +1,5 @@
 package com.haredev.library.book.domain
 
-import com.haredev.library.book.dto.BookCreateDto
 import com.haredev.library.book.dto.CategoryCreateDto
 import io.vavr.control.Option
 import spock.lang.Specification
@@ -54,5 +53,29 @@ class CategorySpec extends Specification {
         then: "System should return categories we have added"
         foundCategories.contains(bestseller)
         foundCategories.contains(adventure)
+    }
+
+    def "Should remove category from system"() {
+        given: "Should add one category to system"
+        facade.addCategory(bestseller)
+
+        when: "Should remove one category from system"
+        facade.removeCategoryById(bestseller.categoryId)
+
+        then: "System should be empty"
+        facade.fetchAllCategories(PAGE_SIZE).isEmpty()
+    }
+
+    def "Should remove two categories from system"() {
+        given: "Should add two categories to system"
+        facade.addCategory(bestseller)
+        facade.addCategory(adventure)
+
+        when: "Should remove two books from system"
+        facade.removeCategoryById(bestseller.categoryId)
+        facade.removeCategoryById(adventure.categoryId)
+
+        then: "System should be empty"
+        facade.fetchAllCategories(PAGE_SIZE).isEmpty()
     }
 }

@@ -29,7 +29,7 @@ class InMemoryCategoryRepository implements CategoryRepository {
     public List<Category> findAll(Pageable pageable) { return new ArrayList<>(inMemory.values()); }
 
     @Override
-    public void deleteById(Long bookId) {
-
+    public void deleteById(Long categoryId) {
+        inMemory.remove(categoryId);
     }
 }
