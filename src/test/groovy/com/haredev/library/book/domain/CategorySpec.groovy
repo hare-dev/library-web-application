@@ -1,5 +1,6 @@
 package com.haredev.library.book.domain
 
+import com.haredev.library.book.dto.BookCreateDto
 import com.haredev.library.book.dto.CategoryCreateDto
 import io.vavr.control.Option
 import spock.lang.Specification
@@ -40,5 +41,18 @@ class CategorySpec extends Specification {
         then:
         bestseller_result.get() == bestseller
         adventure_result.get() == adventure
+    }
+
+    def "Should return all categories from system"() {
+        given: "System should add two categories"
+        facade.addCategory(bestseller)
+        facade.addCategory(adventure)
+
+        when: "We ask system to get categories"
+        List<CategoryCreateDto> foundCategories = facade.fetchAllCategories(PAGE_SIZE)
+
+        then: "System should return categories we have added"
+        foundCategories.contains(bestseller)
+        foundCategories.contains(adventure)
     }
 }
