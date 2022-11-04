@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Entity(name = "Book")
 @Builder
 @AllArgsConstructor
-@EqualsAndHashCode
 @NoArgsConstructor
 class Book {
         @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
