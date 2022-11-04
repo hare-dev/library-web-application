@@ -12,7 +12,7 @@ class BookSpec extends Specification {
     def final twilight = SampleBooks.createBookSample(0L, "Twilight", "Stephenie Meyer")
     def final django = SampleBooks.createBookSample(1L, "Django", "Quentin Tarantino")
 
-    def "System should be empty"() {
+    def "System should has no one book"() {
         expect:
         facade.fetchAllBooks(PAGE_SIZE).isEmpty()
     }
