@@ -20,8 +20,9 @@ class InMemoryCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public Optional<Category> findById(Long bookId) {
-        return Optional.empty();
+    public Optional<Category> findById(Long categoryId) {
+        requireNonNull(categoryId);
+        return Optional.ofNullable(inMemory.get(categoryId));
     }
 
     @Override

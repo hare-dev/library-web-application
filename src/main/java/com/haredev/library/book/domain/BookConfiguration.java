@@ -12,6 +12,7 @@ class BookConfiguration {
     @Bean
     BookFacade bookFacade(BookRepository bookRepository, CategoryRepository categoryRepository) {
         BookCreator bookCreator = new BookCreator();
-        return new BookFacade(bookRepository, categoryRepository, bookCreator);
+        CategoryCreator categoryCreator = new CategoryCreator();
+        return new BookFacade(bookRepository, categoryRepository, bookCreator, categoryCreator);
     }
 }

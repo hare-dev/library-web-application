@@ -19,6 +19,7 @@ public class BookFacade {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
     private final BookCreator bookCreator;
+    private final CategoryCreator categoryCreator;
 
     public BookCreateDto addBook(BookCreateDto request) {
         Book book = bookCreator.from(request);
@@ -54,5 +55,14 @@ public class BookFacade {
                 .stream()
                 .map(Category::response)
                 .collect(Collectors.toList());
+    }
+
+    public CategoryCreateDto addCategory(CategoryCreateDto categoryCreateDto) {
+        Category category = categoryCreator.from(categoryCreateDto);
+        return categoryRepository.save(category).response();
+    }
+
+    public Option<CategoryCreateDto> findCategoryById(Long categoryId) {
+        return Option.ofOptional(categoryRepository.findById(categoryId).map(Category::response));
     }
 }
