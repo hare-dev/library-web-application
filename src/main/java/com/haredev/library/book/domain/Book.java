@@ -6,7 +6,6 @@ import com.haredev.library.book.domain.api.BookStatus;
 import com.haredev.library.book.domain.api.BookType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;

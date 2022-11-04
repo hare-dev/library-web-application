@@ -2,6 +2,7 @@ package com.haredev.library.book.domain;
 
 import com.haredev.library.book.controller.validation.BookValidation;
 import com.haredev.library.book.dto.BookCreateDto;
+import com.haredev.library.book.dto.CategoryCreateDto;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 import io.vavr.control.Validation;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class BookFacade {
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
     private final BookCreator bookCreator;
 
     public BookCreateDto addBook(BookCreateDto request) {
@@ -42,5 +44,15 @@ public class BookFacade {
                         .stream()
                         .map(Book::response)
                         .collect(Collectors.toList());
+    }
+
+    public List<CategoryCreateDto> fetchAllCategories(int page) {
+        final int PAGE_SIZE = 5;
+        return categoryRepository
+                .findAll(PageRequest
+                        .of(page, PAGE_SIZE))
+                .stream()
+                .map(Category::response)
+                .collect(Collectors.toList());
     }
 }
