@@ -21,11 +21,10 @@ import static io.vavr.Patterns.$Valid;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("books")
 final class BookController {
     private final BookFacade bookFacade;
 
-    @PostMapping("/add")
+    @PostMapping("books/add")
     ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>> addBook(
             @RequestBody BookCreateDto bookCreateDto) {
         return Match(bookFacade.validateBook(bookCreateDto)).of(
@@ -43,7 +42,7 @@ final class BookController {
         return () -> new ResponseEntity<>(Either.right(bookFacade.addBook(book)), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{bookId}")
+    @GetMapping("books/{bookId}")
     ResponseEntity findBookById(@PathVariable Long bookId) {
         Option<BookCreateDto> response = bookFacade.findBookById(bookId);
         return ResponseResolver.resolve(response);
@@ -55,7 +54,7 @@ final class BookController {
         return bookFacade.fetchAllBooks(pageNumber);
     }
 
-    @DeleteMapping("/{bookId}")
+    @DeleteMapping("books/{bookId}")
     ResponseEntity<Void> removeBook(@PathVariable Long bookId) {
         bookFacade.removeBookById(bookId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
