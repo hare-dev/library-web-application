@@ -1,4 +1,4 @@
-package com.haredev.library.book.domain
+package com.haredev.library.book.domain.samples
 
 import com.haredev.library.book.dto.CategoryCreateDto
 import groovy.transform.CompileStatic

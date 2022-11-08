@@ -1,5 +1,6 @@
 package com.haredev.library.book.domain
 
+import com.haredev.library.book.domain.samples.SampleBooks
 import com.haredev.library.book.dto.BookCreateDto
 import io.vavr.control.Option
 import spock.lang.Specification
