@@ -8,7 +8,7 @@ import java.util.Optional;
 
 interface CategoryRepository extends Repository<Category, Long> {
     Category save(Category category);
-    Optional<Category> findById(Long bookId);
+    Optional<Category> findById(Long categoryId);
     List<Category> findAll(Pageable pageable);
-    void deleteById(Long bookId);
+    void deleteById(Long categoryId);
 }
