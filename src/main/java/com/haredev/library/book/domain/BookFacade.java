@@ -1,72 +1,52 @@
 package com.haredev.library.book.domain;
 
 import com.haredev.library.book.controller.validation.BookValidation;
-import com.haredev.library.book.dto.BookCreateDto;
-import com.haredev.library.book.dto.CategoryCreateDto;
+import com.haredev.library.book.domain.api.error.BookError;
+import com.haredev.library.book.domain.dto.BookCreateDto;
 import io.vavr.collection.Seq;
-import io.vavr.control.Option;
+import io.vavr.control.Either;
 import io.vavr.control.Validation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.haredev.library.book.domain.api.error.BookError.BOOK_NOT_FOUND;
+
 @RequiredArgsConstructor
-@Transactional
 public class BookFacade {
-    private final BookRepository bookRepository;
-    private final CategoryRepository categoryRepository;
-    private final BookCreator bookCreator;
-    private final CategoryCreator categoryCreator;
+    private final BookManager bookManager;
 
-    public BookCreateDto addBook(BookCreateDto request) {
-        Book book = bookCreator.from(request);
-        return bookRepository.save(book).response();
+    public Validation<Seq<String>, BookCreateDto> validateBook(BookCreateDto bookCreateDto) {
+        return BookValidation.validate(bookCreateDto);
     }
 
-    public Validation<Seq<String>, BookCreateDto> validateBook(BookCreateDto request) {
-        return BookValidation.validate(request);
+    public BookCreateDto addBook(BookCreateDto bookCreateDto) {
+        return bookManager.save(bookCreateDto).response();
     }
 
-    public Option<BookCreateDto> findBookById(Long bookId) {
-        return Option.ofOptional(bookRepository.findById(bookId).map(Book::response));
+    public Either<BookError, BookCreateDto> findBookById(Long bookId) {
+        return bookManager.findOne(bookId)
+                .map(Book::response)
+                .toEither(BOOK_NOT_FOUND);
     }
 
-    public void removeBookById(Long bookId) {
-        bookRepository.deleteById(bookId);
-    }
+    public List<BookCreateDto> fetchAllBooks() {
 
-    public List<BookCreateDto> fetchAllBooks(int page) {
-        final int PAGE_SIZE = 10;
-        return bookRepository.findAll(PageRequest
-                        .of(page, PAGE_SIZE))
-                        .stream()
-                        .map(Book::response)
-                        .collect(Collectors.toList());
-    }
-
-    public List<CategoryCreateDto> fetchAllCategories(int page) {
-        final int PAGE_SIZE = 5;
-        return categoryRepository
-                .findAll(PageRequest
-                        .of(page, PAGE_SIZE))
+        return bookManager.fetchAll()
                 .stream()
-                .map(Category::response)
+                .map(Book::response)
                 .collect(Collectors.toList());
     }
 
-    public CategoryCreateDto addCategory(CategoryCreateDto categoryCreateDto) {
-        Category category = categoryCreator.from(categoryCreateDto);
-        return categoryRepository.save(category).response();
+    public List<BookCreateDto> fechAllBooksWithPageable(int page, int pageSize) {
+        return bookManager.fetchAllWithPageable(page, pageSize)
+                .stream()
+                .map(Book::response)
+                .collect(Collectors.toList());
     }
 
-    public Option<CategoryCreateDto> findCategoryById(Long categoryId) {
-        return Option.ofOptional(categoryRepository.findById(categoryId).map(Category::response));
-    }
-
-    public void removeCategoryById(Long categoryId) {
-        categoryRepository.deleteById(categoryId);
+    public void removeBookById(Long bookId) {
+        bookManager.removeOne(bookId);
     }
 }

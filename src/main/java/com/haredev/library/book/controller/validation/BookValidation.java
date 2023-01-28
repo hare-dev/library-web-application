@@ -1,7 +1,7 @@
 package com.haredev.library.book.controller.validation;
 
 import com.haredev.library.book.controller.validation.patterns.*;
-import com.haredev.library.book.dto.BookCreateDto;
+import com.haredev.library.book.domain.dto.BookCreateDto;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 import lombok.AccessLevel;
@@ -26,7 +26,7 @@ public final class BookValidation {
                         .yearPublication(request.getYearPublication())
                         .pageNumber(pageNumber)
                         .language(language)
-                        .bookType(request.getBookType())
+                        .bookCategory(request.getBookCategory())
                         .bookCover(request.getBookCover())
                         .bookStatus(request.getBookStatus())
                         .description(description)

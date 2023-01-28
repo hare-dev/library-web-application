@@ -10,5 +10,6 @@ interface BookRepository extends Repository<Book, Long> {
     Book save(Book book);
     Optional<Book> findById(Long bookId);
     List<Book> findAll(Pageable pageable);
+    List<Book> findAll();
     void deleteById(Long bookId);
 }

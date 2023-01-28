@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class BookConfiguration {
     BookFacade bookFacade() {
-        return bookFacade(new InMemoryBookRepository(), new InMemoryCategoryRepository());
+        return bookFacade(new InMemoryBookRepository());
     }
 
     @Bean
-    BookFacade bookFacade(BookRepository bookRepository, CategoryRepository categoryRepository) {
+    BookFacade bookFacade(BookRepository bookRepository) {
         BookCreator bookCreator = new BookCreator();
-        CategoryCreator categoryCreator = new CategoryCreator();
-        return new BookFacade(bookRepository, categoryRepository, bookCreator, categoryCreator);
+        BookManager bookManager = new BookManager(bookRepository, bookCreator);
+        return new BookFacade(bookManager);
     }
 }

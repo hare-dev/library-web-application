@@ -1,6 +1,6 @@
-package com.haredev.library.book.domain.samples
+package com.haredev.library.book.samples
 
-import com.haredev.library.book.dto.BookCreateDto
+import com.haredev.library.book.domain.dto.BookCreateDto
 import groovy.transform.CompileStatic
 
 @CompileStatic

@@ -1,8 +1,8 @@
-package com.haredev.library.book.domain.validation
+package com.haredev.library.book.validation
 
 import com.google.common.base.Strings
 import com.haredev.library.book.domain.BookConfiguration
-import com.haredev.library.book.dto.BookCreateDto
+import com.haredev.library.book.domain.dto.BookCreateDto
 import spock.lang.Specification
 
 class BookValidationSpec extends Specification {

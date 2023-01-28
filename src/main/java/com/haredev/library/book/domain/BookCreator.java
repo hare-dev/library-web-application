@@ -1,25 +1,25 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.dto.BookCreateDto;
+import com.haredev.library.book.domain.dto.BookCreateDto;
 
 import static java.util.Objects.requireNonNull;
 
 class BookCreator {
-    Book from(BookCreateDto bookCreateDto) {
-        requireNonNull(bookCreateDto);
+    Book from(BookCreateDto request) {
+        requireNonNull(request);
         return Book.builder()
-                .bookId(bookCreateDto.getBookId())
-                .title(bookCreateDto.getTitle())
-                .author(bookCreateDto.getAuthor())
-                .isbn(bookCreateDto.getIsbn())
-                .publisher(bookCreateDto.getPublisher())
-                .yearPublication(bookCreateDto.getYearPublication())
-                .pageNumber(bookCreateDto.getPageNumber())
-                .language(bookCreateDto.getLanguage())
-                .bookType(bookCreateDto.getBookType())
-                .bookCover(bookCreateDto.getBookCover())
-                .bookStatus(bookCreateDto.getBookStatus())
-                .description(bookCreateDto.getDescription())
+                .bookId(request.getBookId())
+                .title(request.getTitle())
+                .author(request.getAuthor())
+                .isbn(request.getIsbn())
+                .publisher(request.getPublisher())
+                .yearPublication(request.getYearPublication())
+                .pageNumber(request.getPageNumber())
+                .language(request.getLanguage())
+                .bookCategory(request.getBookCategory())
+                .bookCover(request.getBookCover())
+                .bookStatus(request.getBookStatus())
+                .description(request.getDescription())
                 .build();
     }
 }

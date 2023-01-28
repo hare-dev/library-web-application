@@ -1,4 +1,4 @@
-package com.haredev.library.book.domain.validation.patterns
+package com.haredev.library.book.validation.patterns
 
 import com.haredev.library.book.controller.validation.patterns.PageNumber
 import spock.lang.Specification

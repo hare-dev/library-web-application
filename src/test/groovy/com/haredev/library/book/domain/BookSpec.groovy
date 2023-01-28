@@ -1,154 +1,95 @@
 package com.haredev.library.book.domain
 
-import com.haredev.library.book.domain.samples.SampleBooks
-import com.haredev.library.book.domain.samples.SampleCategories
-import com.haredev.library.book.dto.BookCreateDto
-import com.haredev.library.book.dto.CategoryCreateDto
-import io.vavr.control.Option
+import com.haredev.library.book.domain.api.error.BookError
+import com.haredev.library.book.domain.dto.BookCreateDto
+
+import com.haredev.library.book.samples.SampleBooks
+import io.vavr.control.Either
 import spock.lang.Specification
+import static com.haredev.library.book.domain.api.error.BookError.BOOK_NOT_FOUND
+import static com.haredev.library.book.domain.api.error.BookError.CATEGORY_NOT_FOUND
 
 class BookSpec extends Specification {
     def facade = new BookConfiguration().bookFacade()
 
-    private static final int PAGE_SIZE = 10
-
     def final twilight = SampleBooks.createBookSample(0L, "Twilight", "Stephenie Meyer")
     def final django = SampleBooks.createBookSample(1L, "Django", "Quentin Tarantino")
 
-    def final bestseller = SampleCategories.createCategorySample(0L, "Bestsellers", "Best books in library")
-    def final adventure = SampleCategories.createCategorySample(1L, "Adventure", "Adventure books with a lot of amazing histories")
-
-    def "System should has no one book"() {
+    def "Should be empty"() {
         expect:
-        facade.fetchAllBooks(PAGE_SIZE).isEmpty()
+        facade.fetchAllBooks().isEmpty()
     }
 
-    def "System has one book"() {
+    def "Should add one book"() {
         given: "Should add book to system"
         facade.addBook(twilight)
 
-        when: "System should have one book"
-        Option<BookCreateDto> result = facade.findBookById(twilight.bookId)
+        when: "Should have one book"
+        Either<BookError, BookCreateDto> result = facade.findBookById(twilight.bookId)
 
-        then:
+        then: "Should return the book"
         result.get() == twilight
     }
 
-    def "System has two books"() {
+    def "Should have two books"() {
         given: "Should add two books to system"
         facade.addBook(twilight)
         facade.addBook(django)
 
-        when: "System should return two books"
-        Option<BookCreateDto> twilight_result = facade.findBookById(twilight.bookId)
-        Option<BookCreateDto> django_result = facade.findBookById(django.bookId)
+        when: "Should have two books"
+        Either<BookError, BookCreateDto> twilight_result = facade.findBookById(twilight.bookId)
+        Either<BookError, BookCreateDto> django_result = facade.findBookById(django.bookId)
 
-        then:
+        then: "Should return two books"
         twilight_result.get() == twilight
         django_result.get() == django
     }
 
-    def "Should return all films from system"() {
-        given: "System should add two books"
+    def "Should return all books"() {
+        given: "Should add two books"
         facade.addBook(twilight)
         facade.addBook(django)
 
-        when: "We ask system to get books"
-        List<BookCreateDto> foundBooks = facade.fetchAllBooks(PAGE_SIZE)
+        when: "Should return list of books"
+        List<BookCreateDto> foundBooks = facade.fetchAllBooks()
 
-        then: "System should return books we have added"
+        then: "Should return books we have added"
         foundBooks.contains(twilight)
         foundBooks.contains(django)
     }
 
-    def "Should remove book from system"() {
-        given: "Should add one book to system"
+    def "Should remove one book"() {
+        given: "Should add one book"
         facade.addBook(twilight)
 
-        when: "Should remove one book from system"
+        when: "Should remove one book"
         facade.removeBookById(twilight.bookId)
 
-        then: "System should be empty"
-        facade.fetchAllBooks(PAGE_SIZE).isEmpty()
+        then: "Should be empty"
+        facade.fetchAllBooks().isEmpty()
     }
 
-    def "Should remove two books from system"() {
-        given: "Should add two books to system"
+    def "Should remove two books"() {
+        given: "Should add two books"
         facade.addBook(twilight)
         facade.addBook(django)
 
-        when: "Should remove two books from system"
+        when: "Should remove two books"
         facade.removeBookById(django.bookId)
         facade.removeBookById(twilight.bookId)
 
-        then: "System should be empty"
-        facade.fetchAllBooks(PAGE_SIZE).isEmpty()
+        then: "Should be empty"
+        facade.fetchAllBooks().isEmpty()
     }
 
-    def "System should has no one category"() {
-        expect:
-        facade.fetchAllCategories(PAGE_SIZE).isEmpty()
-    }
+    def "Should not find book by not exist id in database"() {
+        given: "Set up not exist book id in database"
+        final Long ID_BOOK_NOT_EXIST = 9999
 
-    def "System has one category"() {
-        given: "Should add category to system"
-        facade.addCategory(bestseller)
+        when: "Should find book"
+        BookError bookError = facade.findBookById(ID_BOOK_NOT_EXIST).getLeft()
 
-        when: "System should have one category"
-        Option<CategoryCreateDto> result = facade.findCategoryById(bestseller.categoryId)
-
-        then:
-        result.get() == bestseller
-    }
-
-    def "System has two categories"() {
-        given: "Should add category to system"
-        facade.addCategory(bestseller)
-        facade.addCategory(adventure)
-
-        when: "System should have two categories"
-        Option<CategoryCreateDto> bestseller_result = facade.findCategoryById(bestseller.categoryId)
-        Option<CategoryCreateDto> adventure_result = facade.findCategoryById(adventure.categoryId)
-
-        then:
-        bestseller_result.get() == bestseller
-        adventure_result.get() == adventure
-    }
-
-    def "Should return all categories from system"() {
-        given: "System should add two categories"
-        facade.addCategory(bestseller)
-        facade.addCategory(adventure)
-
-        when: "We ask system to get categories"
-        List<CategoryCreateDto> foundCategories = facade.fetchAllCategories(PAGE_SIZE)
-
-        then: "System should return categories we have added"
-        foundCategories.contains(bestseller)
-        foundCategories.contains(adventure)
-    }
-
-    def "Should remove category from system"() {
-        given: "Should add one category to system"
-        facade.addCategory(bestseller)
-
-        when: "Should remove one category from system"
-        facade.removeCategoryById(bestseller.categoryId)
-
-        then: "System should be empty"
-        facade.fetchAllCategories(PAGE_SIZE).isEmpty()
-    }
-
-    def "Should remove two categories from system"() {
-        given: "Should add two categories to system"
-        facade.addCategory(bestseller)
-        facade.addCategory(adventure)
-
-        when: "Should remove two books from system"
-        facade.removeCategoryById(bestseller.categoryId)
-        facade.removeCategoryById(adventure.categoryId)
-
-        then: "System should be empty"
-        facade.fetchAllCategories(PAGE_SIZE).isEmpty()
+        then: "Should return error response as BOOK_NOT_FOUND"
+        BOOK_NOT_FOUND == bookError
     }
 }

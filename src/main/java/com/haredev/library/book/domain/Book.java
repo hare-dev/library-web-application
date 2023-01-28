@@ -1,19 +1,19 @@
 package com.haredev.library.book.domain;
 
+import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
-import com.haredev.library.book.dto.BookCreateDto;
 import com.haredev.library.book.domain.api.BookStatus;
-import com.haredev.library.book.domain.api.BookType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import com.haredev.library.book.domain.dto.BookCreateDto;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity(name = "Book")
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "bookId")
 class Book {
         @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
         private Long bookId;
@@ -25,7 +25,7 @@ class Book {
         private Integer pageNumber;
         private String language;
         @Enumerated(EnumType.STRING)
-        private BookType bookType;
+        private BookCategory bookCategory;
         @Enumerated(EnumType.STRING)
         private BookCover bookCover;
         @Enumerated(EnumType.STRING)
@@ -42,7 +42,7 @@ class Book {
                         .yearPublication(yearPublication)
                         .pageNumber(pageNumber)
                         .language(language)
-                        .bookType(bookType)
+                        .bookCategory(bookCategory)
                         .bookCover(bookCover)
                         .bookStatus(bookStatus)
                         .description(description)

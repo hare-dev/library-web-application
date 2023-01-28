@@ -1,14 +1,20 @@
 package com.haredev.library.book.domain;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
+@RequiredArgsConstructor
 class InMemoryBookRepository implements BookRepository {
     private final ConcurrentHashMap<Long, Book> inMemory = new ConcurrentHashMap<>();
 
@@ -20,7 +26,7 @@ class InMemoryBookRepository implements BookRepository {
     }
 
     @Override
-    public List<Book> findAll(Pageable pageable) {
+    public List<Book> findAll() {
         return new ArrayList<>(inMemory.values());
     }
 
@@ -32,7 +38,11 @@ class InMemoryBookRepository implements BookRepository {
 
     @Override
     public Optional<Book> findById(Long bookId) {
-        requireNonNull(bookId);
         return Optional.ofNullable(inMemory.get(bookId));
+    }
+
+    @Override
+    public List<Book> findAll(Pageable pageable) {
+        return new ArrayList<>(inMemory.values());
     }
 }

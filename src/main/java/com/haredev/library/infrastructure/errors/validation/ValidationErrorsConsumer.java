@@ -1,4 +1,4 @@
-package com.haredev.library.infrastructure.errors;
+package com.haredev.library.infrastructure.errors.validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vavr.collection.List;
