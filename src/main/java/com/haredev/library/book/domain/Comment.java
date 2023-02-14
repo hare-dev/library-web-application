@@ -26,7 +26,6 @@ class Comment extends BaseEntity {
     public CommentCreateDto response() {
         return CommentCreateDto.builder()
                 .commentId(commentId)
-                .bookId(bookId)
                 .description(description)
                 .dateAdded(dateAdded)
                 .build();

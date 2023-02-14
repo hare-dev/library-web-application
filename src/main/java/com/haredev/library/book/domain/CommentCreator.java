@@ -9,7 +9,6 @@ class CommentCreator {
         requireNonNull(request);
         return Comment.builder()
                 .commentId(request.getCommentId())
-                .bookId(request.getBookId())
                 .description(request.getDescription())
                 .dateAdded(request.getDateAdded())
                 .build();
