@@ -4,17 +4,20 @@ import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
 import com.haredev.library.book.domain.api.BookStatus;
 import com.haredev.library.book.domain.dto.BookCreateDto;
+import com.haredev.library.infrastructure.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity(name = "Book")
-@Builder
+@Entity
 @Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "bookId")
-class Book {
+class Book extends BaseEntity {
         @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
         private Long bookId;
         private String title;
@@ -31,6 +34,17 @@ class Book {
         @Enumerated(EnumType.STRING)
         private BookStatus bookStatus;
         private String description;
+        @OneToMany(
+                cascade = CascadeType.REMOVE,
+                orphanRemoval = true
+        )
+        @JoinColumn(name = "bookId", updatable = false, insertable = false)
+        @Builder.Default
+        List<Comment> comments = new ArrayList<>();
+
+        public void addComment(Comment comment) {
+                comments.add(comment);
+        }
 
         BookCreateDto response() {
                 return BookCreateDto.builder()

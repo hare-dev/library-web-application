@@ -1,14 +1,14 @@
 package com.haredev.library.book.controller;
 
+import com.haredev.library.book.domain.BookFacade;
 import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.BookCreateDto;
-import com.haredev.library.book.domain.BookFacade;
+import com.haredev.library.book.domain.dto.CommentCreateDto;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.infrastructure.errors.validation.ValidationErrorsConsumer;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ import static io.vavr.Patterns.$Valid;
 final class BookController {
     private final BookFacade bookFacade;
 
-    @PostMapping("books/add")
+    @PostMapping("/books/add")
     ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>> addBook(
             @RequestBody BookCreateDto request) {
         return Match(bookFacade.validateBook(request)).of(
@@ -43,29 +43,34 @@ final class BookController {
         return () -> new ResponseEntity<>(Either.right(bookFacade.addBook(book)), HttpStatus.CREATED);
     }
 
-    @GetMapping("books/{bookId}")
+    @GetMapping("/books/{bookId}")
     ResponseEntity findBookById(@PathVariable Long bookId) {
         Either<BookError, BookCreateDto> response = bookFacade.findBookById(bookId);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/books")
-    ResponseEntity fetchAllBooksWithPageable(@RequestParam(required = false) Integer page,
-                                         @RequestParam int pageSize) {
+    ResponseEntity fetchAllBooks(@RequestParam(required = false) Integer page) {
         int pageNumber = page != null && page >= 0 ? page : 0;
-        List<BookCreateDto> response = bookFacade.fechAllBooksWithPageable(pageNumber, pageSize);
+        List<BookCreateDto> response = bookFacade.fechAllBooks(pageNumber);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("/books")
-    ResponseEntity fetchAllBooks() {
-        List<BookCreateDto> response = bookFacade.fetchAllBooks();
-        return ResponseResolver.resolve(response);
-    }
-
-    @DeleteMapping("books/{bookId}")
+    @DeleteMapping("/books/{bookId}")
     HttpStatus removeBook(@PathVariable Long bookId) {
         bookFacade.removeBookById(bookId);
         return HttpStatus.OK;
+    }
+
+    @PostMapping("/books")
+    ResponseEntity addCommentToBook(@RequestBody CommentCreateDto commentRequest) {
+        Either<BookError, CommentCreateDto> response = bookFacade.addCommentToBook(commentRequest);
+        return ResponseResolver.resolve(response);
+    }
+
+    @GetMapping("/comments/{commentId}")
+    ResponseEntity findCommentById(@PathVariable Long commentId) {
+        Either<BookError, CommentCreateDto> response = bookFacade.findCommentById(commentId);
+        return ResponseResolver.resolve(response);
     }
 }

@@ -2,22 +2,30 @@ package com.haredev.library.book.domain
 
 import com.haredev.library.book.domain.api.error.BookError
 import com.haredev.library.book.domain.dto.BookCreateDto
-
+import com.haredev.library.book.domain.dto.CommentCreateDto
 import com.haredev.library.book.samples.SampleBooks
+import com.haredev.library.book.samples.SampleComments
 import io.vavr.control.Either
 import spock.lang.Specification
-import static com.haredev.library.book.domain.api.error.BookError.BOOK_NOT_FOUND
-import static com.haredev.library.book.domain.api.error.BookError.CATEGORY_NOT_FOUND
+
+import java.time.LocalDateTime
 
 class BookSpec extends Specification {
-    def facade = new BookConfiguration().bookFacade()
+    def facade = new BookConfiguration().bookFacade(new InMemoryBookRepository(), new InMemoryCommentRepository())
+
+    def final int page = 5;
 
     def final twilight = SampleBooks.createBookSample(0L, "Twilight", "Stephenie Meyer")
     def final django = SampleBooks.createBookSample(1L, "Django", "Quentin Tarantino")
 
+    def final twilightComment = SampleComments.createCommentSample(0L, twilight.bookId, "Best book!", LocalDateTime.now())
+    def final twilightCommentWithNullDescription = SampleComments.createCommentSample(0L, twilight.bookId, null, LocalDateTime.now())
+    def final twilightCommentWithEmptyDescription = SampleComments.createCommentSample(0L, twilight.bookId, "", LocalDateTime.now())
+    def final twilightCommentWithNullDateAdded = SampleComments.createCommentSample(0L, twilight.bookId, "Best book!", null)
+
     def "Should be empty"() {
         expect:
-        facade.fetchAllBooks().isEmpty()
+        facade.fechAllBooks(page).isEmpty()
     }
 
     def "Should add one book"() {
@@ -51,7 +59,7 @@ class BookSpec extends Specification {
         facade.addBook(django)
 
         when: "Should return list of books"
-        List<BookCreateDto> foundBooks = facade.fetchAllBooks()
+        List<BookCreateDto> foundBooks = facade.fechAllBooks(page)
 
         then: "Should return books we have added"
         foundBooks.contains(twilight)
@@ -66,7 +74,7 @@ class BookSpec extends Specification {
         facade.removeBookById(twilight.bookId)
 
         then: "Should be empty"
-        facade.fetchAllBooks().isEmpty()
+        facade.fechAllBooks(page).isEmpty()
     }
 
     def "Should remove two books"() {
@@ -79,17 +87,52 @@ class BookSpec extends Specification {
         facade.removeBookById(twilight.bookId)
 
         then: "Should be empty"
-        facade.fetchAllBooks().isEmpty()
+        facade.fechAllBooks(page).isEmpty()
     }
 
-    def "Should not find book by not exist id in database"() {
-        given: "Set up not exist book id in database"
-        final Long ID_BOOK_NOT_EXIST = 9999
+    def "Should add comment to book"() {
+        given: "Should add book"
+        facade.addBook(twilight)
 
-        when: "Should find book"
-        BookError bookError = facade.findBookById(ID_BOOK_NOT_EXIST).getLeft()
+        when: "Should add comment to book"
+        facade.addCommentToBook(twilightComment)
 
-        then: "Should return error response as BOOK_NOT_FOUND"
-        BOOK_NOT_FOUND == bookError
+        then: "Should return comment"
+        Either<BookError, CommentCreateDto> twilightCommentAdded = facade.findCommentById(twilightComment.commentId)
+        twilightComment.description == twilightCommentAdded.get().description
     }
+
+    def "Should not add comment to book because description is null"() {
+        given: "Should add book"
+        facade.addBook(twilight)
+
+        when: "Should add comment to book"
+        Either<BookError, CommentCreateDto> response = facade.addCommentToBook(twilightCommentWithNullDescription)
+
+        then: "Should return error with null description"
+        BookError.NULL_OR_EMPTY_DESCRIPTION == response.getLeft()
+    }
+
+    def "Should not add comment to book because description is empty"() {
+        given: "Should add book"
+        facade.addBook(twilight)
+
+        when: "Should add comment to book"
+        Either<BookError, CommentCreateDto> response = facade.addCommentToBook(twilightCommentWithEmptyDescription)
+
+        then: "Should return error with null description"
+        BookError.NULL_OR_EMPTY_DESCRIPTION == response.getLeft()
+    }
+
+    def "Should not add comment to book because date added is null"() {
+        given: "Should add book"
+        facade.addBook(twilight)
+
+        when: "Should add comment to book"
+        Either<BookError, CommentCreateDto> response = facade.addCommentToBook(twilightCommentWithNullDateAdded)
+
+        then: "Should return error with null description"
+        BookError.NULL_DATE_ADDED == response.getLeft()
+    }
+
 }
