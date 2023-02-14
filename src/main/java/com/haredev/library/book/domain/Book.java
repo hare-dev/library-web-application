@@ -35,10 +35,10 @@ class Book extends BaseEntity {
         private BookStatus bookStatus;
         private String description;
         @OneToMany(
-                cascade = CascadeType.REMOVE,
+                mappedBy = "book",
+                cascade = CascadeType.ALL,
                 orphanRemoval = true
         )
-        @JoinColumn(name = "bookId", updatable = false, insertable = false)
         @Builder.Default
         List<Comment> comments = new ArrayList<>();
 
