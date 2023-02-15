@@ -1,13 +1,15 @@
 package com.haredev.library.book.domain.dto;
+
 import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
 import com.haredev.library.book.domain.api.BookStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
 @AllArgsConstructor
-@EqualsAndHashCode
 public class BookCreateDto {
     private final Long bookId;
     private final String title;
