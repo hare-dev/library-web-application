@@ -14,6 +14,9 @@ import java.util.UUID;
 public abstract class BaseEntity implements Serializable {
     private String uuid = UUID.randomUUID().toString();
 
+    @Version
+    private Integer version;
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
