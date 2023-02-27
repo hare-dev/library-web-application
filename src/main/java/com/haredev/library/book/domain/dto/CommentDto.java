@@ -8,24 +8,22 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
-@Builder
 @AllArgsConstructor
-public class CommentCreateDto {
-    private final Long commentId;
-    private final Long bookId;
+@Builder
+public class CommentDto {
     private final String description;
     private final LocalDateTime dateAdded;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CommentCreateDto that)) return false;
-        if (!Objects.equals(commentId, that.commentId)) return false;
+        if (!(o instanceof CommentDto that)) return false;
+
         return Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return commentId != null ? commentId.hashCode() : 0;
+        return description != null ? description.hashCode() : 0;
     }
 }
