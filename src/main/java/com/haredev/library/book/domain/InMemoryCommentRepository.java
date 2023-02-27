@@ -17,7 +17,6 @@ class InMemoryCommentRepository implements CommentRepository {
 
     @Override
     public Optional<Comment> findById(Long commentId) {
-        requireNonNull(commentId);
-        return Optional.of(inMemoryComment.get(commentId));
+        return Optional.ofNullable(inMemoryComment.get(commentId));
     }
 }

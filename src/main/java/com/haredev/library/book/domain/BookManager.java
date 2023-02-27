@@ -3,17 +3,19 @@ package com.haredev.library.book.domain;
 import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.BookCreateDto;
 import com.haredev.library.book.domain.dto.CommentCreateDto;
+import com.haredev.library.book.domain.dto.CommentDto;
 import io.vavr.API;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import static com.haredev.library.book.domain.api.error.BookError.*;
-import static io.vavr.API.*;
+import static io.vavr.API.$;
 import static io.vavr.API.Case;
 
 @RequiredArgsConstructor
@@ -28,8 +30,8 @@ class BookManager {
         return bookRepository.save(book);
     }
 
-    public Either<BookError, Book> findBookById(Long bookId) {
-        return Option.ofOptional(bookRepository.findById(bookId)).toEither(BOOK_NOT_FOUND);
+    public Option<Book> findBookById(Long bookId) {
+        return Option.ofOptional(bookRepository.findById(bookId));
     }
 
     public void removeBookById(Long bookId) { bookRepository.deleteById(bookId); }
@@ -39,13 +41,13 @@ class BookManager {
         return bookRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    private Comment createComment(CommentCreateDto request) {
-        Comment comment = commentCreator.from(request);
+    private Comment createComment(CommentCreateDto request, Book book) {
+        Comment comment = commentCreator.from(request, book);
         commentRepository.save(comment);
         return comment;
     }
 
-    public Either<BookError, CommentCreateDto> addCommentToBook(Long bookId, CommentCreateDto commentCreateDto) {
+    public Either<BookError, CommentDto> addCommentToBook(Long bookId, CommentCreateDto commentCreateDto) {
         return validateParameters(commentCreateDto)
                 .flatMap(comment -> addComment(bookId, comment));
     }
@@ -60,17 +62,24 @@ class BookManager {
                 .swap();
     }
 
-    private Either<BookError, CommentCreateDto> addComment(Long bookId, CommentCreateDto commentCreateDto) {
+    private Either<BookError, CommentDto> addComment(Long bookId, CommentCreateDto commentCreateDto) {
         return findBookById(bookId)
                 .toEither(BOOK_NOT_FOUND)
                 .map(book -> {
-                    Comment comment = createComment(commentCreateDto);
+                    Comment comment = createComment(commentCreateDto, book);
                     book.addComment(comment);
-                    return comment.response();
+                    return comment.toDto();
                 });
     }
 
-    public Either<BookError, Comment> findCommentById(Long commentId) {
-        return Option.ofOptional(commentRepository.findById(commentId)).toEither(COMMENT_NOT_FOUND);
+    public Option<Comment> findCommentById(Long commentId) {
+        return Option.ofOptional(commentRepository.findById(commentId));
+    }
+
+    public List<CommentDto> getBookByIdWithComments(Long bookId) {
+        return Option.ofOptional(bookRepository.findById(bookId))
+                .map(Book::getAllComments)
+                .getOrElse(Collections.emptyList());
+
     }
 }

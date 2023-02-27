@@ -1,5 +1,6 @@
 package com.haredev.library.book.domain;
 
+import io.vavr.control.Option;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ class InMemoryBookRepository implements BookRepository {
     @Override
     public Optional<Book> findById(Long bookId) {
         requireNonNull(bookId);
-        return Optional.of(inMemoryBook.get(bookId));
+        return Optional.ofNullable(inMemoryBook.get(bookId));
     }
 
     @Override

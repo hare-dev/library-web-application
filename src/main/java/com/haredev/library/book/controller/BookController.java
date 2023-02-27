@@ -4,10 +4,12 @@ import com.haredev.library.book.domain.BookFacade;
 import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.BookCreateDto;
 import com.haredev.library.book.domain.dto.CommentCreateDto;
+import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.infrastructure.errors.validation.ValidationErrorsConsumer;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,14 +47,14 @@ final class BookController {
 
     @GetMapping("/books/{bookId}")
     ResponseEntity findBookById(@PathVariable Long bookId) {
-        Either<BookError, BookCreateDto> response = bookFacade.findBookById(bookId);
+        Option<BookCreateDto> response = bookFacade.findBookById(bookId);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/books")
     ResponseEntity fetchAllBooks(@RequestParam(required = false) Integer page) {
         int pageNumber = page != null && page >= 0 ? page : 0;
-        List<BookCreateDto> response = bookFacade.fechAllBooks(pageNumber);
+        List<BookCreateDto> response = bookFacade.fetchAllBooks(pageNumber);
         return ResponseResolver.resolve(response);
     }
 
@@ -64,13 +66,19 @@ final class BookController {
 
     @PostMapping("/books")
     ResponseEntity addCommentToBook(@RequestBody CommentCreateDto commentRequest) {
-        Either<BookError, CommentCreateDto> response = bookFacade.addCommentToBook(commentRequest);
+        Either<BookError, CommentDto> response = bookFacade.addCommentToBook(commentRequest);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/comments/{commentId}")
     ResponseEntity findCommentById(@PathVariable Long commentId) {
-        Either<BookError, CommentCreateDto> response = bookFacade.findCommentById(commentId);
+        Option<CommentDto> response = bookFacade.findCommentById(commentId);
+        return ResponseResolver.resolve(response);
+    }
+
+    @GetMapping("/books/{bookId}/comments")
+    ResponseEntity getCommentsFromBook(@PathVariable Long bookId) {
+        List<CommentDto> response = bookFacade.getCommentsFromBook(bookId);
         return ResponseResolver.resolve(response);
     }
 }

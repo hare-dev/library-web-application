@@ -4,8 +4,10 @@ import com.haredev.library.book.controller.validation.BookValidation;
 import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.BookCreateDto;
 import com.haredev.library.book.domain.dto.CommentCreateDto;
+import com.haredev.library.book.domain.dto.CommentDto;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import lombok.RequiredArgsConstructor;
 
@@ -24,12 +26,12 @@ public class BookFacade {
         return bookManager.addBook(bookCreateDto).response();
     }
 
-    public Either<BookError, BookCreateDto> findBookById(Long bookId) {
+    public Option<BookCreateDto> findBookById(Long bookId) {
         return bookManager.findBookById(bookId)
                 .map(Book::response);
     }
 
-    public List<BookCreateDto> fechAllBooks(int page) {
+    public List<BookCreateDto> fetchAllBooks(int page) {
         return bookManager.fetchAllBooksWithPageable(page)
                 .stream()
                 .map(Book::response)
@@ -40,12 +42,16 @@ public class BookFacade {
         bookManager.removeBookById(bookId);
     }
 
-    public Either<BookError, CommentCreateDto> addCommentToBook(CommentCreateDto commentRequest) {
+    public Either<BookError, CommentDto> addCommentToBook(CommentCreateDto commentRequest) {
         return bookManager.addCommentToBook(commentRequest.getBookId(), commentRequest);
     }
 
-    public Either<BookError, CommentCreateDto> findCommentById(Long commentId) {
+    public Option<CommentDto> findCommentById(Long commentId) {
         return bookManager.findCommentById(commentId)
-                .map(Comment::response);
+                .map(Comment::toDto);
+    }
+
+    public List<CommentDto> getCommentsFromBook(Long bookId) {
+        return bookManager.getBookByIdWithComments(bookId);
     }
 }
