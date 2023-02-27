@@ -4,12 +4,14 @@ import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
 import com.haredev.library.book.domain.api.BookStatus;
 import com.haredev.library.book.domain.dto.BookCreateDto;
+import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -17,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 class Book extends BaseEntity {
-        @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+        @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookId_generator")
         private Long bookId;
         private String title;
         private String author;
@@ -43,6 +45,10 @@ class Book extends BaseEntity {
 
         public void addComment(Comment comment) {
                 comments.add(comment);
+        }
+
+        public List<CommentDto> getAllComments() {
+                return comments.stream().map(Comment::toDto).collect(Collectors.toList());
         }
 
         BookCreateDto response() {
