@@ -20,8 +20,7 @@ public class CommentCreateDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CommentCreateDto that)) return false;
-        if (!Objects.equals(commentId, that.commentId)) return false;
-        return Objects.equals(description, that.description);
+        return Objects.equals(commentId, that.commentId);
     }
 
     @Override
