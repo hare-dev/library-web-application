@@ -1,6 +1,5 @@
 package com.haredev.library.book.domain;
 
-import io.vavr.control.Option;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;

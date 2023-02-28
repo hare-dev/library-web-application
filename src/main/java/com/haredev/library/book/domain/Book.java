@@ -6,7 +6,10 @@ import com.haredev.library.book.domain.api.BookStatus;
 import com.haredev.library.book.domain.dto.BookCreateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "books")
 class Book extends BaseEntity {
         @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookId_generator")
         private Long bookId;
