@@ -7,7 +7,6 @@ import com.haredev.library.book.domain.dto.CommentCreateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import lombok.RequiredArgsConstructor;
 
@@ -26,9 +25,10 @@ public class BookFacade {
         return bookManager.addBook(bookCreateDto).response();
     }
 
-    public Option<BookCreateDto> findBookById(Long bookId) {
+    public Either<BookError, BookCreateDto> findBookById(Long bookId) {
         return bookManager.findBookById(bookId)
-                .map(Book::response);
+                .map(Book::response)
+                .toEither(BookError.BOOK_NOT_FOUND);
     }
 
     public List<BookCreateDto> fetchAllBooks(int page) {
@@ -46,12 +46,17 @@ public class BookFacade {
         return bookManager.addCommentToBook(commentRequest.getBookId(), commentRequest);
     }
 
-    public Option<CommentDto> findCommentById(Long commentId) {
+    public Either<BookError, CommentDto> findCommentById(Long commentId) {
         return bookManager.findCommentById(commentId)
-                .map(Comment::toDto);
+                .map(Comment::toDto)
+                .toEither(BookError.COMMENT_NOT_FOUND);
     }
 
     public List<CommentDto> getCommentsFromBook(Long bookId) {
         return bookManager.getBookByIdWithComments(bookId);
+    }
+
+    public void removeCommentFromBook(Long commentId) {
+        bookManager.removeCommentById(commentId);
     }
 }

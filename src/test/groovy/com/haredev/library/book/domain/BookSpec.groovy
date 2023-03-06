@@ -36,7 +36,7 @@ class BookSpec extends Specification {
         facade.addBook(twilight)
 
         when: "Should have one book"
-        Option<BookCreateDto> result = facade.findBookById(twilight.bookId)
+        Either<BookError, BookCreateDto> result = facade.findBookById(twilight.bookId)
 
         then: "Should return the book"
         result.get() == twilight
@@ -48,8 +48,8 @@ class BookSpec extends Specification {
         facade.addBook(django)
 
         when: "Should have two books"
-        Option<BookCreateDto> twilight_result = facade.findBookById(twilight.bookId)
-        Option<BookCreateDto> django_result = facade.findBookById(django.bookId)
+        Either<BookError, BookCreateDto> twilight_result = facade.findBookById(twilight.bookId)
+        Either<BookError, BookCreateDto> django_result = facade.findBookById(django.bookId)
 
         then: "Should return two books"
         twilight_result.get() == twilight
@@ -101,7 +101,7 @@ class BookSpec extends Specification {
         Either<BookError, CommentDto> twilightCommentAdded = facade.addCommentToBook(twilightComment)
 
         then: "Should return comment added to book"
-        Option<CommentDto> twilightCommentFounded = facade.findCommentById(twilightComment.commentId)
+        Either<BookError, CommentDto> twilightCommentFounded = facade.findCommentById(twilightComment.commentId)
         twilightCommentAdded.get().description == twilightCommentFounded.get().description
     }
 
@@ -167,9 +167,37 @@ class BookSpec extends Specification {
         when: "Should find book and return list with comments"
         List<CommentDto> comments = facade.getCommentsFromBook(twilight.bookId)
 
-        then: "Should be two comments"
+        then: "Book should have two comments"
         comments.size() == 2
     }
 
+    def "Should remove comment from book"() {
+        given: "Should add book and comment"
+        facade.addBook(twilight)
+        facade.addCommentToBook(twilightComment)
 
+        when: "Should remove comment from book"
+        facade.removeCommentFromBook(twilightComment.commentId)
+
+        then: "Book should not have any comments"
+        BookError error = facade.findCommentById(twilightComment.commentId).getLeft()
+        error == BookError.COMMENT_NOT_FOUND
+    }
+
+    def "Should remove two comments from book"() {
+        given: "Should add book and comment"
+        facade.addBook(twilight)
+        facade.addCommentToBook(twilightComment)
+        facade.addCommentToBook(twilightComment2)
+
+        when: "Should remove comments from book"
+        facade.removeCommentFromBook(twilightComment.commentId)
+        facade.removeCommentFromBook(twilightComment2.commentId)
+
+        then: "Book should not have any comments"
+        BookError error = facade.findCommentById(twilightComment.commentId).getLeft()
+        BookError error2 = facade.findCommentById(twilightComment2.commentId).getLeft()
+        error == BookError.COMMENT_NOT_FOUND
+        error2 == BookError.COMMENT_NOT_FOUND
+    }
 }

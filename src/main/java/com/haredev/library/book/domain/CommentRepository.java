@@ -7,4 +7,5 @@ import java.util.Optional;
 interface CommentRepository extends Repository<Comment, Long> {
     Comment save(Comment comment);
     Optional<Comment> findById(Long commentId);
+    void deleteById(Long commentId);
 }

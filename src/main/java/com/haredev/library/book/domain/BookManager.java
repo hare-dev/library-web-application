@@ -80,6 +80,9 @@ class BookManager {
         return Option.ofOptional(bookRepository.findById(bookId))
                 .map(Book::getAllComments)
                 .getOrElse(Collections.emptyList());
+    }
 
+    public void removeCommentById(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }
