@@ -1,7 +1,10 @@
 package com.haredev.library.book.domain;
 
+import com.haredev.library.book.query.BookQueryFacade;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.persistence.EntityManager;
 
 @Configuration
 class BookConfiguration {
@@ -15,5 +18,10 @@ class BookConfiguration {
         CommentCreator commentCreator = new CommentCreator();
         BookManager bookManager = new BookManager(bookRepository, commentRepository, bookCreator, commentCreator);
         return new BookFacade(bookManager);
+    }
+
+    @Bean
+    BookQueryFacade bookSearchParams(EntityManager entityManager) {
+        return new BookQueryFacade(entityManager);
     }
 }
