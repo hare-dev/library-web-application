@@ -13,12 +13,12 @@ import java.util.List;
 final class BookQueryController {
     private final BookQueryFacade bookQueryFacade;
 
-    @GetMapping("/books/")
+    @GetMapping("/books/criminals")
     List<BookQueryDto> bookFromCriminalCategory() {
         return bookQueryFacade.findAllByCriminalCategory();
     }
 
-    @GetMapping("/books/")
+    @GetMapping("/books/softs")
     List<BookQueryDto> bookWithSoftCover() {
         return bookQueryFacade.findAllBySoftCover();
     }
