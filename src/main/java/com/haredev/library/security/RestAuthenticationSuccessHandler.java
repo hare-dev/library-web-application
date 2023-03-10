@@ -21,7 +21,8 @@ class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final String secret;
 
     public RestAuthenticationSuccessHandler(
-            @Value("${jwt.expirationTime}") long expirationTime, String secret) {
+            @Value("${jwt.expirationTime}") long expirationTime,
+            @Value("${jwt.secret}") String secret) {
         this.expirationTime = expirationTime;
         this.secret = secret;
     }
