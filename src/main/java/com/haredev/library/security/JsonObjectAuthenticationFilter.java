@@ -1,6 +1,7 @@
 package com.haredev.library.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.haredev.library.security.dto.LoginCredentials;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
