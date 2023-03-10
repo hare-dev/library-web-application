@@ -1,4 +1,4 @@
-package com.haredev.library.security;
+package com.haredev.library.security.dto;
 
 import lombok.Getter;
 
