@@ -1,25 +1,40 @@
 package com.haredev.library.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 import javax.sql.DataSource;
 
 @Configuration
-@RequiredArgsConstructor
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final DataSource dataSource;
     private final ObjectMapper objectMapper;
     private final RestAuthenticationFailureHandler failureHandler;
     private final RestAuthenticationSuccessHandler successHandler;
+    private final String secret;
+
+    public SecurityConfiguration(DataSource dataSource, ObjectMapper objectMapper,
+                                 RestAuthenticationFailureHandler failureHandler,
+                                 RestAuthenticationSuccessHandler successHandler,
+                                 @Value("${jwt.secret}") String secret) {
+        this.dataSource = dataSource;
+        this.objectMapper = objectMapper;
+        this.failureHandler = failureHandler;
+        this.successHandler = successHandler;
+        this.secret = secret;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -44,6 +59,9 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(new AuthorizationFilter(authenticationManager(), userDetailsManager(), secret))
                 .addFilter(authenticationFilter())
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
@@ -55,5 +73,10 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         authenticationFilter.setAuthenticationFailureHandler(failureHandler);
         authenticationFilter.setAuthenticationManager(super.authenticationManager());
         return authenticationFilter;
+    }
+
+    @Bean
+    public UserDetailsManager userDetailsManager() {
+        return new JdbcUserDetailsManager(dataSource);
     }
 }
