@@ -101,7 +101,10 @@ jobs:
 workflows:
   library-web-application:
     jobs:
-      - application_build_test
+      - application_build_test:
+          filters:
+            branches:
+              only: main
       - push_docker_image:
           filters:
             branches:
