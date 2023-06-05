@@ -20,6 +20,7 @@ import static io.vavr.API.Case;
 
 @RequiredArgsConstructor
 class BookManager {
+
     private final BookRepository bookRepository;
     private final CommentRepository commentRepository;
     private final BookCreator bookCreator;

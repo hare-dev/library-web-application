@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class BookFacade {
+
     private final BookManager bookManager;
 
     public Validation<Seq<String>, BookCreateDto> validateBook(BookCreateDto bookCreateDto) {
