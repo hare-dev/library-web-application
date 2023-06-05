@@ -44,14 +44,23 @@ jobs:
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
+            ./cc-test-reporter before-build
+          when: always
+
       - run:
           name: Generate JaCoCo Report
           command: ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-report/jacoco.xml
 
+      - store_artifacts:
+          path: jacoco.xml
+
+      - store_artifacts:
+          path: coverage
+
       - run:
           name: Upload JaCoCo report to CodeClimate
           command: |
-            export JACOCO_SOURCE_PATH=library-web-application/src/main/java
+            export JACOCO_SOURCE_PATH=library-web-application/target
             ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-report/jacoco.xml
             ./cc-test-reporter upload-coverage -d
 
@@ -107,3 +116,8 @@ workflows:
             - application_build_test
       - notifications:
           context: slack-secrets
+<<<<<<< HEAD
+=======
+          requires:
+            - push_docker_image
+>>>>>>> develop
