@@ -116,8 +116,5 @@ workflows:
             - application_build_test
       - notifications:
           context: slack-secrets
-<<<<<<< HEAD
-=======
           requires:
             - push_docker_image
->>>>>>> develop
