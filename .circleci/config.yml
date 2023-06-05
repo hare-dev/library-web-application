@@ -84,10 +84,10 @@ jobs:
           name: Create tag for image
           command:
             echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
-            docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TAG
+            docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:TAG
       - run:
           name: Push image to DockerHub
-          command: docker push $DOCKER_IMAGE_NAME:$TAG
+          command: docker push $DOCKER_IMAGE_NAME:TAG
 
   notifications:
     docker:
