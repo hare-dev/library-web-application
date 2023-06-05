@@ -1,0 +1,109 @@
+version: 2.1
+orbs:
+  slack: circleci/slack@4.9.3
+jobs:
+  application_build_test:
+    environment:
+      CC_TEST_REPORTER_ID: aa7bd13a1ed950ae67eb4b5dffa66fde0274424b13c2dd4e4391326c37d87096
+
+    docker:
+      - image: cimg/openjdk:17.0
+
+    working_directory: ~/library-web-application
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - library-web-application-{{ checksum "pom.xml" }}
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: library-web-application-{{ checksum "pom.xml" }}
+
+      - run:
+          name: Java Version
+          command: java --version
+
+      - run:
+          name: Test
+          command: mvn test
+
+      - run:
+          name: Build Application Jar
+          command: mvn -B clean package
+
+      - store_artifacts:
+          path:  target
+
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Generate JaCoCo Report
+          command: ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-report/jacoco.xml
+
+      - run:
+          name: Upload JaCoCo report to CodeClimate
+          command: |
+            export JACOCO_SOURCE_PATH=library-web-application/src/main/java
+            ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-report/jacoco.xml
+            ./cc-test-reporter upload-coverage -d
+
+  push_docker_image:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install Docker Compose
+          environment:
+            COMPOSE_VERSION: '1.29.2'
+          command: |
+            curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - run:
+          name: Login to DockerHub
+          command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run:
+          name: Build images of services declared in docker-compose.yml
+          command: docker-compose build
+      - run:
+          name: Create tag for image
+          command:
+            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
+            docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TAG
+      - run:
+          name: Push image to DockerHub
+          command: docker push $DOCKER_IMAGE_NAME:$TAG
+
+  notifications:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+
+workflows:
+  library-web-application:
+    jobs:
+      - application_build_test
+      - push_docker_image:
+          filters:
+            branches:
+              only: main
+          requires:
+            - application_build_test
+      - notifications:
+          context: slack-secrets
