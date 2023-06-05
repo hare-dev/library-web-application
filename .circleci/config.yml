@@ -59,10 +59,7 @@ jobs:
 
       - run:
           name: Upload JaCoCo report to CodeClimate
-          command: |
-            export JACOCO_SOURCE_PATH=library-web-application/target
-            ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-report/jacoco.xml
-            ./cc-test-reporter upload-coverage -d
+          command: ./cc-test-reporter upload-coverage -d
 
   push_docker_image:
     docker:
