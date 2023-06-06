@@ -23,7 +23,7 @@ public class UserFacade {
     }
 
     public Either<UserError, UserDetailsDto> findByUsername(String username) {
-        return userManager.getUserByUsername(username).map(User::userDetails);
+        return userManager.getUserByUsername(username).map(UserApplication::userDetails);
     }
 
     public List<UserDto> fetchAllUsers() {

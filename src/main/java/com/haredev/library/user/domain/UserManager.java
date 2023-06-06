@@ -25,7 +25,7 @@ class UserManager {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Either<UserError, User> getUserByUsername(String username) {
+    public Either<UserError, UserApplication> getUserByUsername(String username) {
         return Option.ofOptional(userRepository.findByUsername(username)).toEither(UserError.USER_NOT_FOUND);
     }
 
@@ -52,15 +52,15 @@ class UserManager {
 
     public Either<UserError, UserRegistrationResponse> createUser(UserRegistrationRequest request) {
         if (userWithUsernameNotExists(request.getUsername())) {
-            User user = User.newInstance(request.getUsername(), passwordEncoder.encode(request.getPassword()), Authority.USER);
-            return Either.right(userRepository.save(user).registrationResponse()); }
+            UserApplication userApplication = UserApplication.newInstance(request.getUsername(), passwordEncoder.encode(request.getPassword()), Authority.USER);
+            return Either.right(userRepository.save(userApplication).registrationResponse()); }
        return left(USERNAME_DUPLICATED);
     }
 
     public Either<UserError, UserRegistrationResponse> createAdmin(UserRegistrationRequest request) {
         if (userWithUsernameNotExists(request.getUsername())) {
-            User user = User.newInstance(request.getUsername(), passwordEncoder.encode(request.getPassword()), Authority.ADMIN, Authority.USER);
-            return Either.right(userRepository.save(user).registrationResponse()); }
+            UserApplication userApplication = UserApplication.newInstance(request.getUsername(), passwordEncoder.encode(request.getPassword()), Authority.ADMIN, Authority.USER);
+            return Either.right(userRepository.save(userApplication).registrationResponse()); }
         else return left(USERNAME_DUPLICATED);
     }
 
@@ -72,6 +72,6 @@ class UserManager {
     }
 
     public List<UserDto> findAll() {
-        return userRepository.findAll().stream().map(User::toDto).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(UserApplication::toDto).collect(Collectors.toList());
     }
 }

@@ -20,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Getter
-class User extends BaseEntity {
+class UserApplication extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userId_generator")
     private Long userId;
     private String username;
@@ -29,12 +29,12 @@ class User extends BaseEntity {
     @Convert(converter = AuthoritiesToStringConverter.class)
     private Set<Authority> authorities;
 
-    public static User newInstance(String username, String password, Authority... authorities) {
-        final User user = new User();
-        user.username = username;
-        user.password = password;
-        user.authorities = Set.of(authorities);
-        return user;
+    public static UserApplication newInstance(String username, String password, Authority... authorities) {
+        final UserApplication userApplication = new UserApplication();
+        userApplication.username = username;
+        userApplication.password = password;
+        userApplication.authorities = Set.of(authorities);
+        return userApplication;
     }
 
     UserRegistrationResponse registrationResponse() {
@@ -63,10 +63,10 @@ class User extends BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User user)) return false;
+        if (!(o instanceof UserApplication userApplication)) return false;
         if (!super.equals(o)) return false;
-        if (!Objects.equals(userId, user.userId)) return false;
-        return Objects.equals(username, user.username);
+        if (!Objects.equals(userId, userApplication.userId)) return false;
+        return Objects.equals(username, userApplication.username);
     }
 
     @Override

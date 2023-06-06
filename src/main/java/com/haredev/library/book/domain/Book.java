@@ -41,8 +41,8 @@ class Book extends BaseEntity {
         private String description;
         @OneToMany(
                 mappedBy = "book",
-                cascade = CascadeType.ALL,
-                orphanRemoval = true
+                orphanRemoval = true,
+                cascade = CascadeType.ALL
         )
         @Builder.Default
         List<Comment> comments = new ArrayList<>();

@@ -8,22 +8,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.util.Objects.requireNonNull;
 
 class InMemoryUserRepository implements UserRepository {
-    ConcurrentHashMap<Long, User> inMemory = new ConcurrentHashMap<>();
+    ConcurrentHashMap<Long, UserApplication> inMemory = new ConcurrentHashMap<>();
 
     @Override
-    public User save(User user) {
-        requireNonNull(user);
-        inMemory.put(user.registrationResponse().getUserId(), user);
-        return user;
+    public UserApplication save(UserApplication userApplication) {
+        requireNonNull(userApplication);
+        inMemory.put(userApplication.registrationResponse().getUserId(), userApplication);
+        return userApplication;
     }
 
     @Override
-    public List<User> findAll() {
+    public List<UserApplication> findAll() {
         return new ArrayList<>(inMemory.values());
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public Optional<UserApplication> findByUsername(String username) {
         requireNonNull(username);
         return inMemory.values().stream().filter(user -> username.equals(user.getUsername())).findAny();
     }

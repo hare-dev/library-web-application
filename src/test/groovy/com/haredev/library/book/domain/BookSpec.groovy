@@ -181,8 +181,8 @@ class BookSpec extends Specification {
         facade.removeCommentFromBook(twilightComment.commentId)
 
         then: "Book should not have any comments"
-        BookError error = facade.findCommentById(twilightComment.commentId).getLeft()
-        error == COMMENT_NOT_FOUND
+        List<CommentDto> comments = facade.getCommentsFromBook(twilight.bookId)
+        comments.size() == 0
     }
 
     def "Should remove two comments from book"() {
@@ -196,9 +196,7 @@ class BookSpec extends Specification {
         facade.removeCommentFromBook(twilightComment2.commentId)
 
         then: "Book should not have any comments"
-        BookError error1 = facade.findCommentById(twilightComment.commentId).getLeft()
-        BookError error2 = facade.findCommentById(twilightComment2.commentId).getLeft()
-        error1 == COMMENT_NOT_FOUND
-        error2 == COMMENT_NOT_FOUND
+        List<CommentDto> comments = facade.getCommentsFromBook(twilight.bookId)
+        comments.size() == 0
     }
 }
