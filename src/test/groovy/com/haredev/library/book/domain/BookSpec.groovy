@@ -6,6 +6,7 @@ import com.haredev.library.book.domain.dto.CommentDto
 import com.haredev.library.book.samples.SampleBooks
 import com.haredev.library.book.samples.SampleComments
 import io.vavr.control.Either
+import io.vavr.control.Option
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -36,7 +37,7 @@ class BookSpec extends Specification {
         facade.addBook(twilight)
 
         when: "Should have one book"
-        Either<BookError, BookCreateDto> result = facade.findBookById(twilight.bookId)
+        Option<BookCreateDto> result = facade.findBookById(twilight.bookId)
 
         then: "Should return the book"
         result.get() == twilight
@@ -48,8 +49,8 @@ class BookSpec extends Specification {
         facade.addBook(django)
 
         when: "Should have two books"
-        Either<BookError, BookCreateDto> twilight_result = facade.findBookById(twilight.bookId)
-        Either<BookError, BookCreateDto> django_result = facade.findBookById(django.bookId)
+        Option<BookCreateDto> twilight_result = facade.findBookById(twilight.bookId)
+        Option<BookCreateDto> django_result = facade.findBookById(django.bookId)
 
         then: "Should return two books"
         twilight_result.get() == twilight
@@ -101,7 +102,7 @@ class BookSpec extends Specification {
         Either<BookError, CommentDto> twilightCommentAdded = facade.addCommentToBook(twilightComment)
 
         then: "Should return comment added to book"
-        Either<BookError, CommentDto> twilightCommentFounded = facade.findCommentById(twilightComment.commentId)
+        Option<CommentDto> twilightCommentFounded = facade.findCommentById(twilightComment.commentId)
         twilightCommentAdded.get().description == twilightCommentFounded.get().description
     }
 

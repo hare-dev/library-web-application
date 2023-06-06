@@ -47,7 +47,7 @@ final class BookController {
 
     @GetMapping("/books/{bookId}")
     ResponseEntity findBookById(@PathVariable Long bookId) {
-        Either<BookError, BookCreateDto> response = bookFacade.findBookById(bookId);
+        Option<BookCreateDto> response = bookFacade.findBookById(bookId);
         return ResponseResolver.resolve(response);
     }
 
@@ -72,7 +72,7 @@ final class BookController {
 
     @GetMapping("/comments/{commentId}")
     ResponseEntity findCommentById(@PathVariable Long commentId) {
-        Either<BookError, CommentDto> response = bookFacade.findCommentById(commentId);
+        Option<CommentDto> response = bookFacade.findCommentById(commentId);
         return ResponseResolver.resolve(response);
     }
 
