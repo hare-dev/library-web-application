@@ -111,7 +111,7 @@ jobs:
       - run:
           name: Push image to Dockerhub
           command:
-            docker push $DOCKER_IMAGE_NAME:$TAG
+            docker push $DOCKER_IMAGE_NAME:$CIRCLE_BUILD_NUM
 
   send_notifications:
     docker:
