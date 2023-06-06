@@ -2,28 +2,12 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.9.3
 jobs:
-  application_build_test:
-    environment:
-      CC_TEST_REPORTER_ID: aa7bd13a1ed950ae67eb4b5dffa66fde0274424b13c2dd4e4391326c37d87096
-
+  build_tests:
     docker:
       - image: cimg/openjdk:17.0
-
     working_directory: ~/library-web-application
-
     steps:
       - checkout
-
-      - restore_cache:
-          keys:
-            - library-web-application-{{ checksum "pom.xml" }}
-      - run: mvn dependency:go-offline
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: library-web-application-{{ checksum "pom.xml" }}
-
       - run:
           name: Java Version
           command: java --version
@@ -32,13 +16,44 @@ jobs:
           name: Test
           command: mvn test
 
+  build_application:
+    docker:
+      - image: cimg/openjdk:17.0
+    working_directory: ~/library-web-application
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore build application cache
+          keys:
+            - library-web-application-{{ checksum "pom.xml" }}
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          name: Build application cache
+          key: library-web-application-{{ checksum "pom.xml" }}
+          paths:
+            - ~/.m2
+
+      - run:
+          name: Java Version
+          command: java --version
+
       - run:
           name: Build Application Jar
           command: mvn -B clean package
 
       - store_artifacts:
-          path:  target
+          path: tmp/application
+          destination: library-web-application
 
+  generate_code_climate_report:
+    environment:
+      CC_TEST_REPORTER_ID: aa7bd13a1ed950ae67eb4b5dffa66fde0274424b13c2dd4e4391326c37d87096
+    docker:
+      - image: cimg/openjdk:17.0
+    working_directory: ~/library-web-application
+    steps:
+      - checkout
       - run:
           name: Setup Code Climate test-reporter
           command: |
@@ -52,26 +67,27 @@ jobs:
           command: ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-report/jacoco.xml
 
       - store_artifacts:
-          path: jacoco.xml
-
-      - store_artifacts:
-          path: coverage
+          path: tmp/jacoco-report
+          destination: jacoco-report
 
       - run:
           name: Upload JaCoCo report to CodeClimate
           command: ./cc-test-reporter upload-coverage -d
 
-  push_docker_image:
+  build_and_push_docker_image:
     docker:
       - image: docker:stable
+    environment:
+      DOCKER_COMPOSE_VERSION: 'v2.5.0'
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Install Docker Compose
           command: |
             apk update && apk upgrade && apk add curl  
-            curl -L "https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-linux-x86_64" -o ~/docker-compose  
+            curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-linux-x86_64" -o ~/docker-compose  
             chmod +x ~/docker-compose  
             mv ~/docker-compose /usr/local/bin/docker-compose
       - run:
@@ -81,15 +97,13 @@ jobs:
           name: Build images of services declared in docker-compose.yml
           command: docker-compose build
       - run:
-          name: Create tag for image
+          name: Build tag and push image to DockerHub
           command:
-            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
-            docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:TAG
-      - run:
-          name: Push image to DockerHub
-          command: docker push $DOCKER_IMAGE_NAME:TAG
+            TAG=$CIRCLE_BUILD_NUM
+            docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TAG
+            docker push $DOCKER_IMAGE_NAME:$TAG
 
-  notifications:
+  send_notifications:
     docker:
       - image: 'cimg/base:stable'
     steps:
@@ -103,11 +117,17 @@ jobs:
 workflows:
   library-web-application:
     jobs:
-      - application_build_test
-      - push_docker_image:
+      - build_tests
+      - build_application:
           requires:
-            - application_build_test
-      - notifications:
+            - build_tests
+      - generate_code_climate_report:
+          requires:
+            - build_application
+      - build_and_push_docker_image:
+          requires:
+            - generate_code_climate_report
+      - send_notifications:
           context: slack-secrets
           requires:
-            - push_docker_image
+            - build_and_push_docker_image
