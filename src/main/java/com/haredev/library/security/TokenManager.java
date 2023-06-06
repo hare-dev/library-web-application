@@ -7,18 +7,15 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 class TokenManager {
-    private static final int EXPIRATION_TIME = 3600;
-    private static final int KEY_LENGTH = 256;
+    private static final long EXPIRATION_TIME =3600;
+    private static final String SECRET_KEY="482B4D6251655468576D5A7134743777217A25432A462D4A404E635266556A586E3272357538782F413F4428472B4B6250645367566B59703373367639792442";
 
     public String extractLogin(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -66,19 +63,8 @@ class TokenManager {
                 .getBody();
     }
 
-    private String generateKey() {
-        try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-            keyGenerator.init(KEY_LENGTH);
-            SecretKey originalKey = keyGenerator.generateKey();
-            return originalKey.toString();
-        } catch (NoSuchAlgorithmException exception) {
-            throw new RuntimeException("Algorithm not found", exception);
-        }
-    }
-
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(generateKey());
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

@@ -27,6 +27,8 @@ class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
+                .headers().frameOptions().disable()
+                .and()
                 .authorizeHttpRequests()
                 .antMatchers(SWAGGER_AUTHENTICATION_WHITELIST).permitAll()
                 .antMatchers(USER_AUTHENTICATION_WHITELIST).permitAll()
@@ -93,6 +95,8 @@ class SecurityConfiguration {
     private final String[] USER_AUTHENTICATION_WHITELIST = {
             "/users/registration",
             "/admins/registration",
-            "/authenticate"
+            "/authenticate",
+            "/books/**",
+            "/comments/**"
     };
 }
