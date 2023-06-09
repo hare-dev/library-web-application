@@ -4,7 +4,6 @@ import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
 import com.haredev.library.book.domain.api.BookStatus;
 import com.haredev.library.book.domain.dto.BookCreateDto;
-import com.haredev.library.book.domain.dto.CommentCreateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -41,10 +40,10 @@ class Book extends BaseEntity {
         private BookStatus bookStatus;
         private String description;
         @OneToMany(
-                mappedBy = "book",
                 orphanRemoval = true,
                 cascade = CascadeType.ALL
         )
+        @JoinColumn(name = "bookId")
         @Builder.Default
         List<Comment> comments = new ArrayList<>();
 

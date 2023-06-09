@@ -42,15 +42,15 @@ class BookManager {
         return bookRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    private Comment createComment(CommentCreateDto request, Book book) {
-        Comment comment = commentCreator.from(request, book);
+    private Comment createComment(CommentCreateDto request) {
+        Comment comment = commentCreator.from(request);
         commentRepository.save(comment);
         return comment;
     }
 
-    public Either<BookError, CommentDto> addCommentToBook(Long bookId, CommentCreateDto commentCreateDto) {
+    public Either<BookError, CommentDto> addCommentToBook(CommentCreateDto commentCreateDto) {
         return validateParameters(commentCreateDto)
-                .flatMap(comment -> addComment(bookId, comment));
+                .flatMap(this::addComment);
     }
 
     private Either<BookError, CommentCreateDto> validateParameters(CommentCreateDto commentCreateDto) {
@@ -63,11 +63,11 @@ class BookManager {
                 .swap();
     }
 
-    private Either<BookError, CommentDto> addComment(Long bookId, CommentCreateDto commentCreateDto) {
-        return findBookById(bookId)
+    private Either<BookError, CommentDto> addComment(CommentCreateDto request) {
+        return findBookById(request.getBookId())
                 .toEither(BOOK_NOT_FOUND)
                 .map(book -> {
-                    Comment comment = createComment(commentCreateDto, book);
+                    Comment comment = createComment(request);
                     book.addComment(comment);
                     return comment.toDto();
                 });

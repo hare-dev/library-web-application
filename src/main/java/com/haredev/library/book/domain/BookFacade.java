@@ -7,7 +7,6 @@ import com.haredev.library.book.domain.dto.CommentCreateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import lombok.RequiredArgsConstructor;
 
@@ -46,7 +45,7 @@ public class BookFacade {
     }
 
     public Either<BookError, CommentDto> addCommentToBook(CommentCreateDto commentRequest) {
-        return bookManager.addCommentToBook(commentRequest.getBookId(), commentRequest);
+        return bookManager.addCommentToBook(commentRequest);
     }
 
     public Either<BookError, CommentDto> findCommentById(Long commentId) {

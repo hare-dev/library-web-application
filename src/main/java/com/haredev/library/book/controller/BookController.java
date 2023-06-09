@@ -9,7 +9,6 @@ import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.infrastructure.errors.validation.ValidationErrorsConsumer;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +63,7 @@ final class BookController {
         return HttpStatus.OK;
     }
 
-    @PostMapping("/books")
+    @PostMapping("/books/{bookId}")
     ResponseEntity addCommentToBook(@RequestBody CommentCreateDto commentRequest) {
         Either<BookError, CommentDto> response = bookFacade.addCommentToBook(commentRequest);
         return ResponseResolver.resolve(response);
