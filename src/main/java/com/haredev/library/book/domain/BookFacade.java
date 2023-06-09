@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.haredev.library.book.domain.api.error.BookError.BOOK_NOT_FOUND;
+import static com.haredev.library.book.domain.api.error.BookError.COMMENT_NOT_FOUND;
+
 @RequiredArgsConstructor
 public class BookFacade {
 
@@ -27,8 +30,8 @@ public class BookFacade {
         return bookManager.addBook(bookCreateDto).response();
     }
 
-    public Option<BookCreateDto> findBookById(Long bookId) {
-        return bookManager.findBookById(bookId).map(Book::response);
+    public Either<BookError, BookCreateDto> findBookById(Long bookId) {
+        return bookManager.findBookById(bookId).map(Book::response).toEither(BOOK_NOT_FOUND);
     }
 
     public List<BookCreateDto> fetchAllBooks(int page) {
@@ -46,15 +49,15 @@ public class BookFacade {
         return bookManager.addCommentToBook(commentRequest.getBookId(), commentRequest);
     }
 
-    public Option<CommentDto> findCommentById(Long commentId) {
-        return bookManager.findCommentById(commentId).map(Comment::toDto);
+    public Either<BookError, CommentDto> findCommentById(Long commentId) {
+        return bookManager.findCommentById(commentId).map(Comment::toDto).toEither(COMMENT_NOT_FOUND);
     }
 
     public List<CommentDto> getCommentsFromBook(Long bookId) {
         return bookManager.getBookByIdWithComments(bookId);
     }
 
-    public void removeCommentFromBook(Long commentId) {
+    public void removeCommentById(Long commentId) {
         bookManager.removeCommentById(commentId);
     }
 }

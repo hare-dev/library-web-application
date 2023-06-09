@@ -3,10 +3,7 @@ package com.haredev.library.book.domain;
 import com.haredev.library.book.domain.dto.CommentCreateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "comments")
 class Comment extends BaseEntity {

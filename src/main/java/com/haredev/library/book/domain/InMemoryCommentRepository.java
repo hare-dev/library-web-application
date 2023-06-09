@@ -22,7 +22,6 @@ class InMemoryCommentRepository implements CommentRepository {
 
     @Override
     public void deleteById(Long commentId) {
-        requireNonNull(commentId);
         inMemoryComment.remove(commentId);
     }
 }
