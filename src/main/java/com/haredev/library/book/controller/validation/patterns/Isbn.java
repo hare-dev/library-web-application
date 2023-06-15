@@ -1,7 +1,6 @@
 package com.haredev.library.book.controller.validation.patterns;
 
 import io.vavr.control.Validation;
-import org.springframework.lang.NonNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +12,7 @@ public final class Isbn {
             "[- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$";
     private Isbn() { };
 
-    public static Validation<String, String> validate(@NonNull String isbn) {
+    public static Validation<String, String> validate(final String isbn) {
         return isValid(isbn)
                 ? Validation.valid(isbn)
                 : Validation.invalid("Isbn code is not correct");

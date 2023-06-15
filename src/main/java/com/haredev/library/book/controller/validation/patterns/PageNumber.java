@@ -7,7 +7,7 @@ import static java.util.Objects.isNull;
 public final class PageNumber {
     private PageNumber() { };
 
-    public static Validation<String, Integer> validate(Integer pageNumber) {
+    public static Validation<String, Integer> validate(final Integer pageNumber) {
         return isNull(pageNumber)
                 ? Validation.invalid("Page number cannot be null")
                 : Validation.valid(pageNumber);
