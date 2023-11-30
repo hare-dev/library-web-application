@@ -1,8 +1,8 @@
 package com.haredev.library.book.query;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 @RequiredArgsConstructor

@@ -17,11 +17,11 @@ public enum UserError implements ResponseError {
 
     @Override
     public String getMessage() {
-        return null;
+        return message;
     }
 
     @Override
     public int getHttpCode() {
-        return 0;
+        return httpCode;
     }
 }

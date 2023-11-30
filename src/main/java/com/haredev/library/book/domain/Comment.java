@@ -3,9 +3,9 @@ package com.haredev.library.book.domain;
 import com.haredev.library.book.domain.dto.CommentCreateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "comments")
 class Comment extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commentId_generator")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commentId_generator")
     private Long commentId;
     private Long bookId;
     private String description;

@@ -6,12 +6,12 @@ import com.haredev.library.user.domain.api.Authority;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import com.haredev.library.user.domain.dto.UserDto;
 import com.haredev.library.user.domain.mapper.AuthoritiesToStringConverter;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,7 +21,8 @@ import java.util.Set;
 @Builder
 @Getter
 class UserApplication extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userId_generator")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userId_generator")
     private Long userId;
     private String username;
     private String password;

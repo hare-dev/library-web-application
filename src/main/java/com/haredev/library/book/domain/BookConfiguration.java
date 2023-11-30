@@ -1,10 +1,9 @@
 package com.haredev.library.book.domain;
 
 import com.haredev.library.book.query.BookQueryFacade;
+import jakarta.persistence.EntityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.persistence.EntityManager;
 
 @Configuration
 class BookConfiguration {
