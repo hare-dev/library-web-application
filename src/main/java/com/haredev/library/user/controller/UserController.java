@@ -21,17 +21,17 @@ import java.util.List;
 class UserController {
     private final UserFacade userFacade;
 
-    @PostMapping("/admins/registration")
+    @PostMapping("admin/registration")
     public Either<UserError, UserRegistrationResponse> registerAsUser(@RequestBody UserRegistrationRequest request) {
         return userFacade.registerAsUser(request);
     }
 
-    @PostMapping("/users/registration")
+    @PostMapping("/user/registration")
     public Either<UserError, UserRegistrationResponse> registerAsAdmin(@RequestBody UserRegistrationRequest request) {
         return userFacade.registerAsAdmin(request);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/user")
     public ResponseEntity fetchAllUsers() {
         List<UserDto> response = userFacade.fetchAllUsers();
         return ResponseResolver.resolve(response);

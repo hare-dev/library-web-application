@@ -21,7 +21,6 @@ class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final TokenManager tokenManager;
     private final UserDetailsService userDetailsService;
 
-
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,

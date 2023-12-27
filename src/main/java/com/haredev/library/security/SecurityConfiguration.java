@@ -2,6 +2,7 @@ package com.haredev.library.security;
 
 import com.haredev.library.user.domain.UserFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,22 +25,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 class SecurityConfiguration {
     private final UserFacade userFacade;
+    private final TokenManager tokenManager;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.securityMatcher(PathRequest.toH2Console());
         httpSecurity
-                .csrf().disable()
-                .headers().frameOptions().disable()
-                .and()
-                .authorizeHttpRequests()
-                .antMatchers(SWAGGER_AUTHENTICATION_WHITELIST).permitAll()
-                .antMatchers(USER_AUTHENTICATION_WHITELIST).permitAll()
-                .antMatchers(H2_AUTHENTICATION_WHITELIST).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .headers((headers) ->
+                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+                );
+        httpSecurity.authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers(SWAGGER_AUTHENTICATION_WHITELIST).permitAll()
+                                .requestMatchers(H2_AUTHENTICATION_WHITELIST).permitAll()
+                                .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -59,12 +65,7 @@ class SecurityConfiguration {
 
     @Bean
     TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenManager(), userDetailsService());
-    }
-
-    @Bean
-    TokenManager tokenManager() {
-        return new TokenManager();
+        return new TokenAuthenticationFilter(tokenManager, userDetailsService());
     }
 
     @Bean
@@ -93,8 +94,8 @@ class SecurityConfiguration {
     };
 
     private final String[] USER_AUTHENTICATION_WHITELIST = {
-            "/users/registration",
-            "/admins/registration",
+            "/user/registration",
+            "/admin/registration",
             "/authenticate",
             "/books/**",
             "/comments/**"
