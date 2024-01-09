@@ -52,8 +52,10 @@ public class BookFacade {
         return bookManager.findCommentById(commentId).map(Comment::toDto).toEither(COMMENT_NOT_FOUND);
     }
 
-    public List<CommentDto> getCommentsFromBook(Long bookId) {
-        return bookManager.getBookByIdWithComments(bookId);
+    public Either<BookError, List<CommentDto>> getBookByIdWithComments(Long bookId) {
+        return bookManager.findBookById(bookId)
+                .toEither(BOOK_NOT_FOUND)
+                .map(Book::getAllComments);
     }
 
     public void removeCommentById(Long commentId) {

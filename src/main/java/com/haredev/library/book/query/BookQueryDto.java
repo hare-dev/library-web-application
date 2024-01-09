@@ -1,6 +1,5 @@
 package com.haredev.library.book.query;
 
-import com.haredev.library.book.domain.api.BookCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

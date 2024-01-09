@@ -10,7 +10,6 @@ import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,12 +74,6 @@ class BookManager {
 
     public Option<Comment> findCommentById(Long commentId) {
         return Option.ofOptional(commentRepository.findById(commentId));
-    }
-
-    public List<CommentDto> getBookByIdWithComments(Long bookId) {
-        return Option.ofOptional(bookRepository.findById(bookId))
-                .map(Book::getAllComments)
-                .getOrElse(Collections.emptyList());
     }
 
     public void removeCommentById(Long commentId) {

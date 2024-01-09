@@ -1,4 +1,4 @@
-package com.haredev.library.infrastructure.security;
+package com.haredev.library.infrastructure.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

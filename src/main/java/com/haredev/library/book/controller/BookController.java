@@ -76,7 +76,7 @@ final class BookController {
 
     @GetMapping("/books/{bookId}/comments")
     ResponseEntity getCommentsFromBook(@PathVariable Long bookId) {
-        List<CommentDto> response = bookFacade.getCommentsFromBook(bookId);
+        Either<BookError, List<CommentDto>> response = bookFacade.getBookByIdWithComments(bookId);
         return ResponseResolver.resolve(response);
     }
 

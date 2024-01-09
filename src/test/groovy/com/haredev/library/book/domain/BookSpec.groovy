@@ -152,10 +152,10 @@ class BookSpec extends Specification {
         facade.addCommentToBook(TWILIGHT_COMMENT_FIRST)
 
         when: "Should find book and return list with comments"
-        List<CommentDto> comments = facade.getCommentsFromBook(TWILIGHT.bookId)
+        Either<BookError, List<CommentDto>> comments = facade.getBookByIdWithComments(TWILIGHT.bookId)
 
         then: "Should be one comment"
-        comments.size() == 1
+        comments.get().size() == 1
     }
 
     def "Should get two comments from book"() {
@@ -165,10 +165,10 @@ class BookSpec extends Specification {
         facade.addCommentToBook(TWILIGHT_COMMENT_SECOND)
 
         when: "Should find book and return list with comments"
-        List<CommentDto> comments = facade.getCommentsFromBook(TWILIGHT.bookId)
+        Either<BookError, List<CommentDto>> response = facade.getBookByIdWithComments(TWILIGHT.bookId)
 
         then: "Book should have two comments"
-        comments.size() == 2
+        response.get().size() == 2
     }
 
     def "Should remove comment from book"() {
