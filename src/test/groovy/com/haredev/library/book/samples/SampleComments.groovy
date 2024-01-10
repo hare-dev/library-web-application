@@ -6,7 +6,7 @@ import groovy.transform.CompileStatic
 import java.time.LocalDateTime
 
 @CompileStatic
-class SampleComments {
+final class SampleComments {
     static CommentCreateDto createCommentSample(Long commentId, Long bookId, String description, LocalDateTime dateAdded) {
         return CommentCreateDto.builder()
                 .commentId(commentId)
