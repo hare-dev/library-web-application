@@ -113,7 +113,7 @@ class BookSpec extends Specification {
         ERROR_RESPONSE == NULL_OR_EMPTY_DESCRIPTION
     }
 
-    def "Should not add comment to book because description is empty"() {
+    def "Should not add comment to book with empty description"() {
         given: "Add book to System"
         facade.addBook(BOOK_ONE)
 
@@ -124,7 +124,7 @@ class BookSpec extends Specification {
         ERROR_RESPONSE == NULL_OR_EMPTY_DESCRIPTION
     }
 
-    def "Should not add comment to book because date added is null"() {
+    def "Should not add comment to book with null date added"() {
         given: "Add book"
         facade.addBook(BOOK_ONE)
 
@@ -158,6 +158,17 @@ class BookSpec extends Specification {
 
         then: "Book has two comments"
         COMMENTS_SIZE.get().size() == 2
+    }
+
+    def "Should return empty list of comments from book"() {
+        given: "Add book to system"
+        facade.addBook(BOOK_ONE)
+
+        when: "Find book and return list with comments"
+        Either<BookError, List<CommentDto>> COMMENTS = facade.getBookByIdWithComments(BOOK_ONE.bookId)
+
+        then: "List with comments from book is empty"
+        COMMENTS.get().isEmpty()
     }
 
     def "Should remove comment from book"() {
