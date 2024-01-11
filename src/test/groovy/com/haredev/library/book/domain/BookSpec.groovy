@@ -15,17 +15,6 @@ import static com.haredev.library.book.domain.api.error.BookError.*
 class BookSpec extends Specification {
     def facade = new BookConfiguration().bookFacade(new InMemoryBookRepository(), new InMemoryCommentRepository())
 
-    def final PAGE = 1
-    def final BOOK_ONE = SampleBooks.createBookSample(0L, "Twilight", "Stephenie Meyer")
-    def final BOOK_TWO = SampleBooks.createBookSample(1L, "Django", "Quentin Tarantino")
-
-    def final COMMENT_FOR_NOT_EXISTING_BOOK = SampleComments.createCommentSample(3L, 111, "NOT EXISTING", LocalDateTime.now())
-    def final COMMENT_ONE_FOR_BOOK_ONE = SampleComments.createCommentSample(0L, BOOK_ONE.bookId, "Best book!", LocalDateTime.now())
-    def final COMMENT_TWO_FOR_BOOK_ONE = SampleComments.createCommentSample(1L, BOOK_ONE.bookId, "Fantastic book!", LocalDateTime.now())
-    def final COMMENT_FOR_BOOK_ONE_WITH_NULL_DESCRIPTION = SampleComments.createCommentSample(0L, BOOK_ONE.bookId, null, LocalDateTime.now())
-    def final COMMENT_FOR_BOOK_ONE_WITH_EMPTY_DESCRIPTION = SampleComments.createCommentSample(0L, BOOK_ONE.bookId, "", LocalDateTime.now())
-    def final COMMENT_FOR_BOOK_ONE_WITH_NULL_DATE_ADDED = SampleComments.createCommentSample(0L, BOOK_ONE.bookId, "Best book!", null)
-
     def "Should be empty"() {
         expect:
         facade.fetchAllBooks(PAGE).isEmpty()
@@ -107,7 +96,7 @@ class BookSpec extends Specification {
 
     def "Should not add comment to not existing book"() {
         when: "Add comment to book"
-        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_FOR_NOT_EXISTING_BOOK).getLeft()
+        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_FOR_NOT_EXIST_BOOK_ID).getLeft()
 
         then: "Book not found"
         ERROR_RESPONSE == BOOK_NOT_FOUND
@@ -118,7 +107,7 @@ class BookSpec extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Add comment to book"
-        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_FOR_BOOK_ONE_WITH_NULL_DESCRIPTION).getLeft()
+        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_WITH_NULL_DESCRIPTION).getLeft()
 
         then: "Return error with null description"
         ERROR_RESPONSE == NULL_OR_EMPTY_DESCRIPTION
@@ -129,7 +118,7 @@ class BookSpec extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Add comment to book"
-        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_FOR_BOOK_ONE_WITH_EMPTY_DESCRIPTION).getLeft()
+        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_WITH_EMPTY_DESCRIPTION).getLeft()
 
         then: "Return error with null description"
         ERROR_RESPONSE == NULL_OR_EMPTY_DESCRIPTION
@@ -140,13 +129,13 @@ class BookSpec extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Add comment to book"
-        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_FOR_BOOK_ONE_WITH_NULL_DATE_ADDED).getLeft()
+        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_WITH_NULL_DATE_ADDED).getLeft()
 
         then: "Return error with null date added"
         ERROR_RESPONSE == NULL_DATE_ADDED
     }
 
-    def "Should get one comments from book"() {
+    def "Should get one comment from book"() {
         given: "Add book and comment"
         facade.addBook(BOOK_ONE)
         facade.addCommentToBook(COMMENT_ONE_FOR_BOOK_ONE)
@@ -200,4 +189,16 @@ class BookSpec extends Specification {
         COMMENT_ONE_ERROR_RESPONSE == COMMENT_NOT_FOUND
         COMMENT_TWO_ERROR_RESPONSE == COMMENT_NOT_FOUND
     }
+
+    def final PAGE = 1
+    def final BOOK_ONE = SampleBooks.createBookSample(0L, "Twilight", "Stephenie Meyer")
+    def final BOOK_TWO = SampleBooks.createBookSample(1L, "Django", "Quentin Tarantino")
+
+    def final COMMENT_ONE_FOR_BOOK_ONE = SampleComments.createCommentSample(0L, BOOK_ONE.bookId, "Best book!", LocalDateTime.now())
+    def final COMMENT_TWO_FOR_BOOK_ONE = SampleComments.createCommentSample(1L, BOOK_ONE.bookId, "Fantastic book!", LocalDateTime.now())
+
+    def final COMMENT_FOR_NOT_EXIST_BOOK_ID = SampleComments.createCommentSampleWithNotExistsBookId()
+    def final COMMENT_WITH_NULL_DESCRIPTION = SampleComments.createCommentSampleWithNullDescription()
+    def final COMMENT_WITH_EMPTY_DESCRIPTION = SampleComments.createCommentSampleWithEmptyDescription()
+    def final COMMENT_WITH_NULL_DATE_ADDED = SampleComments.createCommentSampleWithNullDateAdded()
 }
