@@ -2,7 +2,6 @@ package com.haredev.library.security;
 
 import com.haredev.library.user.domain.UserFacade;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +29,6 @@ class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(CsrfConfigurer::disable);
-        httpSecurity.securityMatcher(PathRequest.toH2Console());
         httpSecurity
                 .headers((headers) ->
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
