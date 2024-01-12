@@ -39,6 +39,7 @@ class SecurityConfiguration {
                         authorizeRequests
                                 .requestMatchers(SWAGGER_AUTHENTICATION_WHITELIST).permitAll()
                                 .requestMatchers(H2_AUTHENTICATION_WHITELIST).permitAll()
+                                .requestMatchers(USER_AUTHENTICATION_WHITELIST).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -97,7 +98,5 @@ class SecurityConfiguration {
             "/user/registration",
             "/admin/registration",
             "/authenticate",
-            "/books/**",
-            "/comments/**"
     };
 }

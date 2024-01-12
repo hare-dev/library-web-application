@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.$Invalid;
@@ -39,8 +40,8 @@ final class BookController {
                 Either.left(ValidationErrorsConsumer.errorsAsJson(errors)));
     }
 
-    private ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>> valid(BookCreateDto book) {
-        return new ResponseEntity<>(Either.right(bookFacade.addBook(book)), HttpStatus.CREATED);
+    private Supplier<ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>>> valid(BookCreateDto book) {
+        return () -> new ResponseEntity<>(Either.right(bookFacade.addBook(book)), HttpStatus.CREATED);
     }
 
     @GetMapping("/books/{bookId}")
