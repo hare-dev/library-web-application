@@ -1,8 +1,8 @@
 package com.haredev.library.user.controller;
 
 import com.haredev.library.infrastructure.errors.ResponseResolver;
-import com.haredev.library.user.controller.validation.UserRegistrationRequest;
-import com.haredev.library.user.controller.validation.UserRegistrationResponse;
+import com.haredev.library.user.controller.validation.RegistrationRequest;
+import com.haredev.library.user.controller.validation.RegistrationResponse;
 import com.haredev.library.user.domain.UserFacade;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDto;
@@ -22,12 +22,12 @@ class UserController {
     private final UserFacade userFacade;
 
     @PostMapping("admin/registration")
-    public Either<UserError, UserRegistrationResponse> registerAsUser(@RequestBody UserRegistrationRequest request) {
+    public Either<UserError, RegistrationResponse> registerAsUser(@RequestBody RegistrationRequest request) {
         return userFacade.registerAsUser(request);
     }
 
     @PostMapping("/user/registration")
-    public Either<UserError, UserRegistrationResponse> registerAsAdmin(@RequestBody UserRegistrationRequest request) {
+    public Either<UserError, RegistrationResponse> registerAsAdmin(@RequestBody RegistrationRequest request) {
         return userFacade.registerAsAdmin(request);
     }
 

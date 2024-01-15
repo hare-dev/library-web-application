@@ -1,7 +1,7 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.user.controller.validation.UserRegistrationRequest;
-import com.haredev.library.user.controller.validation.UserRegistrationResponse;
+import com.haredev.library.user.controller.validation.RegistrationRequest;
+import com.haredev.library.user.controller.validation.RegistrationResponse;
 import com.haredev.library.user.domain.api.Authority;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDto;
@@ -29,17 +29,17 @@ class UserManager {
         return Option.ofOptional(userRepository.findByUsername(username)).toEither(UserError.USER_NOT_FOUND);
     }
 
-    public Either<UserError, UserRegistrationResponse> registerUser(UserRegistrationRequest userRequest) {
+    public Either<UserError, RegistrationResponse> registerUser(RegistrationRequest userRequest) {
         return validateParameters(userRequest)
                 .flatMap(this::createUser);
     }
 
-    public Either<UserError, UserRegistrationResponse> registerAdmin(UserRegistrationRequest userRequest) {
+    public Either<UserError, RegistrationResponse> registerAdmin(RegistrationRequest userRequest) {
         return validateParameters(userRequest)
                 .flatMap(this::createAdmin);
     }
 
-    private Either<UserError, UserRegistrationRequest> validateParameters(UserRegistrationRequest userRequest) {
+    private Either<UserError, RegistrationRequest> validateParameters(RegistrationRequest userRequest) {
         return API.Match(userRequest)
                 .option(
                         Case($(argument -> Objects.isNull(argument.getUsername())), USERNAME_IS_NULL),
@@ -50,14 +50,14 @@ class UserManager {
                 .swap();
     }
 
-    public Either<UserError, UserRegistrationResponse> createUser(UserRegistrationRequest request) {
+    public Either<UserError, RegistrationResponse> createUser(RegistrationRequest request) {
         if (userWithUsernameNotExists(request.getUsername())) {
             UserApplication userApplication = UserApplication.newInstance(request.getUsername(), passwordEncoder.encode(request.getPassword()), Authority.USER);
             return Either.right(userRepository.save(userApplication).registrationResponse()); }
        return left(USERNAME_DUPLICATED);
     }
 
-    public Either<UserError, UserRegistrationResponse> createAdmin(UserRegistrationRequest request) {
+    public Either<UserError, RegistrationResponse> createAdmin(RegistrationRequest request) {
         if (userWithUsernameNotExists(request.getUsername())) {
             UserApplication userApplication = UserApplication.newInstance(request.getUsername(), passwordEncoder.encode(request.getPassword()), Authority.ADMIN, Authority.USER);
             return Either.right(userRepository.save(userApplication).registrationResponse()); }

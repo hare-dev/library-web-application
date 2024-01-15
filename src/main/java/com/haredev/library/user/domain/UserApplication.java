@@ -1,7 +1,7 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.infrastructure.entity.BaseEntity;
-import com.haredev.library.user.controller.validation.UserRegistrationResponse;
+import com.haredev.library.user.controller.validation.RegistrationResponse;
 import com.haredev.library.user.domain.api.Authority;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import com.haredev.library.user.domain.dto.UserDto;
@@ -38,8 +38,8 @@ class UserApplication extends BaseEntity {
         return userApplication;
     }
 
-    UserRegistrationResponse registrationResponse() {
-        return UserRegistrationResponse.builder()
+    RegistrationResponse registrationResponse() {
+        return RegistrationResponse.builder()
                 .userId(userId)
                 .username(username)
                 .build();

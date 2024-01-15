@@ -9,14 +9,14 @@ import java.util.Objects;
 @Getter
 @Builder
 @AllArgsConstructor
-public class UserRegistrationRequest {
+public class RegistrationRequest {
     private final String password;
     private final String username;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserRegistrationRequest that)) return false;
+        if (!(o instanceof RegistrationRequest that)) return false;
         return Objects.equals(username, that.username);
     }
 

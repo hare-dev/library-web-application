@@ -1,7 +1,7 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.user.controller.validation.UserRegistrationRequest;
-import com.haredev.library.user.controller.validation.UserRegistrationResponse;
+import com.haredev.library.user.controller.validation.RegistrationRequest;
+import com.haredev.library.user.controller.validation.RegistrationResponse;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import com.haredev.library.user.domain.dto.UserDto;
@@ -14,11 +14,11 @@ import java.util.List;
 public class UserFacade {
     private final UserManager userManager;
 
-    public Either<UserError, UserRegistrationResponse> registerAsUser(UserRegistrationRequest userRequest) {
+    public Either<UserError, RegistrationResponse> registerAsUser(RegistrationRequest userRequest) {
         return userManager.registerUser(userRequest);
     }
 
-    public Either<UserError, UserRegistrationResponse> registerAsAdmin(UserRegistrationRequest userRequest) {
+    public Either<UserError, RegistrationResponse> registerAsAdmin(RegistrationRequest userRequest) {
         return userManager.registerAdmin(userRequest);
     }
 
