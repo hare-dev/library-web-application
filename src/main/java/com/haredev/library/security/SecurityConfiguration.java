@@ -79,8 +79,8 @@ class SecurityConfiguration {
             "/dev-test-h2/**",
             "/swagger-resources/**",
             "/swagger-ui/**",
-            "/user/registration",
-            "/admin/registration",
+            "/registration/user",
+            "/registration/admin",
             "/authenticate"
     };
 }
