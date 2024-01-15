@@ -17,12 +17,12 @@ class AuthenticationController {
     private final TokenManager tokenManager;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
+    public ResponseEntity authenticate(@RequestBody AuthenticationRequest request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
         var response = AuthenticationResponse.builder()
-                .token(tokenManager.generateToken(request.getUsername()))
+                .token(tokenManager.buildToken(request.getUsername()))
                 .build();
         return ResponseEntity.ok(response);
     }

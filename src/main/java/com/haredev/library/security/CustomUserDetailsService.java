@@ -20,8 +20,8 @@ class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Either<UserError, UserDetailsDto> userDto = userFacade.findByUsername(username);
-        final String login = userDto .get().getUsername();
-        final String password = userDto .get().getPassword();
+        final String login = userDto.get().getUsername();
+        final String password = userDto.get().getPassword();
         final List<CustomGrantedAuthority> authorities = userDto.get().getAuthorities()
                 .stream().map(authority -> new CustomGrantedAuthority(authority.name())).collect(Collectors.toList());
         return new User(login, password, authorities);

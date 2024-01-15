@@ -34,11 +34,13 @@ class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
         token = header.substring(7);
         login = tokenManager.extractLogin(token);
+
         if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(login);
-            if (tokenManager.isValidToken(token, userDetails)) {
+            if (tokenManager.isTokenValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }

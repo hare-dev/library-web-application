@@ -28,25 +28,20 @@ class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(CsrfConfigurer::disable);
-        httpSecurity
-                .headers((headers) ->
-                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
-                );
-        httpSecurity.authorizeHttpRequests(authorizeRequests ->
+        return httpSecurity
+                .csrf(CsrfConfigurer::disable)
+                .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers(SWAGGER_AUTHENTICATION_WHITELIST).permitAll()
-                                .requestMatchers(H2_AUTHENTICATION_WHITELIST).permitAll()
-                                .requestMatchers(USER_AUTHENTICATION_WHITELIST).permitAll()
+                                .requestMatchers(URL_WHITELIST).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        return httpSecurity.build();
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
@@ -77,24 +72,15 @@ class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    private final String[] SWAGGER_AUTHENTICATION_WHITELIST = {
-            "/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/swagger-ui.html",
+    private final String[] URL_WHITELIST = {
             "/webjars/**",
             "/v3/api-docs/**",
-            "/swagger-ui/**"
-    };
-
-    private final String[] H2_AUTHENTICATION_WHITELIST = {
             "/h2-console/**",
-            "/dev-test-h2/**"
-    };
-
-    private final String[] USER_AUTHENTICATION_WHITELIST = {
+            "/dev-test-h2/**",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
             "/user/registration",
             "/admin/registration",
-            "/authenticate",
+            "/authenticate"
     };
 }
