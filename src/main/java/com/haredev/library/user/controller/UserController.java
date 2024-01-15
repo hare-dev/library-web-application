@@ -2,11 +2,8 @@ package com.haredev.library.user.controller;
 
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.user.controller.validation.RegistrationRequest;
-import com.haredev.library.user.controller.validation.RegistrationResponse;
 import com.haredev.library.user.domain.UserFacade;
-import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDto;
-import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,17 +18,17 @@ import java.util.List;
 class UserController {
     private final UserFacade userFacade;
 
-    @PostMapping("admin/registration")
-    public Either<UserError, RegistrationResponse> registerAsUser(@RequestBody RegistrationRequest request) {
-        return userFacade.registerAsUser(request);
+    @PostMapping("/registration/user")
+    public ResponseEntity registerAsUser(@RequestBody RegistrationRequest request) {
+        return ResponseResolver.resolve(userFacade.registerAsUser(request));
     }
 
-    @PostMapping("/user/registration")
-    public Either<UserError, RegistrationResponse> registerAsAdmin(@RequestBody RegistrationRequest request) {
-        return userFacade.registerAsAdmin(request);
+    @PostMapping("/registration/admin")
+    public ResponseEntity registerAsAdmin(@RequestBody RegistrationRequest request) {
+        return ResponseResolver.resolve(userFacade.registerAsAdmin(request));
     }
 
-    @GetMapping("/user")
+    @GetMapping("/users")
     public ResponseEntity fetchAllUsers() {
         List<UserDto> response = userFacade.fetchAllUsers();
         return ResponseResolver.resolve(response);

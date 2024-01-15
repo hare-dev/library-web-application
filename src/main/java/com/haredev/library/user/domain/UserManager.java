@@ -25,8 +25,8 @@ class UserManager {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Either<UserError, UserApplication> getUserByUsername(String username) {
-        return Option.ofOptional(userRepository.findByUsername(username)).toEither(UserError.USER_NOT_FOUND);
+    public Option<UserApplication> getUserByUsername(String username) {
+        return Option.ofOptional(userRepository.findByUsername(username));
     }
 
     public Either<UserError, RegistrationResponse> registerUser(RegistrationRequest userRequest) {
