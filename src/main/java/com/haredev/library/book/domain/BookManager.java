@@ -24,6 +24,7 @@ class BookManager {
     private final CommentRepository commentRepository;
     private final BookCreator bookCreator;
     private final CommentCreator commentCreator;
+    private static final int pageSize = 20;
 
     public Book addBook(BookCreateDto request) {
         Book book = bookCreator.from(request);
@@ -37,7 +38,6 @@ class BookManager {
     public void removeBookById(Long bookId) { bookRepository.deleteById(bookId); }
 
     public List<Book> fetchAllBooksWithPageable(int page) {
-        final int pageSize = 20;
         return bookRepository.findAll(PageRequest.of(page, pageSize));
     }
 

@@ -69,7 +69,7 @@ final class BookController {
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("/comments/{commentId}")
+    @GetMapping("/books/comments/{commentId}")
     ResponseEntity findCommentById(@PathVariable Long commentId) {
         Either<BookError, CommentDto> response = bookFacade.findCommentById(commentId);
         return ResponseResolver.resolve(response);
@@ -81,7 +81,7 @@ final class BookController {
         return ResponseResolver.resolve(response);
     }
 
-    @DeleteMapping("comments/{commentId}")
+    @DeleteMapping("/books/comments/{commentId}")
     HttpStatus removeCommentById(@PathVariable Long commentId) {
         bookFacade.removeCommentById(commentId);
         return HttpStatus.OK;
