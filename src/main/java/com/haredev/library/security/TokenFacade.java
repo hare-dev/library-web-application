@@ -6,7 +6,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -30,9 +29,9 @@ public class TokenFacade {
         return extractAllClaims(token).getSubject();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean isTokenValid(String token, String username) {
         final String login = extractLogin(token);
-        return login.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        return login.equals(username) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

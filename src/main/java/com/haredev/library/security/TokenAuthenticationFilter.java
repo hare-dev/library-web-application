@@ -37,7 +37,7 @@ class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(login);
-            if (tokenFacade.isTokenValid(token, userDetails)) {
+            if (tokenFacade.isTokenValid(token, userDetails.getUsername())) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

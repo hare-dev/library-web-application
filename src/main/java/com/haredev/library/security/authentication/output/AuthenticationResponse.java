@@ -1,4 +1,4 @@
-package com.haredev.library.security.dto;
+package com.haredev.library.security.authentication.output;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
