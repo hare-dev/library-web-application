@@ -18,7 +18,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private final TokenManager tokenManager;
+    private final TokenFacade tokenFacade;
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -33,11 +33,11 @@ class TokenAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         token = header.substring(7);
-        login = tokenManager.extractLogin(token);
+        login = tokenFacade.extractLogin(token);
 
         if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(login);
-            if (tokenManager.isTokenValid(token, userDetails)) {
+            if (tokenFacade.isTokenValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

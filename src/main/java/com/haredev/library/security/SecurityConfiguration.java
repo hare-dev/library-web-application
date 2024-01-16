@@ -24,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 class SecurityConfiguration {
     private final UserFacade userFacade;
-    private final TokenManager tokenManager;
+    private final TokenFacade tokenFacade;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -59,7 +59,7 @@ class SecurityConfiguration {
 
     @Bean
     TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenManager, userDetailsService());
+        return new TokenAuthenticationFilter(tokenFacade, userDetailsService());
     }
 
     @Bean

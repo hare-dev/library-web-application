@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 class AuthenticationController {
     private final AuthenticationManager authenticationManager;
-    private final TokenManager tokenManager;
+    private final TokenFacade tokenFacade;
 
     @PostMapping("/authenticate")
     public ResponseEntity authenticate(@RequestBody AuthenticationRequest request){
@@ -22,7 +22,7 @@ class AuthenticationController {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
         var response = AuthenticationResponse.builder()
-                .token(tokenManager.buildToken(request.getUsername()))
+                .token(tokenFacade.buildToken(request.getUsername()))
                 .build();
         return ResponseEntity.ok(response);
     }

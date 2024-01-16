@@ -13,13 +13,10 @@ import javax.crypto.SecretKey;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-class TokenManager {
+public class TokenFacade {
 
     @Value("${token.secretKey}")
     private final String secretKey;
@@ -30,16 +27,7 @@ class TokenManager {
     private final Clock clock;
 
     public String extractLogin(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    public String buildToken(String username) {
-        return buildToken(new HashMap<>(), username);
+        return extractAllClaims(token).getSubject();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -52,13 +40,12 @@ class TokenManager {
     }
 
     private Date getTokenExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+        return extractAllClaims(token).getExpiration();
     }
 
-    public String buildToken(Map<String, Object> claims, String username) {
+    public String buildToken(String username) {
         return Jwts
                 .builder()
-                .claims(claims)
                 .subject(username)
                 .issuedAt(Date.from(Instant.now(clock)))
                 .expiration(Date.from(Instant.ofEpochMilli(Date.from(Instant.now(clock)).getTime() + expirationTime)))
