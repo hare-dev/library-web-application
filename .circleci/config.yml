@@ -130,6 +130,10 @@ jobs:
 workflows:
   library-web-application:
     jobs:
+      - build:
+          filters:
+            branches:
+              only: main
       - build_tests
       - build_application:
           requires:
