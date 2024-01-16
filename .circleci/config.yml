@@ -2,9 +2,6 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.9.3
 jobs:
-  filters:
-    branches:
-      only: main
   build_tests:
     docker:
       - image: cimg/openjdk:17.0
@@ -133,37 +130,20 @@ jobs:
 workflows:
   library-web-application:
     jobs:
-      - build_tests:
-          filters:
-            branches:
-              only:
-                - main
+      - build_tests
       - build_application:
           requires:
             - build_tests
-          filters:
-            branches:
-              only:
-                - main
+
       - generate_code_climate_report:
           requires:
             - build_application
-          filters:
-            branches:
-              only:
-                - main
+
       - build_and_push_docker_image:
           requires:
             - generate_code_climate_report
-          filters:
-            branches:
-              only:
-                - main
+
       - send_notifications:
           context: slack-secrets
           requires:
             - build_and_push_docker_image
-          filters:
-            branches:
-              only:
-                - main
