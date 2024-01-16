@@ -134,7 +134,9 @@ workflows:
           filters:
             branches:
               only: main
-      - build_tests
+      - build_tests:
+          requires:
+            - build
       - build_application:
           requires:
             - build_tests
