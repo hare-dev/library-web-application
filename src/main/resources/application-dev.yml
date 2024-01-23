@@ -1,0 +1,65 @@
+# Application DEV - profile properties
+
+server:
+    port: 8181
+
+  # Token Credentials
+
+token:
+    secretKey: 72357538782F4125442A472D4B6150645367566B597033733676397924422645
+    expirationTime: 86400000
+  
+  # Spring-Boot Configuration
+
+spring:
+    h2:
+    console:
+      enabled: true
+      path: /dev-test-h2
+
+    datasource:
+      path: /dev-test-h2
+      url: jdbc:h2:mem:test-h2
+      driverClassName: org.h2.Driver
+      username: admin
+      password: admin
+
+    jpa:
+      show-sql: true
+      generate-ddl: true
+      hibernate:
+        ddl-auto: create-drop
+      properties:
+        hibernate:
+          format_sql: true
+
+    database-platform:
+      org.hibernate:
+        dialect: H2Dialect
+
+  # Spring Security
+
+security:
+  basic:
+    enabled: true
+
+management:
+  security:
+    enabled: true
+
+logging:
+    level:
+        org:
+          hibernate:
+                  SQL: DEBUG
+                  type:
+                    descriptor:sql:BasicBinder: TRACE
+          springframework:web: INFO
+  
+  # Swagger UI
+
+springdoc:
+  swagger-ui.path: swagger-ui.html
+  packagesToScan: com.haredev.library
+  swagger-ui:
+    enabled: true
