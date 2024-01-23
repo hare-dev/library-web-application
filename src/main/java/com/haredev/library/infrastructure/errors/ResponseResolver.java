@@ -9,7 +9,7 @@ import java.util.List;
 
 @NoArgsConstructor
 public final class ResponseResolver {
-    public static ResponseEntity resolve(Either<? extends ResponseError, ?> input) {
+    public static ResponseEntity<?> resolve(Either<? extends ResponseError, ?> input) {
         return input
                 .map(ResponseEntity::ok)
                 .getOrElseGet(ResponseResolver::createErrorMessage);

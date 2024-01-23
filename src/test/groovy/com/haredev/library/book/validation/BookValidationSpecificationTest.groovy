@@ -5,7 +5,7 @@ import com.haredev.library.book.domain.BookConfiguration
 import com.haredev.library.book.domain.dto.BookCreateDto
 import spock.lang.Specification
 
-class BookValidationSpec extends Specification {
+class BookValidationSpecificationTest extends Specification {
     def facade = new BookConfiguration().bookFacade()
 
     def "Valid path of book validation"() {

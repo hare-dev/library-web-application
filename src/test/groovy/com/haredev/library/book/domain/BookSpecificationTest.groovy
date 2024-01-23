@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 
 import static com.haredev.library.book.domain.api.error.BookError.*
 
-class BookSpec extends Specification {
+class BookSpecificationTest extends Specification {
     def facade = new BookConfiguration().bookFacade(new InMemoryBookRepository(), new InMemoryCommentRepository())
 
     def "Should be empty"() {

@@ -45,13 +45,13 @@ final class BookController {
     }
 
     @GetMapping("/books/{bookId}")
-    ResponseEntity findBookById(@PathVariable Long bookId) {
+    ResponseEntity<?> findBookById(@PathVariable Long bookId) {
         Either<BookError, BookCreateDto> response = bookFacade.findBookById(bookId);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/books")
-    ResponseEntity fetchAllBooks(@RequestParam(required = false) Integer page) {
+    ResponseEntity<?> fetchAllBooks(@RequestParam(required = false) Integer page) {
         int pageNumber = page != null && page >= 0 ? page : 0;
         List<BookCreateDto> response = bookFacade.fetchAllBooks(pageNumber);
         return ResponseResolver.resolve(response);
@@ -63,20 +63,20 @@ final class BookController {
         return HttpStatus.OK;
     }
 
-    @PostMapping("/books/{bookId}")
-    ResponseEntity addCommentToBook(@RequestBody CommentCreateDto commentRequest) {
+    @PostMapping("/books/{bookId}/comment")
+    ResponseEntity<?> addCommentToBook(@RequestBody CommentCreateDto commentRequest) {
         Either<BookError, CommentDto> response = bookFacade.addCommentToBook(commentRequest);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/books/comments/{commentId}")
-    ResponseEntity findCommentById(@PathVariable Long commentId) {
+    ResponseEntity<?> findCommentById(@PathVariable Long commentId) {
         Either<BookError, CommentDto> response = bookFacade.findCommentById(commentId);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/books/{bookId}/comments")
-    ResponseEntity getCommentsFromBook(@PathVariable Long bookId) {
+    ResponseEntity<?> getCommentsFromBook(@PathVariable Long bookId) {
         Either<BookError, List<CommentDto>> response = bookFacade.getBookByIdWithComments(bookId);
         return ResponseResolver.resolve(response);
     }
