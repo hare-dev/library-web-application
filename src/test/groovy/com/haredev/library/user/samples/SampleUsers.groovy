@@ -1,16 +1,31 @@
 package com.haredev.library.user.samples
 
-
-import com.haredev.library.user.domain.dto.UserDetailsDto
+import com.haredev.library.user.controller.input.RegistrationRequest
 import groovy.transform.CompileStatic
 
 @CompileStatic
 final class SampleUsers {
-    static UserDetailsDto createUserSample(Long userId, String password, String username) {
-        return UserDetailsDto.builder()
+    static RegistrationRequest createUserSample(Long userId, String username, String password) {
+        return RegistrationRequest.builder()
                 .userId(userId)
-                .password(password)
                 .username(username)
+                .password(password)
                 .build();
+    }
+
+    static String nullUsername() {
+        return null;
+    }
+
+    static String nullPassword() {
+        return null;
+    }
+
+    static String emptyUsername() {
+        return "";
+    }
+
+    static String emptyPassword() {
+        return "";
     }
 }
