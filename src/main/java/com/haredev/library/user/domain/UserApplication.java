@@ -1,7 +1,7 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.infrastructure.entity.BaseEntity;
-import com.haredev.library.user.controller.validation.RegistrationResponse;
+import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.Authority;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import com.haredev.library.user.domain.dto.UserDto;
@@ -30,8 +30,9 @@ class UserApplication extends BaseEntity {
     @Convert(converter = AuthoritiesToStringConverter.class)
     private Set<Authority> authorities;
 
-    public static UserApplication newInstance(String username, String password, Authority... authorities) {
+    public static UserApplication newInstance(Long userId, String username, String password, Authority... authorities) {
         final UserApplication userApplication = new UserApplication();
+        userApplication.userId = userId;
         userApplication.username = username;
         userApplication.password = password;
         userApplication.authorities = Set.of(authorities);

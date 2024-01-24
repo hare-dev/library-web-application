@@ -1,7 +1,7 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.user.controller.validation.RegistrationRequest;
-import com.haredev.library.user.controller.validation.RegistrationResponse;
+import com.haredev.library.user.controller.input.RegistrationRequest;
+import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import com.haredev.library.user.domain.dto.UserDto;
@@ -9,6 +9,7 @@ import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class UserFacade {
@@ -28,7 +29,20 @@ public class UserFacade {
                 .toEither(UserError.USER_NOT_FOUND);
     }
 
-    public List<UserDto> fetchAllUsers() {
-        return userManager.findAll();
+    public Either<UserError, UserDto> findUserById(Long userId) {
+        return userManager.findById(userId)
+                .map(UserApplication::toDto)
+                .toEither(UserError.USER_NOT_FOUND);
+    }
+
+    public List<UserDto> fetchAllUsers(int page) {
+        return userManager.fetchAllUsersWithPageable(page)
+                .stream()
+                .map(UserApplication::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public void removeUserById(Long userId) {
+        userManager.removeUserById(userId);
     }
 }
