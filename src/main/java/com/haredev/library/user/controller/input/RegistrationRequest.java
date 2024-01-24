@@ -1,27 +1,14 @@
-package com.haredev.library.user.controller.validation;
+package com.haredev.library.user.controller.input;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.Objects;
-
 @Getter
 @Builder
 @AllArgsConstructor
 public class RegistrationRequest {
+    private final Long userId;
     private final String password;
     private final String username;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof RegistrationRequest that)) return false;
-        return Objects.equals(username, that.username);
-    }
-
-    @Override
-    public int hashCode() {
-        return username != null ? username.hashCode() : 0;
-    }
 }

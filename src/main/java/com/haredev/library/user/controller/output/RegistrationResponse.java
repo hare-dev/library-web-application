@@ -1,4 +1,4 @@
-package com.haredev.library.user.controller.validation;
+package com.haredev.library.user.controller.output;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
