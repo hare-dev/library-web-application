@@ -4,7 +4,7 @@ import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.domain.UserFacade;
 import com.haredev.library.user.domain.api.UserError;
-import com.haredev.library.user.domain.dto.UserDto;
+import com.haredev.library.user.domain.dto.UserDetailsDto;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,13 +31,13 @@ class UserController {
     @GetMapping("/users")
     ResponseEntity<?> fetchAllUsers(@RequestParam(required = false) Integer page) {
         int pageNumber = page != null && page >= 0 ? page : 0;
-        List<UserDto> response = userFacade.fetchAllUsers(pageNumber);
+        List<UserDetailsDto> response = userFacade.fetchAllUsers(pageNumber);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/users/{userId}")
     ResponseEntity<?> findUserById(@PathVariable Long userId) {
-        Either<UserError, UserDto> response = userFacade.findUserById(userId);
+        Either<UserError, UserDetailsDto> response = userFacade.findUserById(userId);
         return ResponseResolver.resolve(response);
     }
 

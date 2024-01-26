@@ -13,6 +13,5 @@ import java.util.Set;
 public class UserDetailsDto {
     private final Long userId;
     private final String username;
-    private final String password;
     private final Set<Authority> authorities;
 }

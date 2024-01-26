@@ -4,7 +4,6 @@ import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.Authority;
 import com.haredev.library.user.domain.api.UserError;
-import io.vavr.API;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
@@ -12,15 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-import java.util.Objects;
-
-import static com.haredev.library.user.domain.api.UserError.*;
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
 
 @RequiredArgsConstructor
 class UserManager {
     private final UserRepository userRepository;
+    private final UserValidation userValidation;
     private final PasswordEncoder passwordEncoder;
     private static final int pageSize = 20;
 
@@ -29,35 +24,13 @@ class UserManager {
     }
 
     public Either<UserError, RegistrationResponse> registerUser(RegistrationRequest userRequest) {
-        return validateParameters(userRequest)
+        return userValidation.validateParameters(userRequest)
                 .map(this::createUser);
     }
 
     public Either<UserError, RegistrationResponse> registerAdmin(RegistrationRequest userRequest) {
-        return validateParameters(userRequest)
+        return userValidation.validateParameters(userRequest)
                 .map(this::createAdmin);
-    }
-
-    private Either<UserError, RegistrationRequest> validateParameters(RegistrationRequest userRequest) {
-        return API.Match(userRequest)
-                .option(
-                        Case($(username -> Objects.isNull(username.getUsername())), USERNAME_IS_NULL),
-                        Case($(password -> Objects.isNull(password.getPassword())), PASSWORD_IS_NULL),
-                        Case($(username -> username.getUsername().isEmpty()), USERNAME_IS_EMPTY),
-                        Case($(password -> password.getPassword().isEmpty()), PASSWORD_IS_EMPTY),
-                        Case($(username -> usernameIsDuplicated(username.getUsername())), USERNAME_DUPLICATED))
-                .toEither(userRequest)
-                .swap();
-    }
-
-    private boolean findUserWithDuplicatedUsername(String username) {
-        return fetchAllUsersWithPageable(pageSize)
-                .stream()
-                .noneMatch(user -> username.equals(user.getUsername()));
-    }
-
-    private boolean usernameIsDuplicated(String username) {
-        return !findUserWithDuplicatedUsername(username);
     }
 
     public RegistrationResponse createUser(RegistrationRequest request) {
@@ -66,7 +39,7 @@ class UserManager {
                     request.getUsername(),
                     passwordEncoder.encode(request.getPassword()),
                     Authority.USER);
-            return userRepository.save(userApplication).registrationResponse(); }
+            return userRepository.save(userApplication).toRegistrationResponse(); }
 
     public RegistrationResponse createAdmin(RegistrationRequest request) {
             UserApplication userApplication = UserApplication.newInstance(
@@ -74,7 +47,7 @@ class UserManager {
                     request.getUsername(),
                     passwordEncoder.encode(request.getPassword()),
                     Authority.ADMIN, Authority.USER);
-            return userRepository.save(userApplication).registrationResponse();
+            return userRepository.save(userApplication).toRegistrationResponse();
     }
 
     public List<UserApplication> fetchAllUsersWithPageable(int page) {

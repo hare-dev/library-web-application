@@ -3,8 +3,8 @@ package com.haredev.library.user.domain;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.Authority;
+import com.haredev.library.user.domain.dto.UserLoginDto;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
-import com.haredev.library.user.domain.dto.UserDto;
 import com.haredev.library.user.domain.mapper.AuthoritiesToStringConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,23 +39,23 @@ class UserApplication extends BaseEntity {
         return userApplication;
     }
 
-    RegistrationResponse registrationResponse() {
+    RegistrationResponse toRegistrationResponse() {
         return RegistrationResponse.builder()
                 .userId(userId)
                 .username(username)
                 .build();
     }
 
-    UserDto toDto() {
-        return UserDto.builder()
+    UserDetailsDto toUserDetails() {
+        return UserDetailsDto.builder()
                 .userId(userId)
                 .username(username)
                 .authorities(authorities)
                 .build();
     }
 
-    UserDetailsDto userDetails() {
-        return UserDetailsDto.builder()
+    UserLoginDto toLoginDto() {
+        return UserLoginDto.builder()
                 .username(username)
                 .password(password)
                 .authorities(authorities)

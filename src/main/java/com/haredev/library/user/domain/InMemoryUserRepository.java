@@ -15,12 +15,17 @@ class InMemoryUserRepository implements UserRepository {
     @Override
     public UserApplication save(UserApplication userApplication) {
         requireNonNull(userApplication);
-        inMemoryUser.put(userApplication.registrationResponse().getUserId(), userApplication);
+        inMemoryUser.put(userApplication.toRegistrationResponse().getUserId(), userApplication);
         return userApplication;
     }
 
     @Override
     public List<UserApplication> findAll(Pageable pageable) {
+        return new ArrayList<>(inMemoryUser.values());
+    }
+
+    @Override
+    public List<UserApplication> findAll() {
         return new ArrayList<>(inMemoryUser.values());
     }
 

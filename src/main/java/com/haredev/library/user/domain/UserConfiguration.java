@@ -12,7 +12,8 @@ class UserConfiguration {
     @Bean
     UserFacade userFacade(UserRepository userRepository) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        UserManager userManager = new UserManager(userRepository, passwordEncoder);
+        UserValidation userValidation = new UserValidation(userRepository);
+        UserManager userManager = new UserManager(userRepository, userValidation, passwordEncoder);
         return new UserFacade(userManager);
     }
 }

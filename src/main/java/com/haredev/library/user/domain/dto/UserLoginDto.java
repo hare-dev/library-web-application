@@ -10,8 +10,9 @@ import java.util.Set;
 @Getter
 @Builder
 @AllArgsConstructor
-public class UserDto {
+public class UserLoginDto {
     private final Long userId;
     private final String username;
+    private final String password;
     private final Set<Authority> authorities;
 }

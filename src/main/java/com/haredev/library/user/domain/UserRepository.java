@@ -9,6 +9,7 @@ import java.util.Optional;
 interface UserRepository extends Repository<UserApplication, Long> {
     UserApplication save(UserApplication userApplication);
     List<UserApplication> findAll(Pageable pageable);
+    List<UserApplication> findAll();
     Optional<UserApplication> findByUsername(String username);
     Optional<UserApplication> findById(Long userId);
     void deleteById(Long userId);
