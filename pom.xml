@@ -144,7 +144,7 @@
 				<configuration>
 					<useFile>false</useFile>
 					<includes>
-						<include>**/*Spec.java</include>
+						<include>**/*SpecificationTest.java</include>
 					</includes>
 				</configuration>
 			</plugin>

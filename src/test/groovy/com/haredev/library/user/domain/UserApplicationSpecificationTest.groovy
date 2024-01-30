@@ -7,7 +7,7 @@ import spock.lang.Specification
 import static com.haredev.library.user.domain.api.UserError.*
 import static com.haredev.library.user.samples.SampleUsers.*
 
-class UserApplicationSpecification extends Specification {
+class UserApplicationSpecificationTest extends Specification {
     def facade = new UserConfiguration().userFacade(new InMemoryUserRepository())
 
     static final int page = 20;
