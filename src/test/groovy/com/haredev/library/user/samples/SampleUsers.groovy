@@ -14,18 +14,34 @@ final class SampleUsers {
     }
 
     static String nullUsername() {
-        return null;
+        return null
     }
 
     static String nullPassword() {
-        return null;
+        return null
     }
 
     static String emptyUsername() {
-        return "";
+        return ""
     }
 
     static String emptyPassword() {
-        return "";
+        return ""
+    }
+
+    static String lengthIsLessThanTwoCharacters() {
+        return "abc"
+    }
+
+    static String lessThanTwoSpecialCharacters() {
+        return "a12345678Z!"
+    }
+
+    static String lessThanOneUppercaseCharacters() {
+        return "a12345678!@"
+    }
+
+    static String lessThanTwoDigitCharacters() {
+        return "a1!@"
     }
 }

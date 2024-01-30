@@ -5,7 +5,9 @@ import com.haredev.library.user.domain.api.UserError;
 import io.vavr.API;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
+import org.passay.*;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import static com.haredev.library.user.domain.api.UserError.*;
@@ -19,22 +21,41 @@ class UserValidation {
     public Either<UserError, RegistrationRequest> validateParameters(RegistrationRequest userRequest) {
         return API.Match(userRequest)
                 .option(
-                        Case($(username -> Objects.isNull(username.getUsername())), USERNAME_IS_NULL),
-                        Case($(password -> Objects.isNull(password.getPassword())), PASSWORD_IS_NULL),
-                        Case($(username -> username.getUsername().isEmpty()), USERNAME_IS_EMPTY),
-                        Case($(password -> password.getPassword().isEmpty()), PASSWORD_IS_EMPTY),
-                        Case($(username -> usernameIsDuplicated(username.getUsername())), USERNAME_DUPLICATED))
+                        Case($(user -> Objects.isNull(user.getUsername())), NULL_USERNAME),
+                        Case($(user -> Objects.isNull(user.getPassword())), NULL_PASSWORD),
+                        Case($(user -> user.getUsername().isEmpty()), EMPTY_USERNAME),
+                        Case($(user -> usernameIsNotDuplicated(user.getUsername())), DUPLICATED_USERNAME),
+                        Case($(user -> validatePassword(user.getPassword())), PASSWORD_IS_TOO_WEAK)
+                )
                 .toEither(userRequest)
                 .swap();
     }
 
-    private boolean findUserWithDuplicatedUsername(String username) {
+    private boolean validatePassword(final String password) {
+        PasswordValidator validator = buildPasswordValidationConditions();
+        RuleResult result = validator.validate(new PasswordData(password));
+        return !result.isValid();
+    }
+
+    private PasswordValidator buildPasswordValidationConditions() {
+        return new PasswordValidator(Arrays.asList(
+                new LengthRule(8, 15),
+                new CharacterRule(EnglishCharacterData.UpperCase, 1),
+                new CharacterRule(EnglishCharacterData.Digit, 2),
+                new CharacterRule(EnglishCharacterData.Special, 2),
+                new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, false),
+                new WhitespaceRule())
+        );
+    }
+
+    private Boolean findUserWithDuplicatedUsername(String username) {
         return userRepository.findAll()
                 .stream()
                 .noneMatch(user -> username.equals(user.getUsername()));
     }
 
-    private boolean usernameIsDuplicated(String username) {
+    private Boolean usernameIsNotDuplicated(String username) {
         return !findUserWithDuplicatedUsername(username);
     }
+
 }

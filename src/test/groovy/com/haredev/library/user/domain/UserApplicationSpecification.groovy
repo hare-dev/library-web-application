@@ -2,17 +2,17 @@ package com.haredev.library.user.domain
 
 import com.haredev.library.user.controller.input.RegistrationRequest
 import com.haredev.library.user.domain.api.UserError
-import com.haredev.library.user.samples.SampleUsers
 import spock.lang.Specification
 
 import static com.haredev.library.user.domain.api.UserError.*
+import static com.haredev.library.user.samples.SampleUsers.*
 
 class UserApplicationSpecification extends Specification {
     def facade = new UserConfiguration().userFacade(new InMemoryUserRepository())
 
     static final int page = 20;
-    def final USER = SampleUsers.createUserSample(0L,"user", "password")
-    def final ADMIN = SampleUsers.createUserSample(1L,"admin", "password")
+    def final USER = createUserSample(0L,"user", "a12345678Z!@")
+    def final ADMIN = createUserSample(1L,"admin", "a12345678Z!@")
 
     def "Should be empty"() {
         expect:
@@ -61,7 +61,7 @@ class UserApplicationSpecification extends Specification {
         UserError EXPECTED_ERROR = facade.registerAsUser(USER).getLeft()
 
         then: "Return error because username is duplicated"
-        EXPECTED_ERROR == USERNAME_DUPLICATED
+        EXPECTED_ERROR == DUPLICATED_USERNAME
     }
 
     def "Should not register user with null username" () {
@@ -69,14 +69,14 @@ class UserApplicationSpecification extends Specification {
         RegistrationRequest USER = RegistrationRequest.builder()
                 .userId(1)
                 .password("password")
-                .username(SampleUsers.nullUsername())
+                .username(nullUsername())
                 .build()
 
         when: "Return null username error"
         UserError EXPECTED_ERROR = facade.registerAsUser(USER).getLeft()
 
         then: "Compare expected error with result error"
-        EXPECTED_ERROR == USERNAME_IS_NULL
+        EXPECTED_ERROR == NULL_USERNAME
     }
 
     def "Should not register user with empty username" () {
@@ -84,21 +84,21 @@ class UserApplicationSpecification extends Specification {
         RegistrationRequest USER = RegistrationRequest.builder()
                 .userId(1)
                 .password("password")
-                .username(SampleUsers.emptyUsername())
+                .username(emptyUsername())
                 .build()
 
         when: "Return empty username error"
         UserError EXPECTED_ERROR = facade.registerAsUser(USER).getLeft()
 
         then: "Compare expected error with result error"
-        EXPECTED_ERROR == USERNAME_IS_EMPTY
+        EXPECTED_ERROR == EMPTY_USERNAME
     }
 
     def "Should not register user with null password" () {
         given: "Create user with null password"
         RegistrationRequest USER = RegistrationRequest.builder()
                 .userId(1)
-                .password(SampleUsers.nullPassword())
+                .password(nullPassword())
                 .username("user")
                 .build()
 
@@ -106,14 +106,14 @@ class UserApplicationSpecification extends Specification {
         UserError EXPECTED_ERROR = facade.registerAsUser(USER).getLeft()
 
         then: "Compare expected error with result error"
-        EXPECTED_ERROR == PASSWORD_IS_NULL
+        EXPECTED_ERROR == NULL_PASSWORD
     }
 
     def "Should not register user with empty password" () {
         given: "Create user with empty password"
         RegistrationRequest USER = RegistrationRequest.builder()
                 .userId(1)
-                .password(SampleUsers.emptyPassword())
+                .password(emptyPassword())
                 .username("user")
                 .build()
 
@@ -121,7 +121,7 @@ class UserApplicationSpecification extends Specification {
         UserError EXPECTED_ERROR = facade.registerAsUser(USER).getLeft()
 
         then: "Compare expected error with result error"
-        EXPECTED_ERROR == PASSWORD_IS_EMPTY
+        EXPECTED_ERROR == PASSWORD_IS_TOO_WEAK
     }
 
     def "Should find user by id" () {
@@ -177,5 +177,65 @@ class UserApplicationSpecification extends Specification {
 
         then: "No user in system"
         facade.fetchAllUsers(page).isEmpty()
+    }
+
+    def "Should not register user with password length less than two characters" () {
+        given: "Add one user"
+        RegistrationRequest USER = RegistrationRequest.builder()
+                .userId(1)
+                .password(lengthIsLessThanTwoCharacters())
+                .username("user")
+                .build()
+
+        when: "Return error password is too weak"
+        UserError EXPECTED_ERROR = facade.registerAsUser(USER).getLeft()
+
+        then: "Return error password is too weak"
+        PASSWORD_IS_TOO_WEAK == EXPECTED_ERROR
+    }
+
+    def "Should not register user with less than two special characters in password" () {
+        given: "Add one user"
+        RegistrationRequest USER = RegistrationRequest.builder()
+                .userId(1)
+                .password(lessThanTwoSpecialCharacters())
+                .username("user")
+                .build()
+
+        when: "Return error password is too weak"
+        UserError EXPECTED_ERROR = facade.registerAsUser(USER).getLeft()
+
+        then: "Return error password is too weak"
+        PASSWORD_IS_TOO_WEAK == EXPECTED_ERROR
+    }
+
+    def "Should not register user with less than one uppercase characters in password" () {
+        given: "Add one user"
+        RegistrationRequest USER = RegistrationRequest.builder()
+                .userId(1)
+                .password(lessThanOneUppercaseCharacters())
+                .username("user")
+                .build()
+
+        when: "Return error password is too weak"
+        UserError EXPECTED_ERROR = facade.registerAsUser(USER).getLeft()
+
+        then: "Return error password is too weak"
+        PASSWORD_IS_TOO_WEAK == EXPECTED_ERROR
+    }
+
+    def "Should not register user with less than two digit characters in password" () {
+        given: "Add one user"
+        RegistrationRequest USER = RegistrationRequest.builder()
+                .userId(1)
+                .password(lessThanTwoDigitCharacters())
+                .username("user")
+                .build()
+
+        when: "Return error password is too weak"
+        UserError EXPECTED_ERROR = facade.registerAsUser(USER).getLeft()
+
+        then: "Return error password is too weak"
+        PASSWORD_IS_TOO_WEAK == EXPECTED_ERROR
     }
 }

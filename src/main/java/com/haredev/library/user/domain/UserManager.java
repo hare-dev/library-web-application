@@ -2,13 +2,11 @@ package com.haredev.library.user.domain;
 
 import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.controller.output.RegistrationResponse;
-import com.haredev.library.user.domain.api.Authority;
 import com.haredev.library.user.domain.api.UserError;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ import java.util.List;
 class UserManager {
     private final UserRepository userRepository;
     private final UserValidation userValidation;
-    private final PasswordEncoder passwordEncoder;
+    private final UserFactory userFactory;
     private static final int pageSize = 20;
 
     public Option<UserApplication> getUserByUsername(String username) {
@@ -34,20 +32,13 @@ class UserManager {
     }
 
     public RegistrationResponse createUser(RegistrationRequest request) {
-            UserApplication userApplication = UserApplication.newInstance(
-                    request.getUserId(),
-                    request.getUsername(),
-                    passwordEncoder.encode(request.getPassword()),
-                    Authority.USER);
-            return userRepository.save(userApplication).toRegistrationResponse(); }
+        UserApplication userApplication = userFactory.buildUser(request);
+        return userRepository.save(userApplication).toRegistrationResponse();
+    }
 
     public RegistrationResponse createAdmin(RegistrationRequest request) {
-            UserApplication userApplication = UserApplication.newInstance(
-                    request.getUserId(),
-                    request.getUsername(),
-                    passwordEncoder.encode(request.getPassword()),
-                    Authority.ADMIN, Authority.USER);
-            return userRepository.save(userApplication).toRegistrationResponse();
+        UserApplication userApplication = userFactory.buildAdmin(request);
+        return userRepository.save(userApplication).toRegistrationResponse();
     }
 
     public List<UserApplication> fetchAllUsersWithPageable(int page) {

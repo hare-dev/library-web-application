@@ -13,7 +13,8 @@ class UserConfiguration {
     UserFacade userFacade(UserRepository userRepository) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         UserValidation userValidation = new UserValidation(userRepository);
-        UserManager userManager = new UserManager(userRepository, userValidation, passwordEncoder);
+        UserFactory userFactory = new UserFactory(passwordEncoder);
+        UserManager userManager = new UserManager(userRepository, userValidation, userFactory);
         return new UserFacade(userManager);
     }
 }
