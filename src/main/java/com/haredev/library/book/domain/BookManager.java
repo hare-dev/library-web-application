@@ -56,7 +56,7 @@ class BookManager {
         return API.Match(commentCreateDto)
                 .option(
                         Case($(argument -> Objects.isNull(argument.getDescription())), NULL_OR_EMPTY_DESCRIPTION),
-                        Case($(argument -> Objects.isNull(argument.getDateAdded())), NULL_DATE_ADDED),
+                        Case($(argument -> Objects.isNull(argument.getCreatedTime())), NULL_DATE_ADDED),
                         Case($(argument -> argument.getDescription().isEmpty()), NULL_OR_EMPTY_DESCRIPTION))
                 .toEither(commentCreateDto)
                 .swap();

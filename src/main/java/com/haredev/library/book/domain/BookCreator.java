@@ -8,7 +8,7 @@ class BookCreator {
     Book from(BookCreateDto request) {
         requireNonNull(request);
         return Book.builder()
-                .bookId(request.getBookId())
+                .id(request.getId())
                 .title(request.getTitle())
                 .author(request.getAuthor())
                 .isbn(request.getIsbn())

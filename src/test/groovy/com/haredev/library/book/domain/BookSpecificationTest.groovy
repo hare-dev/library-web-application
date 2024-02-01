@@ -25,7 +25,7 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "System has one book"
-        Either<BookError, BookCreateDto> ERROR_RESPONSE = facade.findBookById(BOOK_ONE.bookId)
+        Either<BookError, BookCreateDto> ERROR_RESPONSE = facade.findBookById(BOOK_ONE.id)
 
         then: "Return added book"
         ERROR_RESPONSE.get() == BOOK_ONE
@@ -37,8 +37,8 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_TWO)
 
         when: "System has two books"
-        Either<BookError, BookCreateDto> BOOK_ONE_ADDED = facade.findBookById(BOOK_ONE.bookId)
-        Either<BookError, BookCreateDto> BOOK_TWO_ADDED = facade.findBookById(BOOK_TWO.bookId)
+        Either<BookError, BookCreateDto> BOOK_ONE_ADDED = facade.findBookById(BOOK_ONE.id)
+        Either<BookError, BookCreateDto> BOOK_TWO_ADDED = facade.findBookById(BOOK_TWO.id)
 
         then: "Return two added books"
         BOOK_ONE_ADDED.get() == BOOK_ONE
@@ -63,7 +63,7 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Remove one book"
-        facade.removeBookById(BOOK_ONE.bookId)
+        facade.removeBookById(BOOK_ONE.id)
 
         then: "System is empty"
         facade.fetchAllBooks(PAGE).isEmpty()
@@ -75,8 +75,8 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_TWO)
 
         when: "Remove two books"
-        facade.removeBookById(BOOK_TWO.bookId)
-        facade.removeBookById(BOOK_ONE.bookId)
+        facade.removeBookById(BOOK_TWO.id)
+        facade.removeBookById(BOOK_ONE.id)
 
         then: "System is empty"
         facade.fetchAllBooks(PAGE).isEmpty()
@@ -141,7 +141,7 @@ class BookSpecificationTest extends Specification {
         facade.addCommentToBook(COMMENT_ONE_FOR_BOOK_ONE)
 
         when: "Find book and return size of list with comments"
-        Either<BookError, List<CommentDto>> COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.bookId)
+        Either<BookError, List<CommentDto>> COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id)
 
         then: "Book has one comment"
         COMMENTS_SIZE.get().size() == 1
@@ -154,7 +154,7 @@ class BookSpecificationTest extends Specification {
         facade.addCommentToBook(COMMENT_TWO_FOR_BOOK_ONE)
 
         when: "Find book and return size of list with comments"
-        Either<BookError, List<CommentDto>> COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.bookId)
+        Either<BookError, List<CommentDto>> COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id)
 
         then: "Book has two comments"
         COMMENTS_SIZE.get().size() == 2
@@ -165,7 +165,7 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Find book and return list with comments"
-        Either<BookError, List<CommentDto>> COMMENTS = facade.getBookByIdWithComments(BOOK_ONE.bookId)
+        Either<BookError, List<CommentDto>> COMMENTS = facade.getBookByIdWithComments(BOOK_ONE.id)
 
         then: "List with comments from book is empty"
         COMMENTS.get().isEmpty()
@@ -205,8 +205,8 @@ class BookSpecificationTest extends Specification {
     def final BOOK_ONE = SampleBooks.createBookSample(0L, "Twilight", "Stephenie Meyer")
     def final BOOK_TWO = SampleBooks.createBookSample(1L, "Django", "Quentin Tarantino")
 
-    def final COMMENT_ONE_FOR_BOOK_ONE = SampleComments.createCommentSample(0L, BOOK_ONE.bookId, "Best book!", LocalDateTime.now())
-    def final COMMENT_TWO_FOR_BOOK_ONE = SampleComments.createCommentSample(1L, BOOK_ONE.bookId, "Fantastic book!", LocalDateTime.now())
+    def final COMMENT_ONE_FOR_BOOK_ONE = SampleComments.createCommentSample(0L, BOOK_ONE.id, "Best book!", LocalDateTime.now())
+    def final COMMENT_TWO_FOR_BOOK_ONE = SampleComments.createCommentSample(1L, BOOK_ONE.id, "Fantastic book!", LocalDateTime.now())
 
     def final COMMENT_FOR_NOT_EXIST_BOOK_ID = SampleComments.createCommentSampleWithNotExistsBookId()
     def final COMMENT_WITH_NULL_DESCRIPTION = SampleComments.createCommentSampleWithNullDescription()

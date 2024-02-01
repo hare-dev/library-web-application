@@ -15,7 +15,7 @@ class InMemoryBookRepository implements BookRepository {
     @Override
     public Book save(Book book) {
         requireNonNull(book);
-        inMemoryBook.put(book.response().getBookId(), book);
+        inMemoryBook.put(book.response().getId(), book);
         return book;
     }
 

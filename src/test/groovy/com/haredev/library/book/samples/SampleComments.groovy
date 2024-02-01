@@ -11,12 +11,13 @@ final class SampleComments {
     private static final Long commentId = 0L
     private static final Long notExistBookId = 1000L
 
-    static CommentCreateDto createCommentSample(Long commentId, Long bookId, String description, LocalDateTime dateAdded) {
+    static CommentCreateDto createCommentSample(Long commentId, Long bookId,
+                                                String description, LocalDateTime createdTime) {
         return CommentCreateDto.builder()
                 .commentId(commentId)
                 .bookId(bookId)
                 .description(description)
-                .dateAdded(dateAdded)
+                .createdTime(createdTime)
                 .build()
     }
 
@@ -25,7 +26,7 @@ final class SampleComments {
         .commentId(0L)
         .bookId(notExistBookId)
         .description("Example description")
-        .dateAdded(LocalDateTime.now())
+        .createdTime(LocalDateTime.now())
         .build()
     }
     
@@ -34,7 +35,7 @@ final class SampleComments {
         .commentId(0L)
         .bookId(bookIdForComment)
         .description(null)
-        .dateAdded(LocalDateTime.now())
+        .createdTime(LocalDateTime.now())
         .build()
     }
 
@@ -43,7 +44,7 @@ final class SampleComments {
                 .commentId(0L)
                 .bookId(bookIdForComment)
                 .description("")
-                .dateAdded(LocalDateTime.now())
+                .createdTime(LocalDateTime.now())
                 .build()
     }
 
@@ -52,7 +53,7 @@ final class SampleComments {
         .commentId(commentId)
         .bookId(bookIdForComment)
         .description("Example description")
-        .dateAdded(null)
+        .createdTime(null)
         .build()
     }
 }

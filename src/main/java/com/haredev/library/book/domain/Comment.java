@@ -4,37 +4,39 @@ import com.haredev.library.book.domain.dto.CommentCreateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
-@AllArgsConstructor
-@Builder
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "comments")
 class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commentId_generator")
-    private Long commentId;
+    private Long id;
     private Long bookId;
     private String description;
-    private LocalDateTime dateAdded;
+    private LocalDateTime createdTime;
 
     public CommentCreateDto response() {
         return CommentCreateDto.builder()
-                .commentId(commentId)
+                .commentId(id)
                 .description(description)
-                .dateAdded(dateAdded)
+                .createdTime(createdTime)
                 .build();
     }
 
     public CommentDto toDto() {
         return CommentDto.builder()
                 .description(description)
-                .dateAdded(dateAdded)
+                .createdTime(createdTime)
                 .build();
     }
 }

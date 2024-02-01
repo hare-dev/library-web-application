@@ -13,7 +13,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 public class BookCreateDto {
-    private final Long bookId;
+    private final Long id;
     private final String title;
     private final String author;
     private final String isbn;
@@ -30,11 +30,11 @@ public class BookCreateDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof BookCreateDto that)) return false;
-        return Objects.equals(bookId, that.bookId);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return bookId != null ? bookId.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
     }
 }

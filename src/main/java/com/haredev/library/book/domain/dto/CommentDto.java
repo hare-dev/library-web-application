@@ -11,5 +11,5 @@ import java.time.LocalDateTime;
 @Builder
 public class CommentDto {
     private final String description;
-    private final LocalDateTime dateAdded;
+    private final LocalDateTime createdTime;
 }

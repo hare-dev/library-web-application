@@ -8,10 +8,10 @@ class CommentCreator {
     Comment from(CommentCreateDto request) {
         requireNonNull(request);
         return Comment.builder()
-                .commentId(request.getCommentId())
+                .id(request.getCommentId())
                 .bookId(request.getBookId())
                 .description(request.getDescription())
-                .dateAdded(request.getDateAdded())
+                .createdTime(request.getCreatedTime())
                 .build();
     }
 }

@@ -7,7 +7,7 @@ import groovy.transform.CompileStatic
 final class SampleBooks {
     static BookCreateDto createBookSample(Long bookId, String title, String author) {
         return BookCreateDto.builder()
-                .bookId(bookId)
+                .id(bookId)
                 .title(title)
                 .author(author)
                 .build()
