@@ -2,12 +2,9 @@ package com.haredev.library.book.controller;
 
 import com.haredev.library.book.domain.BookFacade;
 import com.haredev.library.book.domain.api.error.BookError;
-import com.haredev.library.book.domain.dto.BookCreateDto;
-import com.haredev.library.book.domain.dto.CommentCreateDto;
-import com.haredev.library.book.domain.dto.CommentDto;
+import com.haredev.library.book.domain.dto.*;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.infrastructure.errors.validation.ValidationErrorsConsumer;
-import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,11 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.function.Supplier;
-
-import static io.vavr.API.*;
-import static io.vavr.Patterns.$Invalid;
-import static io.vavr.Patterns.$Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,21 +19,9 @@ final class BookController {
     private final BookFacade bookFacade;
 
     @PostMapping("/books/add")
-    ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>> addBook(
+    Either<ValidationErrorsConsumer, BookCreateDto> addBook(
             @RequestBody BookCreateDto request) {
-        return Match(bookFacade.validateBook(request)).of(
-                Case($Invalid($()), this::invalid),
-                Case($Valid($()), valid(request))
-        );
-    }
-
-    private ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>> invalid(Seq<String> errors) {
-        return ResponseEntity.badRequest().body(
-                Either.left(ValidationErrorsConsumer.errorsAsJson(errors)));
-    }
-
-    private Supplier<ResponseEntity<Either<ValidationErrorsConsumer, BookCreateDto>>> valid(BookCreateDto book) {
-        return () -> new ResponseEntity<>(Either.right(bookFacade.addBook(book)), HttpStatus.CREATED);
+        return bookFacade.validateBook(request);
     }
 
     @GetMapping("/books/{bookId}")
@@ -63,9 +43,9 @@ final class BookController {
         return HttpStatus.OK;
     }
 
-    @PostMapping("/books/{bookId}/comment")
-    ResponseEntity<?> addCommentToBook(@RequestBody CommentCreateDto commentRequest) {
-        Either<BookError, CommentDto> response = bookFacade.addCommentToBook(commentRequest);
+    @PostMapping("/books/comments/add")
+    ResponseEntity<?> addCommentToBook(@RequestBody CommentCreateDto request) {
+        Either<BookError, CommentDto> response = bookFacade.addCommentToBook(request);
         return ResponseResolver.resolve(response);
     }
 
@@ -84,6 +64,6 @@ final class BookController {
     @DeleteMapping("/books/comments/{commentId}")
     HttpStatus removeCommentById(@PathVariable Long commentId) {
         bookFacade.removeCommentById(commentId);
-        return HttpStatus.OK;
+        return HttpStatus.NO_CONTENT;
     }
 }

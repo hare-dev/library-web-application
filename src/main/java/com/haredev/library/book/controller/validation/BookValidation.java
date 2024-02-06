@@ -4,12 +4,11 @@ import com.haredev.library.book.controller.validation.patterns.*;
 import com.haredev.library.book.domain.dto.BookCreateDto;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public final class BookValidation {
-    public static Validation<Seq<String>, BookCreateDto> validate(BookCreateDto request) {
+    public Validation<Seq<String>, BookCreateDto> validate(BookCreateDto request) {
         return Validation.combine(
                         Title.validate(request.getTitle()),
                         Author.validate(request.getAuthor()),

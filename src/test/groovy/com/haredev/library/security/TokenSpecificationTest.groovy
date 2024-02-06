@@ -25,11 +25,11 @@ class TokenSpecificationTest extends Specification {
 
     def "Should get username"() {
         given: "Create token"
-        String token = buildToken()
-        String expect = username
+        def token = buildToken()
+        def expect = username
 
         when: "Extract username from token"
-        String result = extractUsername(token)
+        def result = extractUsername(token)
 
         then: "Compare with username from token"
         result == expect
@@ -37,7 +37,7 @@ class TokenSpecificationTest extends Specification {
 
     def "Should return true if token is valid"() {
         given: "Create not expired token"
-        String token = buildToken()
+        def token = buildToken()
 
         when:
         boolean result = tokenFacade.isTokenValid(token, username)
@@ -49,13 +49,13 @@ class TokenSpecificationTest extends Specification {
     @Unroll
     def "Should return false if token isn't valid"() {
         given: "Create expired token"
-        String token = Jwts.builder()
+        def token = Jwts.builder()
                 .subject(username)
                 .expiration(getOldDate())
                 .signWith(getSignInKey(secretKey))
                 .compact()
         when:
-        boolean result = tokenFacade.isTokenValid(token, username)
+        def result = tokenFacade.isTokenValid(token, username)
 
         then:
         !result

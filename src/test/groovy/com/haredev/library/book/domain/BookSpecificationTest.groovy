@@ -1,11 +1,8 @@
 package com.haredev.library.book.domain
 
-import com.haredev.library.book.domain.api.error.BookError
-import com.haredev.library.book.domain.dto.BookCreateDto
-import com.haredev.library.book.domain.dto.CommentDto
+
 import com.haredev.library.book.samples.SampleBooks
 import com.haredev.library.book.samples.SampleComments
-import io.vavr.control.Either
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -25,10 +22,10 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "System has one book"
-        Either<BookError, BookCreateDto> ERROR_RESPONSE = facade.findBookById(BOOK_ONE.id)
+        def ERROR_RESPONSE = facade.findBookById(BOOK_ONE.id)get()
 
         then: "Return added book"
-        ERROR_RESPONSE.get() == BOOK_ONE
+        ERROR_RESPONSE == BOOK_ONE
     }
 
     def "Should have two books"() {
@@ -37,12 +34,12 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_TWO)
 
         when: "System has two books"
-        Either<BookError, BookCreateDto> BOOK_ONE_ADDED = facade.findBookById(BOOK_ONE.id)
-        Either<BookError, BookCreateDto> BOOK_TWO_ADDED = facade.findBookById(BOOK_TWO.id)
+        def BOOK_ONE_ADDED = facade.findBookById(BOOK_ONE.id).get()
+        def BOOK_TWO_ADDED = facade.findBookById(BOOK_TWO.id).get()
 
         then: "Return two added books"
-        BOOK_ONE_ADDED.get() == BOOK_ONE
-        BOOK_TWO_ADDED.get() == BOOK_TWO
+        BOOK_ONE_ADDED == BOOK_ONE
+        BOOK_TWO_ADDED == BOOK_TWO
     }
 
     def "Should return all books"() {
@@ -51,7 +48,7 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_TWO)
 
         when: "Return list of books"
-        List<BookCreateDto> ADDED_BOOKS = facade.fetchAllBooks(PAGE)
+        def ADDED_BOOKS = facade.fetchAllBooks(PAGE)
 
         then: "Check added books"
         ADDED_BOOKS.contains(BOOK_ONE)
@@ -87,16 +84,16 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Add comment to book"
-        Either<BookError, CommentDto> BOOK_ONE_COMMENT_ONE_RESPONSE = facade.addCommentToBook(COMMENT_ONE_FOR_BOOK_ONE)
+        def COMMENT_ADDED_TO_BOOK_ONE = facade.addCommentToBook(COMMENT_ONE_FOR_BOOK_ONE).get()
 
         then: "Return comment added to book"
-        Either<BookError, CommentDto> COMMENT_ONE = facade.findCommentById(COMMENT_ONE_FOR_BOOK_ONE.commentId)
-        BOOK_ONE_COMMENT_ONE_RESPONSE.get().description == COMMENT_ONE.get().description
+        def COMMENT_ONE = facade.findCommentById(COMMENT_ONE_FOR_BOOK_ONE.commentId)
+        COMMENT_ADDED_TO_BOOK_ONE.description == COMMENT_ONE.get().description
     }
 
     def "Should not add comment to not existing book"() {
         when: "Add comment to book"
-        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_FOR_NOT_EXIST_BOOK_ID).getLeft()
+        def ERROR_RESPONSE = facade.addCommentToBook(COMMENT_FOR_NOT_EXIST_BOOK_ID).getLeft()
 
         then: "Book not found"
         ERROR_RESPONSE == BOOK_NOT_FOUND
@@ -107,7 +104,7 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Add comment to book"
-        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_WITH_NULL_DESCRIPTION).getLeft()
+        def ERROR_RESPONSE = facade.addCommentToBook(COMMENT_WITH_NULL_DESCRIPTION).getLeft()
 
         then: "Return error with null description"
         ERROR_RESPONSE == NULL_OR_EMPTY_DESCRIPTION
@@ -118,7 +115,7 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Add comment to book"
-        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_WITH_EMPTY_DESCRIPTION).getLeft()
+        def ERROR_RESPONSE = facade.addCommentToBook(COMMENT_WITH_EMPTY_DESCRIPTION).getLeft()
 
         then: "Return error with null description"
         ERROR_RESPONSE == NULL_OR_EMPTY_DESCRIPTION
@@ -129,7 +126,7 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Add comment to book"
-        BookError ERROR_RESPONSE = facade.addCommentToBook(COMMENT_WITH_NULL_DATE_ADDED).getLeft()
+        def ERROR_RESPONSE = facade.addCommentToBook(COMMENT_WITH_NULL_DATE_ADDED).getLeft()
 
         then: "Return error with null date added"
         ERROR_RESPONSE == NULL_DATE_ADDED
@@ -141,10 +138,10 @@ class BookSpecificationTest extends Specification {
         facade.addCommentToBook(COMMENT_ONE_FOR_BOOK_ONE)
 
         when: "Find book and return size of list with comments"
-        Either<BookError, List<CommentDto>> COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id)
+        def COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id).get()
 
         then: "Book has one comment"
-        COMMENTS_SIZE.get().size() == 1
+        COMMENTS_SIZE.size() == 1
     }
 
     def "Should get two comments from book"() {
@@ -154,10 +151,10 @@ class BookSpecificationTest extends Specification {
         facade.addCommentToBook(COMMENT_TWO_FOR_BOOK_ONE)
 
         when: "Find book and return size of list with comments"
-        Either<BookError, List<CommentDto>> COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id)
+        def COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id).get()
 
         then: "Book has two comments"
-        COMMENTS_SIZE.get().size() == 2
+        COMMENTS_SIZE.size() == 2
     }
 
     def "Should return empty list of comments from book"() {
@@ -165,10 +162,10 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Find book and return list with comments"
-        Either<BookError, List<CommentDto>> COMMENTS = facade.getBookByIdWithComments(BOOK_ONE.id)
+        def COMMENTS = facade.getBookByIdWithComments(BOOK_ONE.id).get()
 
         then: "List with comments from book is empty"
-        COMMENTS.get().isEmpty()
+        COMMENTS.isEmpty()
     }
 
     def "Should remove comment from book"() {
@@ -180,7 +177,7 @@ class BookSpecificationTest extends Specification {
         facade.removeCommentById(COMMENT_ONE_FOR_BOOK_ONE.commentId)
 
         then: "Book not have any comments"
-        BookError ERROR_RESPONSE = facade.findCommentById(COMMENT_ONE_FOR_BOOK_ONE.commentId).getLeft()
+        def ERROR_RESPONSE = facade.findCommentById(COMMENT_ONE_FOR_BOOK_ONE.commentId).getLeft()
         ERROR_RESPONSE == COMMENT_NOT_FOUND
     }
 
@@ -195,8 +192,8 @@ class BookSpecificationTest extends Specification {
         facade.removeCommentById(COMMENT_TWO_FOR_BOOK_ONE.commentId)
 
         then: "Book should not have any comments"
-        BookError COMMENT_ONE_ERROR_RESPONSE = facade.findCommentById(COMMENT_ONE_FOR_BOOK_ONE.commentId).getLeft()
-        BookError COMMENT_TWO_ERROR_RESPONSE = facade.findCommentById(COMMENT_TWO_FOR_BOOK_ONE.commentId).getLeft()
+        def COMMENT_ONE_ERROR_RESPONSE = facade.findCommentById(COMMENT_ONE_FOR_BOOK_ONE.commentId).getLeft()
+        def COMMENT_TWO_ERROR_RESPONSE = facade.findCommentById(COMMENT_TWO_FOR_BOOK_ONE.commentId).getLeft()
         COMMENT_ONE_ERROR_RESPONSE == COMMENT_NOT_FOUND
         COMMENT_TWO_ERROR_RESPONSE == COMMENT_NOT_FOUND
     }

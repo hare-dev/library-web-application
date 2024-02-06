@@ -1,9 +1,7 @@
 package com.haredev.library.book.domain;
 
 import com.haredev.library.book.domain.api.error.BookError;
-import com.haredev.library.book.domain.dto.BookCreateDto;
-import com.haredev.library.book.domain.dto.CommentCreateDto;
-import com.haredev.library.book.domain.dto.CommentDto;
+import com.haredev.library.book.domain.dto.*;
 import io.vavr.API;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -19,7 +17,6 @@ import static io.vavr.API.Case;
 
 @RequiredArgsConstructor
 class BookManager {
-
     private final BookRepository bookRepository;
     private final CommentRepository commentRepository;
     private final BookCreator bookCreator;
@@ -35,7 +32,9 @@ class BookManager {
         return Option.ofOptional(bookRepository.findById(bookId));
     }
 
-    public void removeBookById(Long bookId) { bookRepository.deleteById(bookId); }
+    public void removeBookById(Long bookId) {
+        bookRepository.deleteById(bookId);
+    }
 
     public List<Book> fetchAllBooksWithPageable(int page) {
         return bookRepository.findAll(PageRequest.of(page, pageSize));

@@ -2,12 +2,10 @@ package com.haredev.library.book.domain;
 
 import com.haredev.library.book.controller.validation.BookValidation;
 import com.haredev.library.book.domain.api.error.BookError;
-import com.haredev.library.book.domain.dto.BookCreateDto;
-import com.haredev.library.book.domain.dto.CommentCreateDto;
-import com.haredev.library.book.domain.dto.CommentDto;
+import com.haredev.library.book.domain.dto.*;
+import com.haredev.library.infrastructure.errors.validation.ValidationErrorsConsumer;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
-import io.vavr.control.Validation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -18,11 +16,15 @@ import static com.haredev.library.book.domain.api.error.BookError.COMMENT_NOT_FO
 
 @RequiredArgsConstructor
 public class BookFacade {
-
+    private final BookValidation bookValidation;
     private final BookManager bookManager;
 
-    public Validation<Seq<String>, BookCreateDto> validateBook(BookCreateDto bookCreateDto) {
-        return BookValidation.validate(bookCreateDto);
+    public Either<ValidationErrorsConsumer, BookCreateDto> validateBook(BookCreateDto bookCreateDto) {
+        if (bookValidation.validate(bookCreateDto).isValid()) {
+            return Either.right(addBook(bookCreateDto));
+        }
+        Seq<String> errors = bookValidation.validate(bookCreateDto).getError();
+        return Either.left(ValidationErrorsConsumer.errorsAsJson(errors));
     }
 
     public BookCreateDto addBook(BookCreateDto bookCreateDto) {

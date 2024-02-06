@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -24,10 +23,9 @@ class Comment extends BaseEntity {
     private Long id;
     private Long bookId;
     private String description;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdTime;
 
-    public CommentCreateDto response() {
+    CommentCreateDto response() {
         return CommentCreateDto.builder()
                 .commentId(id)
                 .description(description)
@@ -35,7 +33,7 @@ class Comment extends BaseEntity {
                 .build();
     }
 
-    public CommentDto toDto() {
+    CommentDto toDto() {
         return CommentDto.builder()
                 .description(description)
                 .createdTime(createdTime)
