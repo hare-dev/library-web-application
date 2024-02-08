@@ -2,11 +2,13 @@ package com.haredev.library.infrastructure.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
@@ -15,8 +17,8 @@ public abstract class BaseEntity implements Serializable {
 
     @Override
     public boolean equals(Object that) {
-       return this == that || that instanceof BaseEntity
-               &&Objects.equals(uuid, ((BaseEntity)that).uuid);
+        return this == that || that instanceof BaseEntity
+                && Objects.equals(uuid, ((BaseEntity) that).uuid);
     }
 
     @Override

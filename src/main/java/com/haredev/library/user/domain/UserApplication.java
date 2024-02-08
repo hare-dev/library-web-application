@@ -23,7 +23,7 @@ import java.util.Set;
 class UserApplication extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userId_generator")
-    private Long userId;
+    private Long id;
     private String username;
     private String password;
 
@@ -32,7 +32,7 @@ class UserApplication extends BaseEntity {
 
     public static UserApplication newInstance(Long userId, String username, String password, Authority... authorities) {
         final UserApplication userApplication = new UserApplication();
-        userApplication.userId = userId;
+        userApplication.id = userId;
         userApplication.username = username;
         userApplication.password = password;
         userApplication.authorities = Set.of(authorities);
@@ -41,14 +41,14 @@ class UserApplication extends BaseEntity {
 
     RegistrationResponse toRegistrationResponse() {
         return RegistrationResponse.builder()
-                .userId(userId)
+                .userId(id)
                 .username(username)
                 .build();
     }
 
     UserDetailsDto toUserDetails() {
         return UserDetailsDto.builder()
-                .userId(userId)
+                .id(id)
                 .username(username)
                 .authorities(authorities)
                 .build();
@@ -67,14 +67,14 @@ class UserApplication extends BaseEntity {
         if (this == o) return true;
         if (!(o instanceof UserApplication userApplication)) return false;
         if (!super.equals(o)) return false;
-        if (!Objects.equals(userId, userApplication.userId)) return false;
+        if (!Objects.equals(id, userApplication.id)) return false;
         return Objects.equals(username, userApplication.username);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
         return result;
     }

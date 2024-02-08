@@ -19,7 +19,7 @@ public class BookFacade {
     private final BookValidation bookValidation;
     private final BookManager bookManager;
 
-    public Either<ValidationErrorsConsumer, BookCreateDto> validateBook(BookCreateDto bookCreateDto) {
+    public Either<ValidationErrorsConsumer, BookCreateDto> validateBook(final BookCreateDto bookCreateDto) {
         if (bookValidation.validate(bookCreateDto).isValid()) {
             return Either.right(addBook(bookCreateDto));
         }
@@ -27,7 +27,7 @@ public class BookFacade {
         return Either.left(ValidationErrorsConsumer.errorsAsJson(errors));
     }
 
-    public BookCreateDto addBook(BookCreateDto bookCreateDto) {
+    public BookCreateDto addBook(final BookCreateDto bookCreateDto) {
         return bookManager.addBook(bookCreateDto).response();
     }
 
@@ -35,32 +35,36 @@ public class BookFacade {
         return bookManager.findBookById(bookId).map(Book::response).toEither(BOOK_NOT_FOUND);
     }
 
-    public List<BookCreateDto> fetchAllBooks(int page) {
+    public List<BookCreateDto> fetchAllBooks(final int page) {
         return bookManager.fetchAllBooksWithPageable(page)
                 .stream()
                 .map(Book::response)
                 .collect(Collectors.toList());
     }
 
-    public void removeBookById(Long bookId) {
+    public void removeBookById(final Long bookId) {
         bookManager.removeBookById(bookId);
     }
 
-    public Either<BookError, CommentDto> addCommentToBook(CommentCreateDto commentRequest) {
+    public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto commentRequest) {
         return bookManager.addCommentToBook(commentRequest);
     }
 
-    public Either<BookError, CommentDto> findCommentById(Long commentId) {
+    public Either<BookError, CommentDto> findCommentById(final Long commentId) {
         return bookManager.findCommentById(commentId).map(Comment::toDto).toEither(COMMENT_NOT_FOUND);
     }
 
-    public Either<BookError, List<CommentDto>> getBookByIdWithComments(Long bookId) {
+    public Either<BookError, List<CommentDto>> getBookByIdWithComments(final Long bookId) {
         return bookManager.findBookById(bookId)
                 .toEither(BOOK_NOT_FOUND)
                 .map(Book::getAllComments);
     }
 
-    public void removeCommentById(Long commentId) {
+    public void removeCommentById(final Long commentId) {
         bookManager.removeCommentById(commentId);
+    }
+
+    public Either<BookError, BookCreateDto> updateBook(final Long bookId, final BookUpdateDto toUpdate) {
+        return bookManager.updateBookById(bookId, toUpdate);
     }
 }

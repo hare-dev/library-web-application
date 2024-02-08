@@ -21,7 +21,7 @@ class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commentId_generator")
     private Long id;
-    private Long bookId;
+    private Long fk_id;
     private String description;
     private LocalDateTime createdTime;
 

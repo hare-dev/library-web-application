@@ -13,7 +13,7 @@ class BookConfiguration {
     }
 
     @Bean
-    BookFacade bookFacade(BookRepository bookRepository, CommentRepository commentRepository) {
+    BookFacade bookFacade(final BookRepository bookRepository, final CommentRepository commentRepository) {
         BookCreator bookCreator = new BookCreator();
         BookValidation bookValidation = new BookValidation();
         CommentCreator commentCreator = new CommentCreator();
@@ -22,7 +22,7 @@ class BookConfiguration {
     }
 
     @Bean
-    BookQueryFacade bookSearchParams(EntityManager entityManager) {
+    BookQueryFacade bookSearchParams(final EntityManager entityManager) {
         return new BookQueryFacade(entityManager);
     }
 }

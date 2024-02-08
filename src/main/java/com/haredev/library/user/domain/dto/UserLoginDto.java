@@ -11,7 +11,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 public class UserLoginDto {
-    private final Long userId;
+    private final Long id;
     private final String username;
     private final String password;
     private final Set<Authority> authorities;

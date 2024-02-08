@@ -5,7 +5,7 @@ import com.haredev.library.book.domain.dto.BookCreateDto;
 import static java.util.Objects.requireNonNull;
 
 class BookCreator {
-    Book from(BookCreateDto request) {
+    Book from(final BookCreateDto request) {
         requireNonNull(request);
         return Book.builder()
                 .id(request.getId())

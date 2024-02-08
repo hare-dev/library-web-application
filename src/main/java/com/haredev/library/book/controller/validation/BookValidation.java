@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public final class BookValidation {
-    public Validation<Seq<String>, BookCreateDto> validate(BookCreateDto request) {
+    public Validation<Seq<String>, BookCreateDto> validate(final BookCreateDto request) {
         return Validation.combine(
                         Title.validate(request.getTitle()),
                         Author.validate(request.getAuthor()),

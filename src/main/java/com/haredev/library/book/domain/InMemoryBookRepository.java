@@ -13,26 +13,26 @@ class InMemoryBookRepository implements BookRepository {
     private final ConcurrentHashMap<Long, Book> inMemoryBook = new ConcurrentHashMap<>();
 
     @Override
-    public Book save(Book book) {
+    public Book save(final Book book) {
         requireNonNull(book);
         inMemoryBook.put(book.response().getId(), book);
         return book;
     }
 
     @Override
-    public void deleteById(Long bookId) {
+    public void deleteById(final Long bookId) {
         requireNonNull(bookId);
         inMemoryBook.remove(bookId);
     }
 
     @Override
-    public Optional<Book> findById(Long bookId) {
+    public Optional<Book> findById(final Long bookId) {
         requireNonNull(bookId);
         return Optional.ofNullable(inMemoryBook.get(bookId));
     }
 
     @Override
-    public List<Book> findAll(Pageable pageable) {
+    public List<Book> findAll(final Pageable pageable) {
         return new ArrayList<>(inMemoryBook.values());
     }
 }

@@ -23,35 +23,35 @@ class BookManager {
     private final CommentCreator commentCreator;
     private static final int pageSize = 20;
 
-    public Book addBook(BookCreateDto request) {
+    public Book addBook(final BookCreateDto request) {
         Book book = bookCreator.from(request);
         return bookRepository.save(book);
     }
 
-    public Option<Book> findBookById(Long bookId) {
+    public Option<Book> findBookById(final Long bookId) {
         return Option.ofOptional(bookRepository.findById(bookId));
     }
 
-    public void removeBookById(Long bookId) {
+    public void removeBookById(final Long bookId) {
         bookRepository.deleteById(bookId);
     }
 
-    public List<Book> fetchAllBooksWithPageable(int page) {
+    public List<Book> fetchAllBooksWithPageable(final int page) {
         return bookRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    private Comment createComment(CommentCreateDto request) {
+    private Comment createComment(final CommentCreateDto request) {
         Comment comment = commentCreator.from(request);
         commentRepository.save(comment);
         return comment;
     }
 
-    public Either<BookError, CommentDto> addCommentToBook(CommentCreateDto commentCreateDto) {
+    public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto commentCreateDto) {
         return validateParameters(commentCreateDto)
                 .flatMap(this::addComment);
     }
 
-    private Either<BookError, CommentCreateDto> validateParameters(CommentCreateDto commentCreateDto) {
+    private Either<BookError, CommentCreateDto> validateParameters(final CommentCreateDto commentCreateDto) {
         return API.Match(commentCreateDto)
                 .option(
                         Case($(argument -> Objects.isNull(argument.getDescription())), NULL_OR_EMPTY_DESCRIPTION),
@@ -61,7 +61,7 @@ class BookManager {
                 .swap();
     }
 
-    private Either<BookError, CommentDto> addComment(CommentCreateDto request) {
+    private Either<BookError, CommentDto> addComment(final CommentCreateDto request) {
         return findBookById(request.getBookId())
                 .toEither(BOOK_NOT_FOUND)
                 .map(book -> {
@@ -71,11 +71,18 @@ class BookManager {
                 });
     }
 
-    public Option<Comment> findCommentById(Long commentId) {
+    public Option<Comment> findCommentById(final Long commentId) {
         return Option.ofOptional(commentRepository.findById(commentId));
     }
 
-    public void removeCommentById(Long commentId) {
+    public void removeCommentById(final Long commentId) {
         commentRepository.deleteById(commentId);
+    }
+
+    public Either<BookError, BookCreateDto> updateBookById(final Long bookId, final BookUpdateDto toUpdate) {
+        return findBookById(bookId)
+                .toEither(BOOK_NOT_FOUND)
+                .map(book -> book.update(toUpdate))
+                .map(book -> bookRepository.save(book).response());
     }
 }

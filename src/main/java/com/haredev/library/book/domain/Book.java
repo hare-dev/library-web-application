@@ -4,6 +4,7 @@ import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
 import com.haredev.library.book.domain.api.BookStatus;
 import com.haredev.library.book.domain.dto.BookCreateDto;
+import com.haredev.library.book.domain.dto.BookUpdateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -45,7 +46,7 @@ class Book extends BaseEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "bookId")
+    @JoinColumn(name = "fk_id")
     @Builder.Default
     Set<Comment> comments = new HashSet<>();
 
@@ -71,6 +72,24 @@ class Book extends BaseEntity {
                 .bookCover(bookCover)
                 .bookStatus(bookStatus)
                 .description(description)
+                .build();
+    }
+
+    Book update(BookUpdateDto toUpdate) {
+        return Book.builder()
+                .id(this.id)
+                .title(toUpdate.getTitle())
+                .author(toUpdate.getAuthor())
+                .isbn(toUpdate.getIsbn())
+                .publisher(toUpdate.getPublisher())
+                .yearPublication(toUpdate.getYearPublication())
+                .pageNumber(toUpdate.getPageNumber())
+                .language(toUpdate.getLanguage())
+                .bookCategory(toUpdate.getBookCategory())
+                .bookCover(toUpdate.getBookCover())
+                .bookStatus(this.bookStatus)
+                .description(toUpdate.getDescription())
+                .comments(this.comments)
                 .build();
     }
 }
