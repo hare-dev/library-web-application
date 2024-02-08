@@ -46,7 +46,7 @@ class Book extends BaseEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "fk_id")
+    @JoinColumn(name = "fk_book_id")
     @Builder.Default
     Set<Comment> comments = new HashSet<>();
 
@@ -56,6 +56,24 @@ class Book extends BaseEntity {
 
     public List<CommentDto> getAllComments() {
         return comments.stream().map(Comment::toDto).collect(Collectors.toList());
+    }
+
+    Book update(final BookUpdateDto toUpdate) {
+        return Book.builder()
+                .id(this.id)
+                .title(toUpdate.getTitle())
+                .author(toUpdate.getAuthor())
+                .isbn(toUpdate.getIsbn())
+                .publisher(toUpdate.getPublisher())
+                .yearPublication(toUpdate.getYearPublication())
+                .pageNumber(toUpdate.getPageNumber())
+                .language(toUpdate.getLanguage())
+                .bookCategory(toUpdate.getBookCategory())
+                .bookCover(toUpdate.getBookCover())
+                .bookStatus(this.bookStatus)
+                .description(toUpdate.getDescription())
+                .comments(this.comments)
+                .build();
     }
 
     BookCreateDto response() {
@@ -72,24 +90,6 @@ class Book extends BaseEntity {
                 .bookCover(bookCover)
                 .bookStatus(bookStatus)
                 .description(description)
-                .build();
-    }
-
-    Book update(BookUpdateDto toUpdate) {
-        return Book.builder()
-                .id(this.id)
-                .title(toUpdate.getTitle())
-                .author(toUpdate.getAuthor())
-                .isbn(toUpdate.getIsbn())
-                .publisher(toUpdate.getPublisher())
-                .yearPublication(toUpdate.getYearPublication())
-                .pageNumber(toUpdate.getPageNumber())
-                .language(toUpdate.getLanguage())
-                .bookCategory(toUpdate.getBookCategory())
-                .bookCover(toUpdate.getBookCover())
-                .bookStatus(this.bookStatus)
-                .description(toUpdate.getDescription())
-                .comments(this.comments)
                 .build();
     }
 }

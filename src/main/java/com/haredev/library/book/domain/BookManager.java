@@ -62,7 +62,7 @@ class BookManager {
     }
 
     private Either<BookError, CommentDto> addComment(final CommentCreateDto request) {
-        return findBookById(request.getBookId())
+        return findBookById(request.getFk_book_id())
                 .toEither(BOOK_NOT_FOUND)
                 .map(book -> {
                     Comment comment = createComment(request);
@@ -84,5 +84,12 @@ class BookManager {
                 .toEither(BOOK_NOT_FOUND)
                 .map(book -> book.update(toUpdate))
                 .map(book -> bookRepository.save(book).response());
+    }
+
+    public Either<BookError, CommentDto> updateCommentById(final Long commentId, final CommentUpdateDto toUpdate) {
+        return findCommentById(commentId)
+                .toEither(COMMENT_NOT_FOUND)
+                .map(comment -> comment.update(toUpdate))
+                .map(comment -> commentRepository.save(comment).toDto());
     }
 }

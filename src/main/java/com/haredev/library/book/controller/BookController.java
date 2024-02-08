@@ -72,4 +72,10 @@ final class BookController {
         Either<BookError, BookCreateDto> response = bookFacade.updateBook(bookId, toUpdate);
         return ResponseResolver.resolve(response);
     }
+
+    @PutMapping("/books/comments/{commentId}")
+    ResponseEntity<?> updateComment(@PathVariable final Long commentId, @RequestBody final CommentUpdateDto toUpdate) {
+        Either<BookError, CommentDto> response = bookFacade.updateComment(commentId, toUpdate);
+        return ResponseResolver.resolve(response);
+    }
 }

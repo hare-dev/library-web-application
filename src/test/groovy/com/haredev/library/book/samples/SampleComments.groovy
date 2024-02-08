@@ -15,7 +15,7 @@ final class SampleComments {
                                                 String description, LocalDateTime createdTime) {
         return CommentCreateDto.builder()
                 .commentId(commentId)
-                .bookId(bookId)
+                .fk_book_id(bookId)
                 .description(description)
                 .createdTime(createdTime)
                 .build()
@@ -24,7 +24,7 @@ final class SampleComments {
     static CommentCreateDto createCommentSampleWithNotExistsBookId() {
         return CommentCreateDto.builder()
         .commentId(0L)
-        .bookId(notExistBookId)
+        .fk_book_id(notExistBookId)
         .description("Example description")
         .createdTime(LocalDateTime.now())
         .build()
@@ -33,7 +33,7 @@ final class SampleComments {
     static CommentCreateDto createCommentSampleWithNullDescription() {
         return CommentCreateDto.builder()
         .commentId(0L)
-        .bookId(bookIdForComment)
+        .fk_book_id(bookIdForComment)
         .description(null)
         .createdTime(LocalDateTime.now())
         .build()
@@ -42,7 +42,7 @@ final class SampleComments {
     static CommentCreateDto createCommentSampleWithEmptyDescription() {
         return CommentCreateDto.builder()
                 .commentId(0L)
-                .bookId(bookIdForComment)
+                .fk_book_id(bookIdForComment)
                 .description("")
                 .createdTime(LocalDateTime.now())
                 .build()
@@ -51,7 +51,7 @@ final class SampleComments {
     static CommentCreateDto createCommentSampleWithNullDateAdded() {
         return CommentCreateDto.builder()
         .commentId(commentId)
-        .bookId(bookIdForComment)
+        .fk_book_id(bookIdForComment)
         .description("Example description")
         .createdTime(null)
         .build()

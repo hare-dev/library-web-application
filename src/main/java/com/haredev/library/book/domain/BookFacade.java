@@ -67,4 +67,8 @@ public class BookFacade {
     public Either<BookError, BookCreateDto> updateBook(final Long bookId, final BookUpdateDto toUpdate) {
         return bookManager.updateBookById(bookId, toUpdate);
     }
+
+    public Either<BookError, CommentDto> updateComment(final Long commentId, final CommentUpdateDto toUpdate) {
+        return bookManager.updateCommentById(commentId, toUpdate);
+    }
 }
