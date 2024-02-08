@@ -12,10 +12,10 @@ token:
   # Spring-Boot Configuration
 
 spring:
-    h2:
-      console:
-        enabled: true
-        path: /dev-test-h2
+  h2:
+    console:
+      enabled: true
+      path: /dev-test-h2
     datasource:
       path: /dev-test-h2
       url: jdbc:h2:mem:test-h2
@@ -51,8 +51,8 @@ logging:
         org:
           hibernate:
                   SQL: DEBUG
-                  type: TRACE
-                  springframework:web: INFO
+                  type:descriptor:sql:BasicBinder: TRACE
+
   
   # Swagger UI
 
