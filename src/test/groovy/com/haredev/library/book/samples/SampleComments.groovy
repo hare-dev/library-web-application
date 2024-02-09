@@ -1,6 +1,7 @@
 package com.haredev.library.book.samples
 
 import com.haredev.library.book.domain.dto.CommentCreateDto
+import com.haredev.library.book.domain.dto.CommentUpdateDto
 import groovy.transform.CompileStatic
 
 import java.time.LocalDateTime
@@ -9,7 +10,8 @@ import java.time.LocalDateTime
 final class SampleComments {
     private static final Long bookIdForComment = 0L
     private static final Long commentId = 0L
-    private static final Long notExistBookId = 1000L
+    private static final Long notExistBookWithThisId = 5000L
+    public static final Long notExistCommentWithThisId = 5000L
 
     static CommentCreateDto createCommentSample(Long commentId, Long bookId,
                                                 String description, LocalDateTime createdTime) {
@@ -24,7 +26,7 @@ final class SampleComments {
     static CommentCreateDto createCommentSampleWithNotExistsBookId() {
         return CommentCreateDto.builder()
         .commentId(0L)
-        .fk_book_id(notExistBookId)
+        .fk_book_id(notExistBookWithThisId)
         .description("Example description")
         .createdTime(LocalDateTime.now())
         .build()
@@ -55,5 +57,12 @@ final class SampleComments {
         .description("Example description")
         .createdTime(null)
         .build()
+    }
+
+    static CommentUpdateDto createCommentWithDataToUpdateSample() {
+        return CommentUpdateDto.builder()
+                .description("UPDATE_DESCRIPTION")
+                .createdTime(LocalDateTime.now())
+                .build()
     }
 }

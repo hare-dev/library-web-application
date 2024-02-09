@@ -3,9 +3,11 @@ package com.haredev.library.book.domain.dto;
 import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class BookUpdateDto {
     private final String title;

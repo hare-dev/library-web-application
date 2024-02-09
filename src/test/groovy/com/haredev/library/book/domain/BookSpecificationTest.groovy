@@ -22,10 +22,18 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "System has one book"
-        def ERROR_RESPONSE = facade.findBookById(BOOK_ONE.id)get()
+        def RESULT = facade.findBookById(BOOK_ONE.id).get()
 
         then: "Return added book"
-        ERROR_RESPONSE == BOOK_ONE
+        RESULT == BOOK_ONE
+    }
+
+    def "Should not find book with not exist id"() {
+        when: "Find not exist book by id"
+        def ERROR_RESPONSE = facade.findBookById(SampleBooks.notExistBookWithThisId).getLeft()
+
+        then: "Return response with BOOK_NOT_FOUND"
+        ERROR_RESPONSE == BOOK_NOT_FOUND
     }
 
     def "Should have two books"() {
@@ -91,8 +99,8 @@ class BookSpecificationTest extends Specification {
         COMMENT_ADDED_TO_BOOK_ONE.description == COMMENT_ONE.get().description
     }
 
-    def "Should not add comment to not existing book"() {
-        when: "Add comment to book"
+    def "Should not add comment to not exist book"() {
+        when: "Add comment to not exist book"
         def ERROR_RESPONSE = facade.addCommentToBook(COMMENT_FOR_NOT_EXIST_BOOK_ID).getLeft()
 
         then: "Book not found"
@@ -196,6 +204,55 @@ class BookSpecificationTest extends Specification {
         def COMMENT_TWO_ERROR_RESPONSE = facade.findCommentById(COMMENT_TWO_FOR_BOOK_ONE.commentId).getLeft()
         COMMENT_ONE_ERROR_RESPONSE == COMMENT_NOT_FOUND
         COMMENT_TWO_ERROR_RESPONSE == COMMENT_NOT_FOUND
+    }
+
+    def "Should update one book"() {
+        given: "Add book to update"
+        def BOOK = SampleBooks.createBookToUpdateSample()
+        def BOOK_UPDATE = SampleBooks.createBookWithDataToUpdateSample()
+        facade.addBook(BOOK)
+
+        when: "Update book"
+        def UPDATE_RESULT = facade.updateBook(BOOK.id, BOOK_UPDATE).get()
+
+        then: "Compare book input update with output update"
+        UPDATE_RESULT.title == BOOK_UPDATE.title
+        UPDATE_RESULT.author == BOOK_UPDATE.author
+        UPDATE_RESULT.isbn == BOOK_UPDATE.isbn
+        UPDATE_RESULT.description == BOOK_UPDATE.description
+        UPDATE_RESULT.yearPublication == BOOK_UPDATE.yearPublication
+        UPDATE_RESULT.bookCover == BOOK_UPDATE.bookCover
+    }
+
+    def "Should not update not exist book"() {
+        when: "Update not exist book"
+        def BOOK_UPDATE = SampleBooks.createBookWithDataToUpdateSample()
+        def ERROR_RESPONSE = facade.updateBook(SampleBooks.notExistBookWithThisId, BOOK_UPDATE).getLeft()
+
+        then: "Return error with book not found"
+        ERROR_RESPONSE == BOOK_NOT_FOUND
+    }
+
+    def "Should update one comment"() {
+        given: "Add comment to book"
+        def COMMENT_UPDATE = SampleComments.createCommentWithDataToUpdateSample()
+        facade.addBook(BOOK_ONE)
+        facade.addCommentToBook(COMMENT_ONE_FOR_BOOK_ONE)
+
+        when: "Update comment"
+        def UPDATE_RESULT = facade.updateComment(COMMENT_ONE_FOR_BOOK_ONE.commentId, COMMENT_UPDATE).get()
+
+        then: "Compare comment input update with output update"
+        UPDATE_RESULT.description == COMMENT_UPDATE.description
+    }
+
+    def "Should not update not exist comment"() {
+        when: "Update not exist book"
+        def COMMENT_UPDATE = SampleComments.createCommentWithDataToUpdateSample()
+        def ERROR_RESPONSE = facade.updateComment(SampleComments.notExistCommentWithThisId, COMMENT_UPDATE).getLeft()
+
+        then: "Return error with book not found"
+        ERROR_RESPONSE == COMMENT_NOT_FOUND
     }
 
     def final PAGE = 1
