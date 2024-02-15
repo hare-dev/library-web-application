@@ -2,18 +2,15 @@ package com.haredev.library.book.domain;
 
 import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.*;
-import io.vavr.API;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
-import java.util.Objects;
 
-import static com.haredev.library.book.domain.api.error.BookError.*;
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
+import static com.haredev.library.book.domain.api.error.BookError.BOOK_NOT_FOUND;
+import static com.haredev.library.book.domain.api.error.BookError.COMMENT_NOT_FOUND;
 
 @RequiredArgsConstructor
 class BookManager {
@@ -21,6 +18,7 @@ class BookManager {
     private final CommentRepository commentRepository;
     private final BookCreator bookCreator;
     private final CommentCreator commentCreator;
+    private final CommentValidation commentValidation;
     private static final int pageSize = 20;
 
     public Book addBook(final BookCreateDto request) {
@@ -47,18 +45,8 @@ class BookManager {
     }
 
     public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto request) {
-        return validateParameters(request)
+        return commentValidation.validateParameters(request)
                 .flatMap(this::addComment);
-    }
-
-    private Either<BookError, CommentCreateDto> validateParameters(final CommentCreateDto request) {
-        return API.Match(request)
-                .option(
-                        Case($(argument -> Objects.isNull(argument.description())), NULL_OR_EMPTY_DESCRIPTION),
-                        Case($(argument -> Objects.isNull(argument.createdTime())), NULL_DATE_ADDED),
-                        Case($(argument -> argument.description().isEmpty()), NULL_OR_EMPTY_DESCRIPTION))
-                .toEither(request)
-                .swap();
     }
 
     private Either<BookError, CommentDto> addComment(final CommentCreateDto request) {

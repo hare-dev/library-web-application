@@ -15,7 +15,8 @@ class BookConfiguration {
     BookFacade bookFacade(final BookRepository bookRepository, final CommentRepository commentRepository) {
         BookCreator bookCreator = new BookCreator();
         CommentCreator commentCreator = new CommentCreator();
-        BookManager bookManager = new BookManager(bookRepository, commentRepository, bookCreator, commentCreator);
+        CommentValidation commentValidation = new CommentValidation();
+        BookManager bookManager = new BookManager(bookRepository, commentRepository, bookCreator, commentCreator, commentValidation);
         return new BookFacade(bookManager);
     }
 
