@@ -24,4 +24,8 @@ public final class ResponseResolver {
     public static <T> ResponseEntity<List<T>> resolve(List<T> list) {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+    public static <T> ResponseEntity<T> resolve(T input) {
+        return new ResponseEntity<>(input, HttpStatus.CREATED);
+    }
 }

@@ -6,7 +6,6 @@ import com.haredev.library.book.domain.dto.*;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +17,8 @@ final class BookController {
     private final BookFacade bookFacade;
 
     @PostMapping("/books/add")
-    BookCreateDto addBook(@RequestBody final BookCreateDto request) {
-        return bookFacade.addBook(request);
+    ResponseEntity<?> addBook(@RequestBody final BookCreateDto request) {
+        return ResponseResolver.resolve(bookFacade.addBook(request));
     }
 
     @GetMapping("/books/{bookId}")
@@ -60,9 +59,9 @@ final class BookController {
     }
 
     @DeleteMapping("/books/comments/{commentId}")
-    HttpStatus removeCommentById(@PathVariable final Long commentId) {
+    ResponseEntity<?> removeCommentById(@PathVariable final Long commentId) {
         bookFacade.removeCommentById(commentId);
-        return HttpStatus.NO_CONTENT;
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/books/{bookId}")
