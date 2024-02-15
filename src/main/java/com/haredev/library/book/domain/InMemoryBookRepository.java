@@ -32,6 +32,11 @@ class InMemoryBookRepository implements BookRepository {
     }
 
     @Override
+    public List<Book> findAll() {
+        return new ArrayList<>(inMemoryBook.values());
+    }
+
+    @Override
     public List<Book> findAll(final Pageable pageable) {
         return new ArrayList<>(inMemoryBook.values());
     }

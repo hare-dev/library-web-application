@@ -15,8 +15,8 @@ import static com.haredev.library.book.domain.api.error.BookError.COMMENT_NOT_FO
 public class BookFacade {
     private final BookManager bookManager;
 
-    public BookCreateDto addBook(final BookCreateDto request) {
-        return bookManager.addBook(request).toBookCreateResponse();
+    public Either<BookError, BookCreateDto> addBook(final BookCreateDto request) {
+        return bookManager.addBook(request).map(Book::toBookCreateResponse);
     }
 
     public Either<BookError, BookCreateDto> findBookById(Long bookId) {

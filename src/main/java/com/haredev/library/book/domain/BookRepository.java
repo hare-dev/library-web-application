@@ -9,6 +9,7 @@ import java.util.Optional;
 interface BookRepository extends Repository<Book, Long> {
     Book save(Book book);
     Optional<Book> findById(Long bookId);
+    List<Book> findAll();
     List<Book> findAll(Pageable pageable);
     void deleteById(Long bookId);
 }

@@ -9,11 +9,12 @@ import groovy.transform.CompileStatic
 final class SampleBooks {
     static final Long notExistBookWithThisId = 5000L
 
-    static BookCreateDto createBookSampleToUpdate(Long bookId, String title, String author) {
+    static BookCreateDto createBookSampleToUpdate(Long bookId, String title, String author, String isbn) {
         return BookCreateDto.builder()
                 .id(bookId)
                 .title(title)
                 .author(author)
+                .isbn(isbn)
                 .build()
     }
 
@@ -37,6 +38,13 @@ final class SampleBooks {
                 .description("UPDATED_DESCRIPTION")
                 .yearPublication(2023)
                 .bookCover(BookCover.HARD)
+                .build()
+    }
+
+    static BookCreateDto createBookSampleWithTheSameIsbn() {
+        return BookCreateDto.builder()
+                .id(1L)
+                .isbn("EXAMPLE_ISBN")
                 .build()
     }
 }

@@ -19,7 +19,8 @@ final class BookController {
 
     @PostMapping("/books/add")
     ResponseEntity<?> addBook(@Valid @RequestBody final BookCreateDto request) {
-        return ResponseResolver.resolve(bookFacade.addBook(request));
+        Either<BookError, BookCreateDto> response = bookFacade.addBook(request);
+        return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/books/{bookId}")

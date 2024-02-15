@@ -9,8 +9,9 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
-import static com.haredev.library.book.domain.api.error.BookError.BOOK_NOT_FOUND;
-import static com.haredev.library.book.domain.api.error.BookError.COMMENT_NOT_FOUND;
+import static com.haredev.library.book.domain.api.error.BookError.*;
+import static io.vavr.control.Either.left;
+import static io.vavr.control.Either.right;
 
 @RequiredArgsConstructor
 class BookManager {
@@ -21,9 +22,21 @@ class BookManager {
     private final CommentValidation commentValidation;
     private static final int pageSize = 20;
 
-    public Book addBook(final BookCreateDto request) {
+    public Either<BookError, Book> addBook(final BookCreateDto request) {
+        if (bookWithDuplicatedIsbnNotExist(request.isbn())) {
+            return right(insert(request));
+        } else return left(ISBN_DUPLICATED);
+    }
+
+    private Book insert(final BookCreateDto request) {
         Book book = bookCreator.from(request);
         return bookRepository.save(book);
+    }
+
+    private boolean bookWithDuplicatedIsbnNotExist(String isbn) {
+        return bookRepository.findAll()
+                .stream()
+                .noneMatch(book -> book.getIsbn().equals(isbn));
     }
 
     public Option<Book> findBookById(final Long bookId) {

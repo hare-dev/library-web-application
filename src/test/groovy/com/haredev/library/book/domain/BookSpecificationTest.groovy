@@ -36,6 +36,19 @@ class BookSpecificationTest extends Specification {
         ERROR_RESPONSE == BOOK_NOT_FOUND
     }
 
+    def "Should not add books with the same isbn code"() {
+        given: "Add two books to system"
+        def BOOK_ONE = SampleBooks.createBookSampleWithTheSameIsbn()
+        def BOOK_TWO = SampleBooks.createBookSampleWithTheSameIsbn()
+
+        when: "System has two books"
+        facade.addBook(BOOK_ONE)
+        def ERROR_RESPONSE = facade.addBook(BOOK_TWO).getLeft()
+
+        then: "Return two added books"
+        ERROR_RESPONSE == ISBN_DUPLICATED
+    }
+
     def "Should have two books"() {
         given: "Add two books to system"
         facade.addBook(BOOK_ONE)
@@ -256,8 +269,8 @@ class BookSpecificationTest extends Specification {
     }
 
     def final PAGE = 1
-    def final BOOK_ONE = SampleBooks.createBookSampleToUpdate(0L, "Twilight", "Stephenie Meyer")
-    def final BOOK_TWO = SampleBooks.createBookSampleToUpdate(1L, "Django", "Quentin Tarantino")
+    def final BOOK_ONE = SampleBooks.createBookSampleToUpdate(0L, "Twilight", "Stephenie Meyer", "0-596-52068-9")
+    def final BOOK_TWO = SampleBooks.createBookSampleToUpdate(1L, "Django", "Quentin Tarantino", "978 0 596 52068 7")
 
     def final COMMENT_ONE_FOR_BOOK_ONE = SampleComments.createCommentSample(0L, BOOK_ONE.id(), "Best book!", LocalDateTime.now())
     def final COMMENT_TWO_FOR_BOOK_ONE = SampleComments.createCommentSample(1L, BOOK_ONE.id(), "Fantastic book!", LocalDateTime.now())
