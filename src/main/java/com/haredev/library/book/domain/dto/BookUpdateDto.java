@@ -2,22 +2,18 @@ package com.haredev.library.book.domain.dto;
 
 import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
 @Builder
-@AllArgsConstructor
-public class BookUpdateDto {
-    private final String title;
-    private final String author;
-    private final String isbn;
-    private final String publisher;
-    private final Integer yearPublication;
-    private final Integer pageNumber;
-    private final String language;
-    private final BookCategory bookCategory;
-    private final BookCover bookCover;
-    private final String description;
-}
+public record BookUpdateDto(
+        String title,
+        String author,
+        String isbn,
+        String publisher,
+        Integer yearPublication,
+        Integer pageNumber,
+        String language,
+        BookCategory bookCategory,
+        BookCover bookCover,
+        String description
+) { }
