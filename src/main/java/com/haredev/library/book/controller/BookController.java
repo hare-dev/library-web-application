@@ -5,6 +5,7 @@ import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.*;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import io.vavr.control.Either;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ final class BookController {
     private final BookFacade bookFacade;
 
     @PostMapping("/books/add")
-    ResponseEntity<?> addBook(@RequestBody final BookCreateDto request) {
+    ResponseEntity<?> addBook(@Valid @RequestBody final BookCreateDto request) {
         return ResponseResolver.resolve(bookFacade.addBook(request));
     }
 
