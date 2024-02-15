@@ -1,10 +1,7 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.controller.validation.BookValidation;
 import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.*;
-import com.haredev.library.infrastructure.errors.validation.ValidationErrorsConsumer;
-import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 
@@ -16,29 +13,20 @@ import static com.haredev.library.book.domain.api.error.BookError.COMMENT_NOT_FO
 
 @RequiredArgsConstructor
 public class BookFacade {
-    private final BookValidation bookValidation;
     private final BookManager bookManager;
 
-    public Either<ValidationErrorsConsumer, BookCreateDto> validateBook(final BookCreateDto bookCreateDto) {
-        if (bookValidation.validate(bookCreateDto).isValid()) {
-            return Either.right(addBook(bookCreateDto));
-        }
-        Seq<String> errors = bookValidation.validate(bookCreateDto).getError();
-        return Either.left(ValidationErrorsConsumer.errorsAsJson(errors));
-    }
-
-    public BookCreateDto addBook(final BookCreateDto bookCreateDto) {
-        return bookManager.addBook(bookCreateDto).response();
+    public BookCreateDto addBook(final BookCreateDto request) {
+        return bookManager.addBook(request).toBookCreateResponse();
     }
 
     public Either<BookError, BookCreateDto> findBookById(Long bookId) {
-        return bookManager.findBookById(bookId).map(Book::response).toEither(BOOK_NOT_FOUND);
+        return bookManager.findBookById(bookId).map(Book::toBookCreateResponse).toEither(BOOK_NOT_FOUND);
     }
 
     public List<BookCreateDto> fetchAllBooks(final int page) {
         return bookManager.fetchAllBooksWithPageable(page)
                 .stream()
-                .map(Book::response)
+                .map(Book::toBookCreateResponse)
                 .collect(Collectors.toList());
     }
 
@@ -46,8 +34,8 @@ public class BookFacade {
         bookManager.removeBookById(bookId);
     }
 
-    public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto commentRequest) {
-        return bookManager.addCommentToBook(commentRequest);
+    public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto request) {
+        return bookManager.addCommentToBook(request);
     }
 
     public Either<BookError, CommentDto> findCommentById(final Long commentId) {
@@ -64,11 +52,11 @@ public class BookFacade {
         bookManager.removeCommentById(commentId);
     }
 
-    public Either<BookError, BookCreateDto> updateBook(final Long bookId, final BookUpdateDto toUpdate) {
-        return bookManager.updateBookById(bookId, toUpdate);
+    public Either<BookError, BookCreateDto> updateBookById(final Long bookId, final BookUpdateDto request) {
+        return bookManager.updateBookById(bookId, request);
     }
 
-    public Either<BookError, CommentDto> updateComment(final Long commentId, final CommentUpdateDto toUpdate) {
-        return bookManager.updateCommentById(commentId, toUpdate);
+    public Either<BookError, CommentDto> updateCommentById(final Long commentId, final CommentUpdateDto request) {
+        return bookManager.updateCommentById(commentId, request);
     }
 }

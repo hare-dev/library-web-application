@@ -3,19 +3,19 @@ package com.haredev.library.book.domain;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
 
 class InMemoryBookRepository implements BookRepository {
-    private final ConcurrentHashMap<Long, Book> inMemoryBook = new ConcurrentHashMap<>();
+    private final HashMap<Long, Book> inMemoryBook = new HashMap<>();
 
     @Override
     public Book save(final Book book) {
         requireNonNull(book);
-        inMemoryBook.put(book.response().getId(), book);
+        inMemoryBook.put(book.toBookCreateResponse().id(), book);
         return book;
     }
 

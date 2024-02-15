@@ -46,23 +46,23 @@ class BookManager {
         return comment;
     }
 
-    public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto commentCreateDto) {
-        return validateParameters(commentCreateDto)
+    public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto request) {
+        return validateParameters(request)
                 .flatMap(this::addComment);
     }
 
-    private Either<BookError, CommentCreateDto> validateParameters(final CommentCreateDto commentCreateDto) {
-        return API.Match(commentCreateDto)
+    private Either<BookError, CommentCreateDto> validateParameters(final CommentCreateDto request) {
+        return API.Match(request)
                 .option(
-                        Case($(argument -> Objects.isNull(argument.getDescription())), NULL_OR_EMPTY_DESCRIPTION),
-                        Case($(argument -> Objects.isNull(argument.getCreatedTime())), NULL_DATE_ADDED),
-                        Case($(argument -> argument.getDescription().isEmpty()), NULL_OR_EMPTY_DESCRIPTION))
-                .toEither(commentCreateDto)
+                        Case($(argument -> Objects.isNull(argument.description())), NULL_OR_EMPTY_DESCRIPTION),
+                        Case($(argument -> Objects.isNull(argument.createdTime())), NULL_DATE_ADDED),
+                        Case($(argument -> argument.description().isEmpty()), NULL_OR_EMPTY_DESCRIPTION))
+                .toEither(request)
                 .swap();
     }
 
     private Either<BookError, CommentDto> addComment(final CommentCreateDto request) {
-        return findBookById(request.getFk_book_id())
+        return findBookById(request.bookId())
                 .toEither(BOOK_NOT_FOUND)
                 .map(book -> {
                     Comment comment = createComment(request);
@@ -79,17 +79,17 @@ class BookManager {
         commentRepository.deleteById(commentId);
     }
 
-    public Either<BookError, BookCreateDto> updateBookById(final Long bookId, final BookUpdateDto toUpdate) {
+    public Either<BookError, BookCreateDto> updateBookById(final Long bookId, final BookUpdateDto request) {
         return findBookById(bookId)
                 .toEither(BOOK_NOT_FOUND)
-                .map(book -> book.update(toUpdate))
-                .map(book -> bookRepository.save(book).response());
+                .map(book -> book.toUpdate(request))
+                .map(book -> bookRepository.save(book).toBookCreateResponse());
     }
 
-    public Either<BookError, CommentDto> updateCommentById(final Long commentId, final CommentUpdateDto toUpdate) {
+    public Either<BookError, CommentDto> updateCommentById(final Long commentId, final CommentUpdateDto request) {
         return findCommentById(commentId)
                 .toEither(COMMENT_NOT_FOUND)
-                .map(comment -> comment.update(toUpdate))
+                .map(comment -> comment.toUpdate(request))
                 .map(comment -> commentRepository.save(comment).toDto());
     }
 }

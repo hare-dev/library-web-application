@@ -9,7 +9,7 @@ import groovy.transform.CompileStatic
 final class SampleBooks {
     static final Long notExistBookWithThisId = 5000L
 
-    static BookCreateDto createBookSample(Long bookId, String title, String author) {
+    static BookCreateDto createBookSampleToUpdate(Long bookId, String title, String author) {
         return BookCreateDto.builder()
                 .id(bookId)
                 .title(title)
@@ -17,7 +17,7 @@ final class SampleBooks {
                 .build()
     }
 
-    static BookCreateDto createBookToUpdateSample() {
+    static BookCreateDto createBookSampleToUpdate() {
         return BookCreateDto.builder()
                 .id(1L)
                 .title("EXAMPLE_TITLE")

@@ -4,7 +4,6 @@ import com.haredev.library.book.domain.BookFacade;
 import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.*;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
-import com.haredev.library.infrastructure.errors.validation.ValidationErrorsConsumer;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,9 +18,8 @@ final class BookController {
     private final BookFacade bookFacade;
 
     @PostMapping("/books/add")
-    Either<ValidationErrorsConsumer, BookCreateDto> addBook(
-            @RequestBody final BookCreateDto request) {
-        return bookFacade.validateBook(request);
+    BookCreateDto addBook(@RequestBody final BookCreateDto request) {
+        return bookFacade.addBook(request);
     }
 
     @GetMapping("/books/{bookId}")
@@ -38,9 +36,9 @@ final class BookController {
     }
 
     @DeleteMapping("/books/{bookId}")
-    HttpStatus removeBook(@PathVariable final Long bookId) {
+    ResponseEntity<?> removeBook(@PathVariable final Long bookId) {
         bookFacade.removeBookById(bookId);
-        return HttpStatus.OK;
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/books/comments/add")
@@ -69,13 +67,13 @@ final class BookController {
 
     @PutMapping("/books/{bookId}")
     ResponseEntity<?> updateBook(@PathVariable final Long bookId, @RequestBody final BookUpdateDto toUpdate) {
-        Either<BookError, BookCreateDto> response = bookFacade.updateBook(bookId, toUpdate);
+        Either<BookError, BookCreateDto> response = bookFacade.updateBookById(bookId, toUpdate);
         return ResponseResolver.resolve(response);
     }
 
     @PutMapping("/books/comments/{commentId}")
     ResponseEntity<?> updateComment(@PathVariable final Long commentId, @RequestBody final CommentUpdateDto toUpdate) {
-        Either<BookError, CommentDto> response = bookFacade.updateComment(commentId, toUpdate);
+        Either<BookError, CommentDto> response = bookFacade.updateCommentById(commentId, toUpdate);
         return ResponseResolver.resolve(response);
     }
 }

@@ -8,18 +8,18 @@ class BookCreator {
     Book from(final BookCreateDto request) {
         requireNonNull(request);
         return Book.builder()
-                .id(request.getId())
-                .title(request.getTitle())
-                .author(request.getAuthor())
-                .isbn(request.getIsbn())
-                .publisher(request.getPublisher())
-                .yearPublication(request.getYearPublication())
-                .pageNumber(request.getPageNumber())
-                .language(request.getLanguage())
-                .bookCategory(request.getBookCategory())
-                .bookCover(request.getBookCover())
-                .bookStatus(request.getBookStatus())
-                .description(request.getDescription())
+                .id(request.id())
+                .title(request.title())
+                .author(request.author())
+                .isbn(request.isbn())
+                .publisher(request.publisher())
+                .yearPublication(request.yearPublication())
+                .pageNumber(request.pageNumber())
+                .language(request.language())
+                .bookCategory(request.bookCategory())
+                .bookCover(request.bookCover())
+                .bookStatus(request.bookStatus())
+                .description(request.description())
                 .build();
     }
 }

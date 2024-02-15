@@ -46,7 +46,7 @@ class Book extends BaseEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "fk_book_id")
+    @JoinColumn(name = "bookId")
     @Builder.Default
     Set<Comment> comments = new HashSet<>();
 
@@ -58,25 +58,25 @@ class Book extends BaseEntity {
         return comments.stream().map(Comment::toDto).collect(Collectors.toList());
     }
 
-    Book update(final BookUpdateDto toUpdate) {
+    Book toUpdate(final BookUpdateDto data) {
         return Book.builder()
                 .id(this.id)
-                .title(toUpdate.getTitle())
-                .author(toUpdate.getAuthor())
-                .isbn(toUpdate.getIsbn())
-                .publisher(toUpdate.getPublisher())
-                .yearPublication(toUpdate.getYearPublication())
-                .pageNumber(toUpdate.getPageNumber())
-                .language(toUpdate.getLanguage())
-                .bookCategory(toUpdate.getBookCategory())
-                .bookCover(toUpdate.getBookCover())
+                .title(data.title())
+                .author(data.author())
+                .isbn(data.isbn())
+                .publisher(data.publisher())
+                .yearPublication(data.yearPublication())
+                .pageNumber(data.pageNumber())
+                .language(data.language())
+                .bookCategory(data.bookCategory())
+                .bookCover(data.bookCover())
                 .bookStatus(this.bookStatus)
-                .description(toUpdate.getDescription())
+                .description(data.description())
                 .comments(this.comments)
                 .build();
     }
 
-    BookCreateDto response() {
+    BookCreateDto toBookCreateResponse() {
         return BookCreateDto.builder()
                 .id(id)
                 .title(title)

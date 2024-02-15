@@ -22,7 +22,7 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "System has one book"
-        def RESULT = facade.findBookById(BOOK_ONE.id).get()
+        def RESULT = facade.findBookById(BOOK_ONE.id()).get()
 
         then: "Return added book"
         RESULT == BOOK_ONE
@@ -208,12 +208,12 @@ class BookSpecificationTest extends Specification {
 
     def "Should update one book"() {
         given: "Add book to update"
-        def BOOK = SampleBooks.createBookToUpdateSample()
+        def BOOK = SampleBooks.createBookSampleToUpdate()
         def BOOK_UPDATE = SampleBooks.createBookWithDataToUpdateSample()
         facade.addBook(BOOK)
 
         when: "Update book"
-        def UPDATE_RESULT = facade.updateBook(BOOK.id, BOOK_UPDATE).get()
+        def UPDATE_RESULT = facade.updateBookById(BOOK.id, BOOK_UPDATE).get()
 
         then: "Compare book input update with output update"
         UPDATE_RESULT.title == BOOK_UPDATE.title
@@ -227,7 +227,7 @@ class BookSpecificationTest extends Specification {
     def "Should not update not exist book"() {
         when: "Update not exist book"
         def BOOK_UPDATE = SampleBooks.createBookWithDataToUpdateSample()
-        def ERROR_RESPONSE = facade.updateBook(SampleBooks.notExistBookWithThisId, BOOK_UPDATE).getLeft()
+        def ERROR_RESPONSE = facade.updateBookById(SampleBooks.notExistBookWithThisId, BOOK_UPDATE).getLeft()
 
         then: "Return error with book not found"
         ERROR_RESPONSE == BOOK_NOT_FOUND
@@ -240,7 +240,7 @@ class BookSpecificationTest extends Specification {
         facade.addCommentToBook(COMMENT_ONE_FOR_BOOK_ONE)
 
         when: "Update comment"
-        def UPDATE_RESULT = facade.updateComment(COMMENT_ONE_FOR_BOOK_ONE.commentId, COMMENT_UPDATE).get()
+        def UPDATE_RESULT = facade.updateCommentById(COMMENT_ONE_FOR_BOOK_ONE.commentId, COMMENT_UPDATE).get()
 
         then: "Compare comment input update with output update"
         UPDATE_RESULT.description == COMMENT_UPDATE.description
@@ -249,15 +249,15 @@ class BookSpecificationTest extends Specification {
     def "Should not update not exist comment"() {
         when: "Update not exist book"
         def COMMENT_UPDATE = SampleComments.createCommentWithDataToUpdateSample()
-        def ERROR_RESPONSE = facade.updateComment(SampleComments.notExistCommentWithThisId, COMMENT_UPDATE).getLeft()
+        def ERROR_RESPONSE = facade.updateCommentById(SampleComments.notExistCommentWithThisId, COMMENT_UPDATE).getLeft()
 
         then: "Return error with book not found"
         ERROR_RESPONSE == COMMENT_NOT_FOUND
     }
 
     def final PAGE = 1
-    def final BOOK_ONE = SampleBooks.createBookSample(0L, "Twilight", "Stephenie Meyer")
-    def final BOOK_TWO = SampleBooks.createBookSample(1L, "Django", "Quentin Tarantino")
+    def final BOOK_ONE = SampleBooks.createBookSampleToUpdate(0L, "Twilight", "Stephenie Meyer")
+    def final BOOK_TWO = SampleBooks.createBookSampleToUpdate(1L, "Django", "Quentin Tarantino")
 
     def final COMMENT_ONE_FOR_BOOK_ONE = SampleComments.createCommentSample(0L, BOOK_ONE.id, "Best book!", LocalDateTime.now())
     def final COMMENT_TWO_FOR_BOOK_ONE = SampleComments.createCommentSample(1L, BOOK_ONE.id, "Fantastic book!", LocalDateTime.now())

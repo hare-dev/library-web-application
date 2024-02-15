@@ -3,14 +3,14 @@ package com.haredev.library.user.domain;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
 
 class InMemoryUserRepository implements UserRepository {
-    private final ConcurrentHashMap<Long, UserApplication> inMemoryUser = new ConcurrentHashMap<>();
+    private final HashMap<Long, UserApplication> inMemoryUser = new HashMap<>();
 
     @Override
     public UserApplication save(UserApplication userApplication) {
