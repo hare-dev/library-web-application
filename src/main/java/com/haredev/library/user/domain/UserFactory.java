@@ -9,19 +9,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class UserFactory {
     private final PasswordEncoder passwordEncoder;
 
-    public final UserApplication buildUser(RegistrationRequest request) {
+    public final UserApplication buildUser(final RegistrationRequest request) {
         return UserApplication.newInstance(
-                request.getUserId(),
-                request.getUsername(),
-                passwordEncoder.encode(request.getPassword()),
+                request.userId(),
+                request.username(),
+                passwordEncoder.encode(request.password()),
                 Authority.USER);
     }
 
-    public final UserApplication buildAdmin(RegistrationRequest request) {
+    public final UserApplication buildAdmin(final RegistrationRequest request) {
         return UserApplication.newInstance(
-                request.getUserId(),
-                request.getUsername(),
-                passwordEncoder.encode(request.getPassword()),
+                request.userId(),
+                request.username(),
+                passwordEncoder.encode(request.password()),
                 Authority.ADMIN, Authority.USER);
     }
 }

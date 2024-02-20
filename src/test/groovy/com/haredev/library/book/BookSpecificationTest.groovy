@@ -1,6 +1,8 @@
-package com.haredev.library.book.domain
+package com.haredev.library.book
 
-
+import com.haredev.library.book.domain.BookConfiguration
+import com.haredev.library.book.domain.InMemoryBookRepository
+import com.haredev.library.book.domain.InMemoryCommentRepository
 import com.haredev.library.book.samples.SampleBooks
 import com.haredev.library.book.samples.SampleComments
 import spock.lang.Specification

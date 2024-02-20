@@ -10,46 +10,59 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
+import static com.haredev.library.user.domain.api.UserError.DUPLICATED_USERNAME;
+import static io.vavr.control.Either.left;
+import static io.vavr.control.Either.right;
+
 @RequiredArgsConstructor
 class UserManager {
     private final UserRepository userRepository;
-    private final UserValidation userValidation;
     private final UserFactory userFactory;
     private static final int pageSize = 20;
 
-    public Option<UserApplication> getUserByUsername(String username) {
+    public Option<UserApplication> getUserByUsername(final String username) {
         return Option.ofOptional(userRepository.findByUsername(username));
     }
 
-    public Either<UserError, RegistrationResponse> registerUser(RegistrationRequest userRequest) {
-        return userValidation.validateParameters(userRequest)
-                .map(this::createUser);
+    public Either<UserError, RegistrationResponse> registerUser(final RegistrationRequest userRequest) {
+        if (userWithDuplicatedUsernameNotExist(userRequest.username())) {
+            return right(createUser(userRequest));
+        }
+        return left(DUPLICATED_USERNAME);
     }
 
-    public Either<UserError, RegistrationResponse> registerAdmin(RegistrationRequest userRequest) {
-        return userValidation.validateParameters(userRequest)
-                .map(this::createAdmin);
+    public Either<UserError, RegistrationResponse> registerAdmin(final RegistrationRequest userRequest) {
+        if (userWithDuplicatedUsernameNotExist(userRequest.username())) {
+            return right(createAdmin(userRequest));
+        }
+        return left(DUPLICATED_USERNAME);
     }
 
-    public RegistrationResponse createUser(RegistrationRequest request) {
+    private Boolean userWithDuplicatedUsernameNotExist(final String username) {
+        return userRepository.findAll()
+                .stream()
+                .noneMatch(user -> username.equals(user.getUsername()));
+    }
+
+    public RegistrationResponse createUser(final RegistrationRequest request) {
         UserApplication userApplication = userFactory.buildUser(request);
         return userRepository.save(userApplication).toRegistrationResponse();
     }
 
-    public RegistrationResponse createAdmin(RegistrationRequest request) {
+    public RegistrationResponse createAdmin(final RegistrationRequest request) {
         UserApplication userApplication = userFactory.buildAdmin(request);
         return userRepository.save(userApplication).toRegistrationResponse();
     }
 
-    public List<UserApplication> fetchAllUsersWithPageable(int page) {
+    public List<UserApplication> fetchAllUsersWithPageable(final int page) {
         return userRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    public Option<UserApplication> findById(Long userId) {
+    public Option<UserApplication> findById(final Long userId) {
         return Option.ofOptional(userRepository.findById(userId));
     }
 
-    public void removeUserById(Long userId) {
+    public void removeUserById(final Long userId) {
         userRepository.deleteById(userId);
     }
 }

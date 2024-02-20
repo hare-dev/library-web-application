@@ -6,6 +6,7 @@ import com.haredev.library.user.domain.UserFacade;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import io.vavr.control.Either;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +19,12 @@ class UserController {
     private final UserFacade userFacade;
 
     @PostMapping("/registration/user")
-    public ResponseEntity<?> registerAsUser(@RequestBody final RegistrationRequest request) {
+    public ResponseEntity<?> registerAsUser(@RequestBody @Valid final RegistrationRequest request) {
         return ResponseResolver.resolve(userFacade.registerAsUser(request));
     }
 
     @PostMapping("/registration/admin")
-    public ResponseEntity<?> registerAsAdmin(@RequestBody final RegistrationRequest request) {
+    public ResponseEntity<?> registerAsAdmin(@RequestBody @Valid final RegistrationRequest request) {
         return ResponseResolver.resolve(userFacade.registerAsAdmin(request));
     }
 

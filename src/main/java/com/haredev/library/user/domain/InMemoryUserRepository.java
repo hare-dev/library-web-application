@@ -13,14 +13,14 @@ class InMemoryUserRepository implements UserRepository {
     private final HashMap<Long, UserApplication> inMemoryUser = new HashMap<>();
 
     @Override
-    public UserApplication save(UserApplication userApplication) {
+    public UserApplication save(final UserApplication userApplication) {
         requireNonNull(userApplication);
-        inMemoryUser.put(userApplication.toRegistrationResponse().getUserId(), userApplication);
+        inMemoryUser.put(userApplication.toRegistrationResponse().userId(), userApplication);
         return userApplication;
     }
 
     @Override
-    public List<UserApplication> findAll(Pageable pageable) {
+    public List<UserApplication> findAll(final Pageable pageable) {
         return new ArrayList<>(inMemoryUser.values());
     }
 
@@ -30,19 +30,19 @@ class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<UserApplication> findByUsername(String username) {
+    public Optional<UserApplication> findByUsername(final String username) {
         requireNonNull(username);
         return inMemoryUser.values().stream().filter(user -> username.equals(user.getUsername())).findAny();
     }
 
     @Override
-    public Optional<UserApplication> findById(Long userId) {
+    public Optional<UserApplication> findById(final Long userId) {
         requireNonNull(userId);
         return Optional.ofNullable(inMemoryUser.get(userId));
     }
 
     @Override
-    public void deleteById(Long userId) {
+    public void deleteById(final Long userId) {
         requireNonNull(userId);
         inMemoryUser.remove(userId);
     }
