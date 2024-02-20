@@ -16,10 +16,10 @@ public class AuthenticationFacade {
 
     public AuthenticationResponse signIn(AuthenticationRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.username(), request.password())
         );
         return AuthenticationResponse.builder()
-                .token(tokenFacade.buildToken(request.getUsername()))
+                .token(tokenFacade.buildToken(request.username()))
                 .build();
     }
 
