@@ -66,6 +66,15 @@ class UserApplicationSpecificationTest extends Specification {
         EXPECTED_ERROR == DUPLICATED_USERNAME
     }
 
+    def "Should not register admin because username is duplicated"() {
+        when: "Add admin with the same username to system"
+        facade.registerAsUser(ADMIN)
+        UserError EXPECTED_ERROR = facade.registerAsUser(ADMIN).getLeft()
+
+        then: "Return error because username is duplicated"
+        EXPECTED_ERROR == DUPLICATED_USERNAME
+    }
+
     def "Should find user by id"() {
         given: "Add user to system"
         facade.registerAsUser(USER)
