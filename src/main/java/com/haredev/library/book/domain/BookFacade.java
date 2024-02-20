@@ -19,7 +19,7 @@ public class BookFacade {
         return bookManager.addBook(request).map(Book::toBookCreateResponse);
     }
 
-    public Either<BookError, BookCreateDto> findBookById(Long bookId) {
+    public Either<BookError, BookCreateDto> findBookById(final Long bookId) {
         return bookManager.findBookById(bookId).map(Book::toBookCreateResponse).toEither(BOOK_NOT_FOUND);
     }
 
