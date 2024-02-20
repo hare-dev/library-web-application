@@ -67,7 +67,7 @@ final class BookController {
     }
 
     @PutMapping("/books/{bookId}")
-    ResponseEntity<?> updateBook(@PathVariable final Long bookId, @RequestBody final BookUpdateDto toUpdate) {
+    ResponseEntity<?> updateBook(@PathVariable final Long bookId, @RequestBody @Valid final BookUpdateDto toUpdate) {
         Either<BookError, BookCreateDto> response = bookFacade.updateBookById(bookId, toUpdate);
         return ResponseResolver.resolve(response);
     }
