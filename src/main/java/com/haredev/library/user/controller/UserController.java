@@ -7,7 +7,6 @@ import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,31 +18,31 @@ class UserController {
     private final UserFacade userFacade;
 
     @PostMapping("/registration/user")
-    public ResponseEntity<?> registerAsUser(@RequestBody RegistrationRequest request) {
+    public ResponseEntity<?> registerAsUser(@RequestBody final RegistrationRequest request) {
         return ResponseResolver.resolve(userFacade.registerAsUser(request));
     }
 
     @PostMapping("/registration/admin")
-    public ResponseEntity<?> registerAsAdmin(@RequestBody RegistrationRequest request) {
+    public ResponseEntity<?> registerAsAdmin(@RequestBody final RegistrationRequest request) {
         return ResponseResolver.resolve(userFacade.registerAsAdmin(request));
     }
 
     @GetMapping("/users")
-    ResponseEntity<?> fetchAllUsers(@RequestParam(required = false) Integer page) {
+    ResponseEntity<?> fetchAllUsers(@RequestParam(required = false) final Integer page) {
         int pageNumber = page != null && page >= 0 ? page : 0;
         List<UserDetailsDto> response = userFacade.fetchAllUsers(pageNumber);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/users/{userId}")
-    ResponseEntity<?> findUserById(@PathVariable Long userId) {
+    ResponseEntity<?> findUserById(@PathVariable final Long userId) {
         Either<UserError, UserDetailsDto> response = userFacade.findUserById(userId);
         return ResponseResolver.resolve(response);
     }
 
     @DeleteMapping("/users/{userId}")
-    HttpStatus removeBook(@PathVariable Long userId) {
+    ResponseEntity<?> removeBook(@PathVariable final Long userId) {
         userFacade.removeUserById(userId);
-        return HttpStatus.OK;
+        return ResponseEntity.noContent().build();
     }
 }
