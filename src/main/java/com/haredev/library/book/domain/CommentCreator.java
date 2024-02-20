@@ -7,13 +7,14 @@ import static java.util.Objects.requireNonNull;
 
 @RequiredArgsConstructor
 class CommentCreator {
-    Comment from(final CommentCreateDto request) {
+    Comment from(final CommentCreateDto request, final Long bookId) {
         requireNonNull(request);
         return Comment.builder()
                 .id(request.commentId())
-                .bookId(request.bookId())
+                .bookId(bookId)
                 .description(request.description())
-                .createdTime(request.createdTime())
+                .creationDate(request.creationDate())
+                .updateTime(null)
                 .build();
     }
 }

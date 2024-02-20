@@ -34,8 +34,8 @@ public class BookFacade {
         bookManager.removeBookById(bookId);
     }
 
-    public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto request) {
-        return bookManager.addCommentToBook(request);
+    public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto request, final Long bookId) {
+        return bookManager.addCommentToBook(request, bookId);
     }
 
     public Either<BookError, CommentDto> findCommentById(final Long commentId) {

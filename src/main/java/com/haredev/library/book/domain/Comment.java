@@ -24,14 +24,16 @@ class Comment extends BaseEntity {
     private Long id;
     private Long bookId;
     private String description;
-    private LocalDateTime createdTime;
+    private LocalDateTime creationDate;
+    private LocalDateTime updateTime;
 
     Comment toUpdate(final CommentUpdateDto toUpdate) {
         return Comment.builder()
                 .id(this.id)
                 .bookId(this.bookId)
                 .description(toUpdate.description())
-                .createdTime(toUpdate.createdTime())
+                .creationDate(this.creationDate)
+                .updateTime(toUpdate.updateTime())
                 .build();
     }
 
@@ -39,14 +41,15 @@ class Comment extends BaseEntity {
         return CommentCreateDto.builder()
                 .commentId(id)
                 .description(description)
-                .createdTime(createdTime)
+                .creationDate(creationDate)
                 .build();
     }
 
     CommentDto toDto() {
         return CommentDto.builder()
                 .description(description)
-                .createdTime(createdTime)
+                .creationDate(creationDate)
+                .updateTime(updateTime)
                 .build();
     }
 }

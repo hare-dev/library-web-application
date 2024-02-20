@@ -42,9 +42,9 @@ final class BookController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/books/comments/add")
-    ResponseEntity<?> addCommentToBook(@RequestBody final CommentCreateDto request) {
-        Either<BookError, CommentDto> response = bookFacade.addCommentToBook(request);
+    @PostMapping("/books/{bookId}/comments/add")
+    ResponseEntity<?> addCommentToBook(@RequestBody @Valid final CommentCreateDto request, @PathVariable Long bookId) {
+        Either<BookError, CommentDto> response = bookFacade.addCommentToBook(request, bookId);
         return ResponseResolver.resolve(response);
     }
 
@@ -73,7 +73,7 @@ final class BookController {
     }
 
     @PutMapping("/books/comments/{commentId}")
-    ResponseEntity<?> updateComment(@PathVariable final Long commentId, @RequestBody final CommentUpdateDto toUpdate) {
+    ResponseEntity<?> updateComment(@PathVariable final Long commentId, @RequestBody final @Valid CommentUpdateDto toUpdate) {
         Either<BookError, CommentDto> response = bookFacade.updateCommentById(commentId, toUpdate);
         return ResponseResolver.resolve(response);
     }

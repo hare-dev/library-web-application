@@ -7,5 +7,6 @@ import java.time.LocalDateTime;
 @Builder
 public record CommentDto(
         String description,
-        LocalDateTime createdTime
+        LocalDateTime creationDate,
+        LocalDateTime updateTime
 ) { }
