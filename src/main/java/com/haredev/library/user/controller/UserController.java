@@ -47,9 +47,15 @@ class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/users/{userId}")
-    ResponseEntity<?> promoteToAdmin(@PathVariable Long userId) {
+    @PutMapping("/users/promote/{userId}")
+    ResponseEntity<?> promoteToAdmin(@PathVariable final Long userId) {
         Either<UserError, UserDetailsDto> response = userFacade.promoteToAdmin(userId);
+        return ResponseResolver.resolve(response);
+    }
+
+    @PutMapping("/users/{userId}")
+    ResponseEntity<?> changeUsername(@PathVariable final Long userId, @RequestParam final String username) {
+        Either<UserError, UserDetailsDto> response = userFacade.changeUsername(userId, username);
         return ResponseResolver.resolve(response);
     }
 }

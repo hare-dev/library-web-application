@@ -3,8 +3,8 @@ package com.haredev.library.user.domain;
 import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.UserError;
-import com.haredev.library.user.domain.dto.UserLoginDto;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
+import com.haredev.library.user.domain.dto.UserLoginDto;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 
@@ -44,6 +44,10 @@ public class UserFacade {
 
     public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
         return userManager.promoteToAdmin(userId);
+    }
+
+    public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String username) {
+        return userManager.changeUsername(userId, username);
     }
 
     public void removeUserById(final Long userId) {

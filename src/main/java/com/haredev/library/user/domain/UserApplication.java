@@ -32,6 +32,16 @@ class UserApplication extends BaseEntity {
     @Convert(converter = AuthoritiesToStringConverter.class)
     private Set<Authority> authorities;
 
+    UserApplication changeUsername(String username) {
+        return UserApplication.builder()
+                .id(this.id)
+                .username(username)
+                .email(this.email)
+                .password(this.password)
+                .authorities(this.authorities)
+                .build();
+    }
+
     void promoteToAdmin() {
         this.authorities.add(Authority.ADMIN);
     }

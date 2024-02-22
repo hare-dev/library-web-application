@@ -36,11 +36,19 @@ class UserManager {
                 });
     }
 
-    private Either<UserError, UserApplication> canPromoteToAdmin(UserApplication userApplication) {
+    private Either<UserError, UserApplication> canPromoteToAdmin(final UserApplication userApplication) {
         if (userApplication.getAuthorities().contains(ADMIN)) {
             return left(USER_IS_ALREADY_ADMIN);
         }
         return Either.right(userApplication);
+    }
+
+    public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String username) {
+        return findById(userId)
+                .toEither(USER_NOT_FOUND)
+                .map(user -> user.changeUsername(username))
+                .map(userRepository::save)
+                .map(UserApplication::toUserDetails);
     }
 
     public Either<UserError, RegistrationResponse> registerUser(final RegistrationRequest userRequest) {
