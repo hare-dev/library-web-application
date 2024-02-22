@@ -46,4 +46,10 @@ class UserController {
         userFacade.removeUserById(userId);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/users/{userId}")
+    ResponseEntity<?> promoteToAdmin(@PathVariable Long userId) {
+        Either<UserError, UserDetailsDto> response = userFacade.promoteToAdmin(userId);
+        return ResponseResolver.resolve(response);
+    }
 }

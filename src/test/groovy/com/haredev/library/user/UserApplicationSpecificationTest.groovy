@@ -2,7 +2,9 @@ package com.haredev.library.user
 
 import com.haredev.library.user.domain.InMemoryUserRepository
 import com.haredev.library.user.domain.UserConfiguration
+import com.haredev.library.user.domain.api.Authority
 import com.haredev.library.user.domain.api.UserError
+import com.haredev.library.user.samples.SampleUsers
 import spock.lang.Specification
 
 import static com.haredev.library.user.domain.api.UserError.DUPLICATED_USERNAME
@@ -128,5 +130,25 @@ class UserApplicationSpecificationTest extends Specification {
 
         then: "No user in system"
         facade.fetchAllUsers(page).isEmpty()
+    }
+
+    def "Should promote user to admin"() {
+        given: "Add one user"
+        facade.registerAsUser(USER)
+
+        when: "Promote user to be admin"
+        facade.promoteToAdmin(USER.userId())
+        def RESULT = facade.findUserById(USER.userId())
+
+        then: "User has two authorities"
+        RESULT.get().authorities() == Set.of(Authority.ADMIN, Authority.USER)
+    }
+
+    def "Should not promote not exist user to admin"() {
+        when: "Try to promote not exist user"
+        def RESULT = facade.promoteToAdmin(SampleUsers.notExistUserWithThisId).getLeft()
+
+        then: "Return user not found"
+        RESULT == USER_NOT_FOUND
     }
 }

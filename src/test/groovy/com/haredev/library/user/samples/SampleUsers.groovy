@@ -5,6 +5,8 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 final class SampleUsers {
+    static final Long notExistUserWithThisId = 5000L;
+
     static RegistrationRequest createUserSample(Long userId, String username, String password) {
         return RegistrationRequest.builder()
                 .userId(userId)

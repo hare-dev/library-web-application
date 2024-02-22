@@ -42,6 +42,10 @@ public class UserFacade {
                 .collect(Collectors.toList());
     }
 
+    public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
+        return userManager.promoteToAdmin(userId);
+    }
+
     public void removeUserById(final Long userId) {
         userManager.removeUserById(userId);
     }

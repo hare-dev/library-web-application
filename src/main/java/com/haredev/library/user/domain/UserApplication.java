@@ -3,8 +3,8 @@ package com.haredev.library.user.domain;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.Authority;
-import com.haredev.library.user.domain.dto.UserLoginDto;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
+import com.haredev.library.user.domain.dto.UserLoginDto;
 import com.haredev.library.user.domain.mapper.AuthoritiesToStringConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,12 +31,16 @@ class UserApplication extends BaseEntity {
     @Convert(converter = AuthoritiesToStringConverter.class)
     private Set<Authority> authorities;
 
+    void promoteToAdmin() {
+        this.authorities.add(Authority.ADMIN);
+    }
+
     public static UserApplication newInstance(Long userId, String username, String password, Authority... authorities) {
         final UserApplication userApplication = new UserApplication();
         userApplication.id = userId;
         userApplication.username = username;
         userApplication.password = password;
-        userApplication.authorities = Set.of(authorities);
+        userApplication.authorities = new HashSet<>(Set.of(authorities));
         return userApplication;
     }
 

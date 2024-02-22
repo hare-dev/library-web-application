@@ -3,6 +3,7 @@ package com.haredev.library.user.domain;
 import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.UserError;
+import com.haredev.library.user.domain.dto.UserDetailsDto;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 import static com.haredev.library.user.domain.api.UserError.DUPLICATED_USERNAME;
+import static com.haredev.library.user.domain.api.UserError.USER_NOT_FOUND;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
@@ -22,6 +24,15 @@ class UserManager {
 
     public Option<UserApplication> getUserByUsername(final String username) {
         return Option.ofOptional(userRepository.findByUsername(username));
+    }
+
+     public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
+        return findById(userId)
+                .toEither(USER_NOT_FOUND)
+                .map(user -> {
+                    user.promoteToAdmin();
+                    return userRepository.save(user).toUserDetails();
+                });
     }
 
     public Either<UserError, RegistrationResponse> registerUser(final RegistrationRequest userRequest) {
