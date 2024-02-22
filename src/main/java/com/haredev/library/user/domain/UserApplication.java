@@ -26,8 +26,8 @@ class UserApplication extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userId_generator")
     private Long id;
     private String username;
-    private String password;
     private String email;
+    private String password;
 
     @Convert(converter = AuthoritiesToStringConverter.class)
     private Set<Authority> authorities;
@@ -36,13 +36,13 @@ class UserApplication extends BaseEntity {
         this.authorities.add(Authority.ADMIN);
     }
 
-    public static UserApplication newInstance(Long userId, String username, String password, String email, Authority... authorities) {
+    public static UserApplication newInstance(Long userId, String username, String email, String password, Authority... authorities) {
         final UserApplication userApplication = new UserApplication();
         userApplication.id = userId;
         userApplication.username = username;
+        userApplication.email = email;
         userApplication.password = password;
         userApplication.authorities = new HashSet<>(Set.of(authorities));
-        userApplication.email = email;
         return userApplication;
     }
 

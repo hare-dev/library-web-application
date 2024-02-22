@@ -11,8 +11,8 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
-import static com.haredev.library.user.domain.api.UserError.DUPLICATED_USERNAME;
-import static com.haredev.library.user.domain.api.UserError.USER_NOT_FOUND;
+import static com.haredev.library.user.domain.api.Authority.ADMIN;
+import static com.haredev.library.user.domain.api.UserError.*;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
@@ -26,13 +26,21 @@ class UserManager {
         return Option.ofOptional(userRepository.findByUsername(username));
     }
 
-     public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
+    public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
         return findById(userId)
                 .toEither(USER_NOT_FOUND)
+                .flatMap(this::canPromoteToAdmin)
                 .map(user -> {
                     user.promoteToAdmin();
                     return userRepository.save(user).toUserDetails();
                 });
+    }
+
+    private Either<UserError, UserApplication> canPromoteToAdmin(UserApplication userApplication) {
+        if (userApplication.getAuthorities().contains(ADMIN)) {
+            return left(USER_IS_ALREADY_ADMIN);
+        }
+        return Either.right(userApplication);
     }
 
     public Either<UserError, RegistrationResponse> registerUser(final RegistrationRequest userRequest) {

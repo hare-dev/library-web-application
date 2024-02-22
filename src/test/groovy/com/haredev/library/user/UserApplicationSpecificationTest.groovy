@@ -7,8 +7,7 @@ import com.haredev.library.user.domain.api.UserError
 import com.haredev.library.user.samples.SampleUsers
 import spock.lang.Specification
 
-import static com.haredev.library.user.domain.api.UserError.DUPLICATED_USERNAME
-import static com.haredev.library.user.domain.api.UserError.USER_NOT_FOUND
+import static com.haredev.library.user.domain.api.UserError.*
 import static com.haredev.library.user.samples.SampleUsers.createUserSample
 
 class UserApplicationSpecificationTest extends Specification {
@@ -132,7 +131,7 @@ class UserApplicationSpecificationTest extends Specification {
         facade.fetchAllUsers(page).isEmpty()
     }
 
-    def "Should promote user to admin"() {
+    def "Should promote user to be admin"() {
         given: "Add one user"
         facade.registerAsUser(USER)
 
@@ -143,13 +142,22 @@ class UserApplicationSpecificationTest extends Specification {
         RESULT.get().authorities() == Set.of(Authority.ADMIN, Authority.USER)
     }
 
-    def "Should not promote not exist user to admin"() {
+    def "Should not promote user to be admin with admin authority"() {
+        given: "Add one user"
+        facade.registerAsAdmin(ADMIN)
+
+        when: "Promote user with admin authority to be admin"
+        def RESULT = facade.promoteToAdmin(ADMIN.userId()).getLeft()
+
+        then: "User is already admin response error"
+        RESULT == USER_IS_ALREADY_ADMIN
+    }
+
+    def "Should not promote not exist user to be admin"() {
         when: "Try to promote not exist user"
         def RESULT = facade.promoteToAdmin(SampleUsers.notExistUserWithThisId).getLeft()
 
         then: "Return user not found"
         RESULT == USER_NOT_FOUND
     }
-
-
 }
