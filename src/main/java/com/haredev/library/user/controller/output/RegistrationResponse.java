@@ -5,5 +5,6 @@ import lombok.Builder;
 @Builder
 public record RegistrationResponse(
     Long userId,
-    String username
+    String username,
+    String email
 ) { }

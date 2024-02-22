@@ -15,8 +15,8 @@ class UserApplicationSpecificationTest extends Specification {
     def facade = new UserConfiguration().userFacade(new InMemoryUserRepository())
 
     static final int page = 20;
-    def final USER = createUserSample(0L, "user", "a12345678Z!@")
-    def final ADMIN = createUserSample(1L, "admin", "a12345678Z!@")
+    def final USER = createUserSample(0L, "user", "a12345678Z!@", "user_example@gmail.com")
+    def final ADMIN = createUserSample(1L, "admin", "a12345678Z!@", "admin_example@gmail.com")
 
     def "Should be empty"() {
         expect:
@@ -137,8 +137,7 @@ class UserApplicationSpecificationTest extends Specification {
         facade.registerAsUser(USER)
 
         when: "Promote user to be admin"
-        facade.promoteToAdmin(USER.userId())
-        def RESULT = facade.findUserById(USER.userId())
+        def RESULT = facade.promoteToAdmin(USER.userId())
 
         then: "User has two authorities"
         RESULT.get().authorities() == Set.of(Authority.ADMIN, Authority.USER)
@@ -151,4 +150,6 @@ class UserApplicationSpecificationTest extends Specification {
         then: "Return user not found"
         RESULT == USER_NOT_FOUND
     }
+
+
 }

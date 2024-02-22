@@ -13,6 +13,7 @@ class UserFactory {
         return UserApplication.newInstance(
                 request.userId(),
                 request.username(),
+                request.email(),
                 passwordEncoder.encode(request.password()),
                 Authority.USER);
     }
@@ -21,6 +22,7 @@ class UserFactory {
         return UserApplication.newInstance(
                 request.userId(),
                 request.username(),
+                request.email(),
                 passwordEncoder.encode(request.password()),
                 Authority.ADMIN, Authority.USER);
     }

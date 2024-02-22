@@ -7,11 +7,12 @@ import groovy.transform.CompileStatic
 final class SampleUsers {
     static final Long notExistUserWithThisId = 5000L;
 
-    static RegistrationRequest createUserSample(Long userId, String username, String password) {
+    static RegistrationRequest createUserSample(Long userId, String username, String password, String email) {
         return RegistrationRequest.builder()
                 .userId(userId)
                 .username(username)
                 .password(password)
+                .email(email)
                 .build();
     }
 }
