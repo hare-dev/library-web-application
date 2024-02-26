@@ -7,8 +7,8 @@ import java.util.Set;
 
 @Builder
 public record UserLoginDto(
-    Long id,
-    String username,
-    String password,
-    Set<Authority> authorities
+        Long id,
+        String username,
+        String password,
+        Set<Authority> authorities
 ) { }

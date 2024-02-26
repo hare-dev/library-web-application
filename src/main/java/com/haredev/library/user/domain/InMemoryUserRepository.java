@@ -15,7 +15,7 @@ class InMemoryUserRepository implements UserRepository {
     @Override
     public UserApplication save(final UserApplication userApplication) {
         requireNonNull(userApplication);
-        inMemoryUser.put(userApplication.toRegistrationResponse().userId(), userApplication);
+        inMemoryUser.put(userApplication.toRegistrationResponse().id(), userApplication);
         return userApplication;
     }
 

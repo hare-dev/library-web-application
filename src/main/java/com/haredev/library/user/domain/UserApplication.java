@@ -28,17 +28,30 @@ class UserApplication extends BaseEntity {
     private String username;
     private String email;
     private String password;
+    private Boolean activationStatus;
 
     @Convert(converter = AuthoritiesToStringConverter.class)
     private Set<Authority> authorities;
 
     UserApplication changeUsername(String username) {
         return UserApplication.builder()
-                .id(this.id)
+                .id(id)
                 .username(username)
-                .email(this.email)
-                .password(this.password)
-                .authorities(this.authorities)
+                .email(email)
+                .password(password)
+                .activationStatus(activationStatus)
+                .authorities(authorities)
+                .build();
+    }
+
+    public UserApplication activateAccount() {
+        return UserApplication.builder()
+                .id(id)
+                .username(username)
+                .email(email)
+                .password(password)
+                .activationStatus(true)
+                .authorities(authorities)
                 .build();
     }
 
@@ -52,22 +65,25 @@ class UserApplication extends BaseEntity {
         userApplication.username = username;
         userApplication.email = email;
         userApplication.password = password;
+        userApplication.activationStatus = false;
         userApplication.authorities = new HashSet<>(Set.of(authorities));
         return userApplication;
     }
 
     RegistrationResponse toRegistrationResponse() {
         return RegistrationResponse.builder()
-                .userId(id)
+                .id(id)
                 .username(username)
                 .email(email)
+                .activationStatus(activationStatus)
                 .build();
     }
 
-    UserDetailsDto toUserDetails() {
+    UserDetailsDto toUserDetailsDto() {
         return UserDetailsDto.builder()
                 .id(id)
                 .username(username)
+                .activationStatus(activationStatus)
                 .authorities(authorities)
                 .build();
     }

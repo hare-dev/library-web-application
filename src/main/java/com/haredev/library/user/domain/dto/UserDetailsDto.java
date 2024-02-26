@@ -7,7 +7,8 @@ import java.util.Set;
 
 @Builder
 public record UserDetailsDto(
-    Long id,
-    String username,
-    Set<Authority> authorities
+        Long id,
+        String username,
+        Set<Authority> authorities,
+        Boolean activationStatus
 ) { }

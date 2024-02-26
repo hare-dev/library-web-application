@@ -1,5 +1,6 @@
 package com.haredev.library.user
 
+import com.haredev.library.user.domain.InMemoryConfirmationTokenRepository
 import com.haredev.library.user.domain.InMemoryUserRepository
 import com.haredev.library.user.domain.UserConfiguration
 import com.haredev.library.user.domain.api.Authority
@@ -11,7 +12,7 @@ import static com.haredev.library.user.samples.SampleUsers.createUserSample
 import static com.haredev.library.user.samples.SampleUsers.notExistUserWithThisId
 
 class UserApplicationSpecificationTest extends Specification {
-    def facade = new UserConfiguration().userFacade(new InMemoryUserRepository())
+    def facade = new UserConfiguration().userFacade(new InMemoryUserRepository(), new InMemoryConfirmationTokenRepository())
 
     static final int page = 20;
     def final USER = createUserSample(0L, "user", "a12345678Z!@", "user_example@gmail.com")
@@ -80,7 +81,7 @@ class UserApplicationSpecificationTest extends Specification {
         given: "Add user to system"
         facade.registerAsUser(USER)
 
-        when: "Find user by userId"
+        when: "Find user by id"
         def EXPECTED_USERNAME = facade.findUserById(USER.userId()).get().username()
 
         then: "Compare added user with founded user"

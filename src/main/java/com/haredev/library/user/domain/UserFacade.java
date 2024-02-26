@@ -32,14 +32,14 @@ public class UserFacade {
 
     public Either<UserError, UserDetailsDto> findUserById(final Long userId) {
         return userManager.findUserById(userId)
-                .map(UserApplication::toUserDetails)
+                .map(UserApplication::toUserDetailsDto)
                 .toEither(UserError.USER_NOT_FOUND);
     }
 
     public List<UserDetailsDto> fetchAllUsers(final int page) {
         return userManager.fetchAllUsersWithPageable(page)
                 .stream()
-                .map(UserApplication::toUserDetails)
+                .map(UserApplication::toUserDetailsDto)
                 .collect(Collectors.toList());
     }
 
@@ -53,6 +53,10 @@ public class UserFacade {
 
     public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
         return userManager.createConfirmationToken(userId);
+    }
+
+    public Either<UserError, UserDetailsDto> confirmRegistration(final String token, final Long userId) {
+        return userManager.confirmToken(token, userId);
     }
 
     public void removeUserById(final Long userId) {

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static com.haredev.library.user.domain.api.Authority.ADMIN;
 import static com.haredev.library.user.domain.api.UserError.*;
@@ -23,6 +24,7 @@ class UserManager {
     private final UserFactory userFactory;
     private final ConfirmationTokenFactory confirmationTokenFactory;
     private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final ConfirmationTokenValidation confirmationTokenValidation;
     private static final int pageSize = 20;
 
     public Option<UserApplication> getUserByUsername(final String username) {
@@ -36,13 +38,39 @@ class UserManager {
                 .map(token -> confirmationTokenRepository.save(token).toConfirmationTokenResponse());
     }
 
+    public Either<UserError, UserDetailsDto> confirmToken(final String token, final Long userId) {
+        return getConfirmationToken(token)
+                .toEither(CONFIRMATION_TOKEN_NOT_FOUND)
+                .flatMap(confirmationTokenValidation::isConfirmed)
+                .flatMap(confirmationTokenValidation::isExpired)
+                .map(setConfirmationTime(token))
+                .map(confirmationTokenRepository::save)
+                .flatMap(UserApplication -> activateAccount(userId));
+    }
+
+    private Option<ConfirmationToken> getConfirmationToken(final String token) {
+        return Option.ofOptional(confirmationTokenRepository.findByToken(token));
+    }
+
+    private static Function<ConfirmationToken, ConfirmationToken> setConfirmationTime(String token) {
+        return confirmed -> confirmed.setConfirmedAt(token);
+    }
+
+    private Either<UserError, UserDetailsDto> activateAccount(final Long userId) {
+        return findUserById(userId).
+                toEither(USER_NOT_FOUND)
+                .map(UserApplication::activateAccount)
+                .map(userRepository::save)
+                .map(UserApplication::toUserDetailsDto);
+    }
+
     public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
         return findUserById(userId)
                 .toEither(USER_NOT_FOUND)
                 .flatMap(this::canPromoteToAdmin)
                 .map(user -> {
                     user.promoteToAdmin();
-                    return userRepository.save(user).toUserDetails();
+                    return userRepository.save(user).toUserDetailsDto();
                 });
     }
 
@@ -58,7 +86,7 @@ class UserManager {
                 .toEither(USER_NOT_FOUND)
                 .map(user -> user.changeUsername(username))
                 .map(userRepository::save)
-                .map(UserApplication::toUserDetails);
+                .map(UserApplication::toUserDetailsDto);
     }
 
     public Either<UserError, RegistrationResponse> registerUser(final RegistrationRequest userRequest) {

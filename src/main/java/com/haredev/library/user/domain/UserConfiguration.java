@@ -16,8 +16,13 @@ class UserConfiguration {
         final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         final UserFactory userFactory = new UserFactory(passwordEncoder);
         final ConfirmationTokenFactory confirmationTokenFactory = new ConfirmationTokenFactory();
-        final UserManager userManager = new UserManager(userRepository,
-                userFactory, confirmationTokenFactory, confirmationTokenRepository);
+        final ConfirmationTokenValidation confirmationTokenValidation = new ConfirmationTokenValidation();
+        final UserManager userManager = new UserManager(
+                userRepository,
+                userFactory,
+                confirmationTokenFactory,
+                confirmationTokenRepository,
+                confirmationTokenValidation);
         return new UserFacade(userManager);
     }
 }

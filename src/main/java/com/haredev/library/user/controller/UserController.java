@@ -36,33 +36,39 @@ class UserController {
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("/users/{userId}")
-    ResponseEntity<?> findUserById(@PathVariable final Long userId) {
-        Either<UserError, UserDetailsDto> response = userFacade.findUserById(userId);
+    @GetMapping("/users/{id}")
+    ResponseEntity<?> findUserById(@PathVariable final Long id) {
+        Either<UserError, UserDetailsDto> response = userFacade.findUserById(id);
         return ResponseResolver.resolve(response);
     }
 
-    @DeleteMapping("/users/{userId}")
-    ResponseEntity<?> removeUser(@PathVariable final Long userId) {
-        userFacade.removeUserById(userId);
+    @DeleteMapping("/users/{id}")
+    ResponseEntity<?> removeUserById(@PathVariable final Long id) {
+        userFacade.removeUserById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/users/promote/{userId}")
-    ResponseEntity<?> promoteToAdmin(@PathVariable final Long userId) {
-        Either<UserError, UserDetailsDto> response = userFacade.promoteToAdmin(userId);
+    @PutMapping("/users/promote/{id}")
+    ResponseEntity<?> promoteToAdmin(@PathVariable final Long id) {
+        Either<UserError, UserDetailsDto> response = userFacade.promoteToAdmin(id);
         return ResponseResolver.resolve(response);
     }
 
-    @PutMapping("/users/{userId}")
-    ResponseEntity<?> changeUsername(@PathVariable final Long userId, @RequestParam final String username) {
-        Either<UserError, UserDetailsDto> response = userFacade.changeUsername(userId, username);
+    @PutMapping("/users/{id}")
+    ResponseEntity<?> changeUsername(@PathVariable final Long id, @RequestParam final String username) {
+        Either<UserError, UserDetailsDto> response = userFacade.changeUsername(id, username);
         return ResponseResolver.resolve(response);
     }
 
-    @PostMapping("users/confirmation/{userId}")
-    ResponseEntity<?> createConfirmationToken(@PathVariable final Long userId) {
-        Either<UserError, ConfirmationTokenResponse> response = userFacade.createConfirmationToken(userId);
+    @GetMapping("users/confirmation/{id}")
+    ResponseEntity<?> createConfirmationToken(@PathVariable final Long id) {
+        Either<UserError, ConfirmationTokenResponse> response = userFacade.createConfirmationToken(id);
+        return ResponseResolver.resolve(response);
+    }
+
+    @PutMapping("users/confirmation/{id}")
+    ResponseEntity<?> confirmRegistration(@RequestParam final String token, @PathVariable final Long id) {
+        Either<UserError, UserDetailsDto> response = userFacade.confirmRegistration(token, id);
         return ResponseResolver.resolve(response);
     }
 }

@@ -25,6 +25,16 @@ class ConfirmationToken {
     @MapsId
     private UserApplication userApplication;
 
+    ConfirmationToken setConfirmedAt(String token) {
+        return ConfirmationToken.builder()
+                .id(this.id)
+                .token(token)
+                .createdAt(this.createdAt)
+                .expiredAt(this.expiredAt)
+                .confirmedAt(LocalDateTime.now())
+                .build();
+    }
+
     ConfirmationTokenResponse toConfirmationTokenResponse() {
         return ConfirmationTokenResponse.builder()
                 .token(token)
