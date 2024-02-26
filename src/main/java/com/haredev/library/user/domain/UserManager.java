@@ -70,14 +70,6 @@ class UserManager {
                 .map(userMapper::toUserDetailsDto);
     }
 
-    public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String username) {
-        return findUserById(userId)
-                .toEither(USER_NOT_FOUND)
-                .map(user -> user.changeUsername(username))
-                .map(userRepository::save)
-                .map(userMapper::toUserDetailsDto);
-    }
-
     public Either<UserError, RegistrationResponse> registerUser(final RegistrationRequest userRequest) {
         if (userWithDuplicatedUsernameNotExist(userRequest.username())) {
             return right(createUser(userRequest));

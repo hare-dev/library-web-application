@@ -55,8 +55,8 @@ class UserController {
     }
 
     @PutMapping("/users/{id}")
-    ResponseEntity<?> changeUsername(@PathVariable final Long id, @RequestParam final String username) {
-        Either<UserError, UserDetailsDto> response = userFacade.changeUsername(id, username);
+    ResponseEntity<?> changeUsername(@PathVariable final Long id, @RequestParam final String newUsername) {
+        Either<UserError, UserDetailsDto> response = userFacade.changeUsername(id, newUsername);
         return ResponseResolver.resolve(response);
     }
 
