@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.haredev.library.user.domain.api.Authority.ADMIN;
 import static com.haredev.library.user.domain.api.UserError.*;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
@@ -28,6 +27,10 @@ class UserManager {
     private final ConfirmationTokenMapper confirmationTokenMapper;
     private final UserMapper userMapper;
     private static final int pageSize = 20;
+
+    public UserApplication saveUser(UserApplication userApplication) {
+        return userRepository.save(userApplication);
+    }
 
     public Option<UserApplication> getUserByUsername(final String username) {
         return Option.ofOptional(userRepository.findByUsername(username));
@@ -65,23 +68,6 @@ class UserManager {
                 .map(UserApplication::activateAccount)
                 .map(userRepository::save)
                 .map(userMapper::toUserDetailsDto);
-    }
-
-    public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
-        return findUserById(userId)
-                .toEither(USER_NOT_FOUND)
-                .flatMap(this::canPromoteToAdmin)
-                .map(user -> {
-                    user.promoteToAdmin();
-                    return userMapper.toUserDetailsDto(userRepository.save(user));
-                });
-    }
-
-    private Either<UserError, UserApplication> canPromoteToAdmin(final UserApplication userApplication) {
-        if (userApplication.getAuthorities().contains(ADMIN)) {
-            return left(USER_IS_ALREADY_ADMIN);
-        }
-        return Either.right(userApplication);
     }
 
     public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String username) {

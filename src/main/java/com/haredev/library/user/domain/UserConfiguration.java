@@ -27,6 +27,7 @@ class UserConfiguration {
                 confirmationTokenValidation,
                 confirmationTokenMapper,
                 userMapper);
-        return new UserFacade(userManager, userMapper);
+        final UserPromotion userPromotion = new UserPromotion(userManager, userMapper);
+        return new UserFacade(userPromotion, userManager, userMapper);
     }
 }
