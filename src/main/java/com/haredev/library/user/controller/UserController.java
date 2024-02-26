@@ -66,7 +66,7 @@ class UserController {
         return ResponseResolver.resolve(response);
     }
 
-    @PutMapping("users/confirmation/{id}")
+    @PutMapping("users/registration/confirm/{id}")
     ResponseEntity<?> confirmRegistration(@RequestParam final String token, @PathVariable final Long id) {
         Either<UserError, UserDetailsDto> response = userFacade.confirmRegistration(token, id);
         return ResponseResolver.resolve(response);

@@ -14,17 +14,20 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class UserFacade {
+
     private final UserPromotion userPromotion;
     private final UserUpdate userUpdate;
+    private final UserRegistration userRegistration;
+    private final UserRegistrationConfirmation userRegistrationConfirmation;
     private final UserManager userManager;
     private final UserMapper userMapper;
 
     public Either<UserError, RegistrationResponse> registerAsUser(final RegistrationRequest userRequest) {
-        return userManager.registerUser(userRequest);
+        return userRegistration.registerUser(userRequest);
     }
 
     public Either<UserError, RegistrationResponse> registerAsAdmin(final RegistrationRequest userRequest) {
-        return userManager.registerAdmin(userRequest);
+        return userRegistration.registerAdmin(userRequest);
     }
 
     public Either<UserError, UserLoginDto> findByUsername(final String username) {
@@ -55,11 +58,11 @@ public class UserFacade {
     }
 
     public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
-        return userManager.createConfirmationToken(userId);
+        return userRegistrationConfirmation.createConfirmationToken(userId);
     }
 
     public Either<UserError, UserDetailsDto> confirmRegistration(final String token, final Long userId) {
-        return userManager.confirmToken(token, userId);
+        return userRegistrationConfirmation.confirmToken(token, userId);
     }
 
     public void removeUserById(final Long userId) {

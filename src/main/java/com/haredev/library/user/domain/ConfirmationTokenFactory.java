@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 class ConfirmationTokenFactory {
+
     private static final Long expirationTimeInMinutes = 30L;
 
     public final ConfirmationToken buildToken(final UserApplication userApplication) {

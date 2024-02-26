@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RequiredArgsConstructor
 class UserFactory {
+
     private final PasswordEncoder passwordEncoder;
 
     public final UserApplication buildUser(final RegistrationRequest request) {

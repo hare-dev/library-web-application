@@ -6,6 +6,7 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
 class InMemoryConfirmationTokenRepository implements ConfirmationTokenRepository {
+
     private final HashMap<Long, ConfirmationToken> inMemoryConfirmationToken = new HashMap<>();
 
     @Override

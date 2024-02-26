@@ -10,6 +10,7 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
 class InMemoryUserRepository implements UserRepository {
+
     private final HashMap<Long, UserApplication> inMemoryUser = new HashMap<>();
 
     @Override

@@ -5,12 +5,13 @@ import com.haredev.library.user.domain.dto.UserDetailsDto;
 import com.haredev.library.user.domain.dto.UserLoginDto;
 
 class UserMapper {
+
     RegistrationResponse toRegistrationResponse(final UserApplication userApplication) {
         return RegistrationResponse.builder()
                 .id(userApplication.getId())
                 .username(userApplication.getUsername())
                 .email(userApplication.getEmail())
-                .activationStatus(userApplication.getActivationStatus())
+                .isActivated(userApplication.getIsActivated())
                 .build();
     }
 
@@ -18,7 +19,7 @@ class UserMapper {
         return UserDetailsDto.builder()
                 .id(userApplication.getId())
                 .username(userApplication.getUsername())
-                .activationStatus(userApplication.getActivationStatus())
+                .isActivated(userApplication.getIsActivated())
                 .authorities(userApplication.getAuthorities())
                 .build();
     }

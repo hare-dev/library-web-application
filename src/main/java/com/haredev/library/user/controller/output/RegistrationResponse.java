@@ -7,5 +7,5 @@ public record RegistrationResponse(
     Long id,
     String username,
     String email,
-    Boolean activationStatus
+    Boolean isActivated
 ) { }

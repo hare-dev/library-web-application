@@ -10,5 +10,5 @@ public record UserDetailsDto(
         Long id,
         String username,
         Set<Authority> authorities,
-        Boolean activationStatus
+        Boolean isActivated
 ) { }

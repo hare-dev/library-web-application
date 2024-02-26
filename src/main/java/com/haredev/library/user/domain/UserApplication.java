@@ -25,7 +25,7 @@ class UserApplication extends BaseEntity {
     private String username;
     private String email;
     private String password;
-    private Boolean activationStatus;
+    private Boolean isActivated;
 
     @Convert(converter = AuthoritiesToStringConverter.class)
     private Set<Authority> authorities;
@@ -36,7 +36,7 @@ class UserApplication extends BaseEntity {
                 .username(username)
                 .email(email)
                 .password(password)
-                .activationStatus(activationStatus)
+                .isActivated(isActivated)
                 .authorities(authorities)
                 .build();
     }
@@ -47,7 +47,7 @@ class UserApplication extends BaseEntity {
                 .username(username)
                 .email(email)
                 .password(password)
-                .activationStatus(true)
+                .isActivated(true)
                 .authorities(authorities)
                 .build();
     }
@@ -62,7 +62,7 @@ class UserApplication extends BaseEntity {
         userApplication.username = username;
         userApplication.email = email;
         userApplication.password = password;
-        userApplication.activationStatus = false;
+        userApplication.isActivated = false;
         userApplication.authorities = new HashSet<>(Set.of(authorities));
         return userApplication;
     }
