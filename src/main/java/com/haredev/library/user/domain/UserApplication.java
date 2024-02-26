@@ -5,7 +5,7 @@ import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.Authority;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import com.haredev.library.user.domain.dto.UserLoginDto;
-import com.haredev.library.user.domain.mapper.AuthoritiesToStringConverter;
+import com.haredev.library.infrastructure.mapper.AuthoritiesToStringConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

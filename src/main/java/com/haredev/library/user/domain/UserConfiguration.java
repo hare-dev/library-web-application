@@ -7,13 +7,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 class UserConfiguration {
-    UserFacade userFacade() { return userFacade(new InMemoryUserRepository()); }
+    UserFacade userFacade() {
+        return userFacade(new InMemoryUserRepository(), new InMemoryConfirmationTokenRepository());
+    }
 
     @Bean
-    UserFacade userFacade(UserRepository userRepository) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        UserFactory userFactory = new UserFactory(passwordEncoder);
-        UserManager userManager = new UserManager(userRepository, userFactory);
+    UserFacade userFacade(UserRepository userRepository, ConfirmationTokenRepository confirmationTokenRepository) {
+        final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        final UserFactory userFactory = new UserFactory(passwordEncoder);
+        final ConfirmationTokenFactory confirmationTokenFactory = new ConfirmationTokenFactory();
+        final UserManager userManager = new UserManager(userRepository,
+                userFactory, confirmationTokenFactory, confirmationTokenRepository);
         return new UserFacade(userManager);
     }
 }

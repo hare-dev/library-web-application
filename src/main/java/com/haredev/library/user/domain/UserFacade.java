@@ -1,6 +1,7 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.user.controller.input.RegistrationRequest;
+import com.haredev.library.user.controller.output.ConfirmationTokenResponse;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
@@ -30,7 +31,7 @@ public class UserFacade {
     }
 
     public Either<UserError, UserDetailsDto> findUserById(final Long userId) {
-        return userManager.findById(userId)
+        return userManager.findUserById(userId)
                 .map(UserApplication::toUserDetails)
                 .toEither(UserError.USER_NOT_FOUND);
     }
@@ -48,6 +49,10 @@ public class UserFacade {
 
     public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String username) {
         return userManager.changeUsername(userId, username);
+    }
+
+    public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
+        return userManager.createConfirmationToken(userId);
     }
 
     public void removeUserById(final Long userId) {

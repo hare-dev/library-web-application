@@ -1,4 +1,4 @@
-package com.haredev.library.user.domain.mapper;
+package com.haredev.library.infrastructure.mapper;
 
 import com.haredev.library.user.domain.api.Authority;
 import jakarta.persistence.AttributeConverter;

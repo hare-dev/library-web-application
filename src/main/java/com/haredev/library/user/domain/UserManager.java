@@ -1,6 +1,7 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.user.controller.input.RegistrationRequest;
+import com.haredev.library.user.controller.output.ConfirmationTokenResponse;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
@@ -20,14 +21,23 @@ import static io.vavr.control.Either.right;
 class UserManager {
     private final UserRepository userRepository;
     private final UserFactory userFactory;
+    private final ConfirmationTokenFactory confirmationTokenFactory;
+    private final ConfirmationTokenRepository confirmationTokenRepository;
     private static final int pageSize = 20;
 
     public Option<UserApplication> getUserByUsername(final String username) {
         return Option.ofOptional(userRepository.findByUsername(username));
     }
 
+    public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
+        return findUserById(userId)
+                .toEither(USER_NOT_FOUND)
+                .map(confirmationTokenFactory::buildToken)
+                .map(token -> confirmationTokenRepository.save(token).toConfirmationTokenResponse());
+    }
+
     public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
-        return findById(userId)
+        return findUserById(userId)
                 .toEither(USER_NOT_FOUND)
                 .flatMap(this::canPromoteToAdmin)
                 .map(user -> {
@@ -44,7 +54,7 @@ class UserManager {
     }
 
     public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String username) {
-        return findById(userId)
+        return findUserById(userId)
                 .toEither(USER_NOT_FOUND)
                 .map(user -> user.changeUsername(username))
                 .map(userRepository::save)
@@ -85,7 +95,7 @@ class UserManager {
         return userRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    public Option<UserApplication> findById(final Long userId) {
+    public Option<UserApplication> findUserById(final Long userId) {
         return Option.ofOptional(userRepository.findById(userId));
     }
 

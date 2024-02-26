@@ -2,6 +2,7 @@ package com.haredev.library.user.controller;
 
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.user.controller.input.RegistrationRequest;
+import com.haredev.library.user.controller.output.ConfirmationTokenResponse;
 import com.haredev.library.user.domain.UserFacade;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
@@ -42,7 +43,7 @@ class UserController {
     }
 
     @DeleteMapping("/users/{userId}")
-    ResponseEntity<?> removeBook(@PathVariable final Long userId) {
+    ResponseEntity<?> removeUser(@PathVariable final Long userId) {
         userFacade.removeUserById(userId);
         return ResponseEntity.noContent().build();
     }
@@ -56,6 +57,12 @@ class UserController {
     @PutMapping("/users/{userId}")
     ResponseEntity<?> changeUsername(@PathVariable final Long userId, @RequestParam final String username) {
         Either<UserError, UserDetailsDto> response = userFacade.changeUsername(userId, username);
+        return ResponseResolver.resolve(response);
+    }
+
+    @PostMapping("users/confirmation/{userId}")
+    ResponseEntity<?> createConfirmationToken(@PathVariable final Long userId) {
+        Either<UserError, ConfirmationTokenResponse> response = userFacade.createConfirmationToken(userId);
         return ResponseResolver.resolve(response);
     }
 }
