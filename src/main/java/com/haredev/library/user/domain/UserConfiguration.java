@@ -15,14 +15,18 @@ class UserConfiguration {
     UserFacade userFacade(UserRepository userRepository, ConfirmationTokenRepository confirmationTokenRepository) {
         final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         final UserFactory userFactory = new UserFactory(passwordEncoder);
+        final UserMapper userMapper = new UserMapper();
         final ConfirmationTokenFactory confirmationTokenFactory = new ConfirmationTokenFactory();
         final ConfirmationTokenValidation confirmationTokenValidation = new ConfirmationTokenValidation();
+        final ConfirmationTokenMapper confirmationTokenMapper = new ConfirmationTokenMapper();
         final UserManager userManager = new UserManager(
                 userRepository,
                 userFactory,
                 confirmationTokenFactory,
                 confirmationTokenRepository,
-                confirmationTokenValidation);
-        return new UserFacade(userManager);
+                confirmationTokenValidation,
+                confirmationTokenMapper,
+                userMapper);
+        return new UserFacade(userManager, userMapper);
     }
 }

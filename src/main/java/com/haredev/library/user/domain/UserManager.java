@@ -25,6 +25,8 @@ class UserManager {
     private final ConfirmationTokenFactory confirmationTokenFactory;
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final ConfirmationTokenValidation confirmationTokenValidation;
+    private final ConfirmationTokenMapper confirmationTokenMapper;
+    private final UserMapper userMapper;
     private static final int pageSize = 20;
 
     public Option<UserApplication> getUserByUsername(final String username) {
@@ -35,7 +37,8 @@ class UserManager {
         return findUserById(userId)
                 .toEither(USER_NOT_FOUND)
                 .map(confirmationTokenFactory::buildToken)
-                .map(token -> confirmationTokenRepository.save(token).toConfirmationTokenResponse());
+                .map(confirmationTokenRepository::save)
+                .map(confirmationTokenMapper::toConfirmationTokenResponse);
     }
 
     public Either<UserError, UserDetailsDto> confirmToken(final String token, final Long userId) {
@@ -52,7 +55,7 @@ class UserManager {
         return Option.ofOptional(confirmationTokenRepository.findByToken(token));
     }
 
-    private static Function<ConfirmationToken, ConfirmationToken> setConfirmationTime(String token) {
+    private static Function<ConfirmationToken, ConfirmationToken> setConfirmationTime(final String token) {
         return confirmed -> confirmed.setConfirmedAt(token);
     }
 
@@ -61,7 +64,7 @@ class UserManager {
                 toEither(USER_NOT_FOUND)
                 .map(UserApplication::activateAccount)
                 .map(userRepository::save)
-                .map(UserApplication::toUserDetailsDto);
+                .map(userMapper::toUserDetailsDto);
     }
 
     public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
@@ -70,7 +73,7 @@ class UserManager {
                 .flatMap(this::canPromoteToAdmin)
                 .map(user -> {
                     user.promoteToAdmin();
-                    return userRepository.save(user).toUserDetailsDto();
+                    return userMapper.toUserDetailsDto(userRepository.save(user));
                 });
     }
 
@@ -86,7 +89,7 @@ class UserManager {
                 .toEither(USER_NOT_FOUND)
                 .map(user -> user.changeUsername(username))
                 .map(userRepository::save)
-                .map(UserApplication::toUserDetailsDto);
+                .map(userMapper::toUserDetailsDto);
     }
 
     public Either<UserError, RegistrationResponse> registerUser(final RegistrationRequest userRequest) {
@@ -111,12 +114,14 @@ class UserManager {
 
     public RegistrationResponse createUser(final RegistrationRequest request) {
         UserApplication userApplication = userFactory.buildUser(request);
-        return userRepository.save(userApplication).toRegistrationResponse();
+        userRepository.save(userApplication);
+        return userMapper.toRegistrationResponse(userApplication);
     }
 
     public RegistrationResponse createAdmin(final RegistrationRequest request) {
         UserApplication userApplication = userFactory.buildAdmin(request);
-        return userRepository.save(userApplication).toRegistrationResponse();
+        userRepository.save(userApplication);
+        return userMapper.toRegistrationResponse(userApplication);
     }
 
     public List<UserApplication> fetchAllUsersWithPageable(final int page) {

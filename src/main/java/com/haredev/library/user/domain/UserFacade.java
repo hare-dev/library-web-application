@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserFacade {
     private final UserManager userManager;
+    private final UserMapper userMapper;
 
     public Either<UserError, RegistrationResponse> registerAsUser(final RegistrationRequest userRequest) {
         return userManager.registerUser(userRequest);
@@ -26,20 +27,20 @@ public class UserFacade {
 
     public Either<UserError, UserLoginDto> findByUsername(final String username) {
         return userManager.getUserByUsername(username)
-                .map(UserApplication::toLoginDto)
+                .map(userMapper::toLoginDto)
                 .toEither(UserError.USER_NOT_FOUND);
     }
 
     public Either<UserError, UserDetailsDto> findUserById(final Long userId) {
         return userManager.findUserById(userId)
-                .map(UserApplication::toUserDetailsDto)
+                .map(userMapper::toUserDetailsDto)
                 .toEither(UserError.USER_NOT_FOUND);
     }
 
     public List<UserDetailsDto> fetchAllUsers(final int page) {
         return userManager.fetchAllUsersWithPageable(page)
                 .stream()
-                .map(UserApplication::toUserDetailsDto)
+                .map(userMapper::toUserDetailsDto)
                 .collect(Collectors.toList());
     }
 

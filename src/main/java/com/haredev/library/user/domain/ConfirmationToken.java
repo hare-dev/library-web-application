@@ -1,6 +1,5 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.user.controller.output.ConfirmationTokenResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,12 +31,6 @@ class ConfirmationToken {
                 .createdAt(this.createdAt)
                 .expiredAt(this.expiredAt)
                 .confirmedAt(LocalDateTime.now())
-                .build();
-    }
-
-    ConfirmationTokenResponse toConfirmationTokenResponse() {
-        return ConfirmationTokenResponse.builder()
-                .token(token)
                 .build();
     }
 }

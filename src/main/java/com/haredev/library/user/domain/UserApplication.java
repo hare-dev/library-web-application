@@ -1,11 +1,8 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.infrastructure.entity.BaseEntity;
-import com.haredev.library.user.controller.output.RegistrationResponse;
-import com.haredev.library.user.domain.api.Authority;
-import com.haredev.library.user.domain.dto.UserDetailsDto;
-import com.haredev.library.user.domain.dto.UserLoginDto;
 import com.haredev.library.infrastructure.mapper.AuthoritiesToStringConverter;
+import com.haredev.library.user.domain.api.Authority;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -68,32 +65,6 @@ class UserApplication extends BaseEntity {
         userApplication.activationStatus = false;
         userApplication.authorities = new HashSet<>(Set.of(authorities));
         return userApplication;
-    }
-
-    RegistrationResponse toRegistrationResponse() {
-        return RegistrationResponse.builder()
-                .id(id)
-                .username(username)
-                .email(email)
-                .activationStatus(activationStatus)
-                .build();
-    }
-
-    UserDetailsDto toUserDetailsDto() {
-        return UserDetailsDto.builder()
-                .id(id)
-                .username(username)
-                .activationStatus(activationStatus)
-                .authorities(authorities)
-                .build();
-    }
-
-    UserLoginDto toLoginDto() {
-        return UserLoginDto.builder()
-                .username(username)
-                .password(password)
-                .authorities(authorities)
-                .build();
     }
 
     @Override
