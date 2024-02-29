@@ -10,7 +10,7 @@ import static com.haredev.library.user.domain.api.UserError.CONFIRMATION_TOKEN_I
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
-class ConfirmationTokenValidation {
+class VerificationTokenValidator {
 
     public final Either<UserError, VerificationToken> isExpired(final VerificationToken verificationToken) {
         if (verificationToken.getExpiredAt().isBefore(LocalDateTime.now())) {

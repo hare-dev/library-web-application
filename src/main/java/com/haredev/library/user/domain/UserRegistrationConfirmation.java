@@ -19,7 +19,7 @@ class UserRegistrationConfirmation {
     private final UserMapper userMapper;
     private final VerificationTokenFactory verificationTokenFactory;
     private final VerificationTokenRepository verificationTokenRepository;
-    private final ConfirmationTokenValidation confirmationTokenValidation;
+    private final VerificationTokenValidator verificationTokenValidator;
     private final VerificationTokenMapper verificationTokenMapper;
 
     public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
@@ -33,8 +33,8 @@ class UserRegistrationConfirmation {
     public Either<UserError, UserDetailsDto> confirmToken(final String token, final Long userId) {
         return getConfirmationToken(token)
                 .toEither(CONFIRMATION_TOKEN_NOT_FOUND)
-                .flatMap(confirmationTokenValidation::isConfirmed)
-                .flatMap(confirmationTokenValidation::isExpired)
+                .flatMap(verificationTokenValidator::isConfirmed)
+                .flatMap(verificationTokenValidator::isExpired)
                 .map(setConfirmationTime(token))
                 .map(verificationTokenRepository::save)
                 .flatMap(UserApplication -> activateAccount(userId));
