@@ -18,7 +18,7 @@ class UserConfiguration {
         final UserFactory userFactory = new UserFactory(passwordEncoder);
         final UserManager userManager = new UserManager(userRepository);
         final UserMapper userMapper = new UserMapper();
-        final ConfirmationTokenFactory confirmationTokenFactory = new ConfirmationTokenFactory();
+        final VerificationTokenFactory verificationTokenFactory = new VerificationTokenFactory();
         final ConfirmationTokenValidation confirmationTokenValidation = new ConfirmationTokenValidation();
         final ConfirmationTokenMapper confirmationTokenMapper = new ConfirmationTokenMapper();
         final UserPromotion userPromotion = new UserPromotion(userManager, userMapper);
@@ -27,7 +27,7 @@ class UserConfiguration {
         final UserRegistrationConfirmation userRegistrationConfirmation = new UserRegistrationConfirmation(
                 userManager,
                 userMapper,
-                confirmationTokenFactory,
+                verificationTokenFactory,
                 confirmationTokenRepository,
                 confirmationTokenValidation,
                 confirmationTokenMapper);

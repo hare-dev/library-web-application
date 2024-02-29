@@ -3,7 +3,7 @@ package com.haredev.library.user.domain;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-class ConfirmationTokenFactory {
+class VerificationTokenFactory {
 
     private static final Long expirationTimeInMinutes = 30L;
 

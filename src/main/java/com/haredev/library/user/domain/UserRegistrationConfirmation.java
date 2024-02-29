@@ -17,7 +17,7 @@ class UserRegistrationConfirmation {
 
     private final UserManager userManager;
     private final UserMapper userMapper;
-    private final ConfirmationTokenFactory confirmationTokenFactory;
+    private final VerificationTokenFactory verificationTokenFactory;
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final ConfirmationTokenValidation confirmationTokenValidation;
     private final ConfirmationTokenMapper confirmationTokenMapper;
@@ -25,7 +25,7 @@ class UserRegistrationConfirmation {
     public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
         return userManager.findUserById(userId)
                 .toEither(USER_NOT_FOUND)
-                .map(confirmationTokenFactory::buildToken)
+                .map(verificationTokenFactory::buildToken)
                 .map(confirmationTokenRepository::save)
                 .map(confirmationTokenMapper::toConfirmationTokenResponse);
     }
