@@ -26,10 +26,10 @@ class ConfirmationToken {
 
     ConfirmationToken setConfirmedAt(String token) {
         return ConfirmationToken.builder()
-                .id(this.id)
+                .id(id)
                 .token(token)
-                .createdAt(this.createdAt)
-                .expiredAt(this.expiredAt)
+                .createdAt(createdAt)
+                .expiredAt(expiredAt)
                 .confirmedAt(LocalDateTime.now())
                 .build();
     }
