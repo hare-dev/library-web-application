@@ -137,10 +137,10 @@ class UserApplicationSpecificationTest extends Specification {
         facade.registerAsUser(USER)
 
         when: "Promote user to be admin"
-        def RESULT = facade.promoteToAdmin(USER.userId()).get()
+        def EXPECTED_RESULT = facade.promoteToAdmin(USER.userId()).get()
 
         then: "User has two authorities"
-        RESULT.authorities() == Set.of(Authority.ADMIN, Authority.USER)
+        EXPECTED_RESULT.authorities() == Set.of(Authority.ADMIN, Authority.USER)
     }
 
     def "Should not promote user to be admin with admin authority"() {
@@ -148,38 +148,38 @@ class UserApplicationSpecificationTest extends Specification {
         facade.registerAsAdmin(ADMIN)
 
         when: "Promote user with admin authority to be admin"
-        def RESULT = facade.promoteToAdmin(ADMIN.userId()).getLeft()
+        def EXPECTED_RESULT = facade.promoteToAdmin(ADMIN.userId()).getLeft()
 
         then: "User is already admin response error"
-        RESULT == USER_IS_ALREADY_ADMIN
+        EXPECTED_RESULT == USER_IS_ALREADY_ADMIN
     }
 
     def "Should not promote for not exist user to be admin"() {
         when: "Try to promote not exist user"
-        def RESULT = facade.promoteToAdmin(notExistUserWithThisId).getLeft()
+        def EXPECTED_RESULT = facade.promoteToAdmin(notExistUserWithThisId).getLeft()
 
         then: "Return user not found"
-        RESULT == USER_NOT_FOUND
+        EXPECTED_RESULT == USER_NOT_FOUND
     }
 
     def "Should change username for user or admin"() {
         given: "Add one user"
         facade.registerAsUser(USER)
-        final String newUserUsername = "user_updated"
+        final String NEW_USERNAME = "user_updated"
 
         when: "Change username for user"
-        def RESULT = facade.changeUsername(USER.userId(), newUserUsername).get()
+        def EXPECTED_RESULT = facade.changeUsername(USER.userId(), NEW_USERNAME).get().username()
 
         then: "Compare old username with new username"
-        RESULT.username() == newUserUsername
+        EXPECTED_RESULT == NEW_USERNAME
     }
 
     def "Should not change username for not exist user or admin"() {
         when: "Try change username for not exists user or admin"
         final String newUserUsername = "user_updated"
-        def RESULT = facade.changeUsername(notExistUserWithThisId, newUserUsername).getLeft()
+        def EXPECTED_RESULT = facade.changeUsername(notExistUserWithThisId, newUserUsername).getLeft()
 
         then: "Return user not found"
-        RESULT == USER_NOT_FOUND
+        EXPECTED_RESULT == USER_NOT_FOUND
     }
 }
