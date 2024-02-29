@@ -20,14 +20,14 @@ class UserRegistrationConfirmation {
     private final VerificationTokenFactory verificationTokenFactory;
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final ConfirmationTokenValidation confirmationTokenValidation;
-    private final ConfirmationTokenMapper confirmationTokenMapper;
+    private final VerificationTokenMapper verificationTokenMapper;
 
     public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
         return userManager.findUserById(userId)
                 .toEither(USER_NOT_FOUND)
                 .map(verificationTokenFactory::buildToken)
                 .map(confirmationTokenRepository::save)
-                .map(confirmationTokenMapper::toConfirmationTokenResponse);
+                .map(verificationTokenMapper::toConfirmationTokenResponse);
     }
 
     public Either<UserError, UserDetailsDto> confirmToken(final String token, final Long userId) {

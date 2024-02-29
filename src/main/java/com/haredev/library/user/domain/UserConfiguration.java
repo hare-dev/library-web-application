@@ -20,7 +20,7 @@ class UserConfiguration {
         final UserMapper userMapper = new UserMapper();
         final VerificationTokenFactory verificationTokenFactory = new VerificationTokenFactory();
         final ConfirmationTokenValidation confirmationTokenValidation = new ConfirmationTokenValidation();
-        final ConfirmationTokenMapper confirmationTokenMapper = new ConfirmationTokenMapper();
+        final VerificationTokenMapper verificationTokenMapper = new VerificationTokenMapper();
         final UserPromotion userPromotion = new UserPromotion(userManager, userMapper);
         final UserUpdate userUpdate = new UserUpdate(userManager, userMapper);
         final UserRegistration userRegistration = new UserRegistration(userFactory, userManager, userMapper);
@@ -30,7 +30,7 @@ class UserConfiguration {
                 verificationTokenFactory,
                 confirmationTokenRepository,
                 confirmationTokenValidation,
-                confirmationTokenMapper);
+                verificationTokenMapper);
         return new UserFacade(userPromotion, userUpdate, userRegistration, userRegistrationConfirmation, userManager, userMapper);
     }
 }
