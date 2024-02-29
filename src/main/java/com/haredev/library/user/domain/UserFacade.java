@@ -1,7 +1,7 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.user.controller.input.RegistrationRequest;
-import com.haredev.library.user.controller.output.ConfirmationTokenResponse;
+import com.haredev.library.user.controller.output.VerificationTokenResponse;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
@@ -57,12 +57,12 @@ public class UserFacade {
         return userUpdater.changeUsername(userId, newUsername);
     }
 
-    public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
-        return verificationRegistration.createConfirmationToken(userId);
+    public Either<UserError, VerificationTokenResponse> createConfirmationToken(final Long userId) {
+        return verificationRegistration.createVerificationToken(userId);
     }
 
     public Either<UserError, UserDetailsDto> confirmRegistration(final String token, final Long userId) {
-        return verificationRegistration.confirmToken(token, userId);
+        return verificationRegistration.confirmVerificationToken(token, userId);
     }
 
     public void removeUserById(final Long userId) {

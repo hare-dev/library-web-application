@@ -2,7 +2,7 @@ package com.haredev.library.user.controller;
 
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.user.controller.input.RegistrationRequest;
-import com.haredev.library.user.controller.output.ConfirmationTokenResponse;
+import com.haredev.library.user.controller.output.VerificationTokenResponse;
 import com.haredev.library.user.domain.UserFacade;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
@@ -62,7 +62,7 @@ class UserController {
 
     @GetMapping("users/confirmation/{id}")
     ResponseEntity<?> createConfirmationToken(@PathVariable final Long id) {
-        Either<UserError, ConfirmationTokenResponse> response = userFacade.createConfirmationToken(id);
+        Either<UserError, VerificationTokenResponse> response = userFacade.createConfirmationToken(id);
         return ResponseResolver.resolve(response);
     }
 

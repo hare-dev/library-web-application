@@ -1,11 +1,11 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.user.controller.output.ConfirmationTokenResponse;
+import com.haredev.library.user.controller.output.VerificationTokenResponse;
 
 class VerificationTokenMapper {
 
-    ConfirmationTokenResponse toConfirmationTokenResponse(final VerificationToken verificationToken) {
-        return ConfirmationTokenResponse.builder()
+    VerificationTokenResponse verificationTokenResponse(final VerificationToken verificationToken) {
+        return VerificationTokenResponse.builder()
                 .token(verificationToken.getToken())
                 .build();
     }

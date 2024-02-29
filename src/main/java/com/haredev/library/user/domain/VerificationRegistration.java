@@ -1,6 +1,6 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.user.controller.output.ConfirmationTokenResponse;
+import com.haredev.library.user.controller.output.VerificationTokenResponse;
 import com.haredev.library.user.domain.api.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import io.vavr.control.Either;
@@ -22,29 +22,29 @@ class VerificationRegistration {
     private final VerificationTokenValidator verificationTokenValidator;
     private final VerificationTokenMapper verificationTokenMapper;
 
-    public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
+    public Either<UserError, VerificationTokenResponse> createVerificationToken(final Long userId) {
         return userManager.findUserById(userId)
                 .toEither(USER_NOT_FOUND)
                 .map(verificationTokenFactory::buildToken)
                 .map(verificationTokenRepository::save)
-                .map(verificationTokenMapper::toConfirmationTokenResponse);
+                .map(verificationTokenMapper::verificationTokenResponse);
     }
 
-    public Either<UserError, UserDetailsDto> confirmToken(final String token, final Long userId) {
-        return getConfirmationToken(token)
+    public Either<UserError, UserDetailsDto> confirmVerificationToken(final String token, final Long userId) {
+        return getVerificationToken(token)
                 .toEither(CONFIRMATION_TOKEN_NOT_FOUND)
                 .flatMap(verificationTokenValidator::isConfirmed)
                 .flatMap(verificationTokenValidator::isExpired)
-                .map(setConfirmationTime(token))
+                .map(setVerificationTime(token))
                 .map(verificationTokenRepository::save)
                 .flatMap(UserApplication -> activateAccount(userId));
     }
 
-    private Option<VerificationToken> getConfirmationToken(final String token) {
+    private Option<VerificationToken> getVerificationToken(final String token) {
         return Option.ofOptional(verificationTokenRepository.findByToken(token));
     }
 
-    private static Function<VerificationToken, VerificationToken> setConfirmationTime(final String token) {
+    private static Function<VerificationToken, VerificationToken> setVerificationTime(final String token) {
         return confirmed -> confirmed.setConfirmedAt(token);
     }
 
