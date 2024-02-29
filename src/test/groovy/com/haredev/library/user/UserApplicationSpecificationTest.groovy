@@ -1,7 +1,8 @@
 package com.haredev.library.user
 
-import com.haredev.library.user.domain.InMemoryConfirmationTokenRepository
+
 import com.haredev.library.user.domain.InMemoryUserRepository
+import com.haredev.library.user.domain.InMemoryVerificationTokenRepository
 import com.haredev.library.user.domain.UserConfiguration
 import com.haredev.library.user.domain.api.Authority
 import com.haredev.library.user.domain.api.UserError
@@ -12,7 +13,7 @@ import static com.haredev.library.user.samples.SampleUsers.createUserSample
 import static com.haredev.library.user.samples.SampleUsers.notExistUserWithThisId
 
 class UserApplicationSpecificationTest extends Specification {
-    def facade = new UserConfiguration().userFacade(new InMemoryUserRepository(), new InMemoryConfirmationTokenRepository())
+    def facade = new UserConfiguration().userFacade(new InMemoryUserRepository(), new InMemoryVerificationTokenRepository())
 
     static final int page = 20;
     def final USER = createUserSample(0L, "user", "a12345678Z!@", "user_example@gmail.com")
