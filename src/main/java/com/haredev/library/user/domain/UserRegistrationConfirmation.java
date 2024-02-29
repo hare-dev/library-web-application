@@ -40,11 +40,11 @@ class UserRegistrationConfirmation {
                 .flatMap(UserApplication -> activateAccount(userId));
     }
 
-    private Option<ConfirmationToken> getConfirmationToken(final String token) {
+    private Option<VerificationToken> getConfirmationToken(final String token) {
         return Option.ofOptional(confirmationTokenRepository.findByToken(token));
     }
 
-    private static Function<ConfirmationToken, ConfirmationToken> setConfirmationTime(final String token) {
+    private static Function<VerificationToken, VerificationToken> setConfirmationTime(final String token) {
         return confirmed -> confirmed.setConfirmedAt(token);
     }
 

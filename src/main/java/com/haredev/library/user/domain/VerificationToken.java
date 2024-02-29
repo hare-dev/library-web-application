@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-class ConfirmationToken {
+class VerificationToken {
     @Id
     private Long id;
     private String token;
@@ -24,8 +24,8 @@ class ConfirmationToken {
     @MapsId
     private UserApplication userApplication;
 
-    ConfirmationToken setConfirmedAt(String token) {
-        return ConfirmationToken.builder()
+    VerificationToken setConfirmedAt(String token) {
+        return VerificationToken.builder()
                 .id(id)
                 .token(token)
                 .createdAt(createdAt)

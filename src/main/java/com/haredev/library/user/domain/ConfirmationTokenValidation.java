@@ -12,17 +12,17 @@ import static io.vavr.control.Either.right;
 
 class ConfirmationTokenValidation {
 
-    public final Either<UserError, ConfirmationToken> isExpired(final ConfirmationToken confirmationToken) {
-        if (confirmationToken.getExpiredAt().isBefore(LocalDateTime.now())) {
+    public final Either<UserError, VerificationToken> isExpired(final VerificationToken verificationToken) {
+        if (verificationToken.getExpiredAt().isBefore(LocalDateTime.now())) {
             return left(CONFIRMATION_TOKEN_IS_EXPIRED);
         }
-        return right(confirmationToken);
+        return right(verificationToken);
     }
 
-    public final Either<UserError, ConfirmationToken> isConfirmed(final ConfirmationToken confirmationToken) {
-        if (confirmationToken.getConfirmedAt() != null) {
+    public final Either<UserError, VerificationToken> isConfirmed(final VerificationToken verificationToken) {
+        if (verificationToken.getConfirmedAt() != null) {
             return left(CONFIRMATION_TOKEN_IS_ALREADY_CONFIRMED);
         }
-        return right(confirmationToken);
+        return right(verificationToken);
     }
 }

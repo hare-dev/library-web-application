@@ -4,9 +4,9 @@ import com.haredev.library.user.controller.output.ConfirmationTokenResponse;
 
 class ConfirmationTokenMapper {
 
-    ConfirmationTokenResponse toConfirmationTokenResponse(final ConfirmationToken confirmationToken) {
+    ConfirmationTokenResponse toConfirmationTokenResponse(final VerificationToken verificationToken) {
         return ConfirmationTokenResponse.builder()
-                .token(confirmationToken.getToken())
+                .token(verificationToken.getToken())
                 .build();
     }
 }

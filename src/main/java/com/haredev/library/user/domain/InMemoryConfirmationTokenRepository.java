@@ -7,18 +7,18 @@ import static java.util.Objects.requireNonNull;
 
 class InMemoryConfirmationTokenRepository implements ConfirmationTokenRepository {
 
-    private final HashMap<Long, ConfirmationToken> inMemoryConfirmationToken = new HashMap<>();
+    private final HashMap<Long, VerificationToken> inMemoryConfirmationToken = new HashMap<>();
 
     @Override
-    public Optional<ConfirmationToken> findByToken(String token) {
+    public Optional<VerificationToken> findByToken(String token) {
         requireNonNull(token);
         return inMemoryConfirmationToken.values().stream().filter(value -> token.equals(value.getToken())).findAny();
     }
 
     @Override
-    public ConfirmationToken save(ConfirmationToken confirmationToken) {
-        requireNonNull(confirmationToken);
-        inMemoryConfirmationToken.put(confirmationToken.getId(), confirmationToken);
-        return confirmationToken;
+    public VerificationToken save(VerificationToken verificationToken) {
+        requireNonNull(verificationToken);
+        inMemoryConfirmationToken.put(verificationToken.getId(), verificationToken);
+        return verificationToken;
     }
 }

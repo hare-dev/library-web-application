@@ -4,7 +4,7 @@ import org.springframework.data.repository.Repository;
 
 import java.util.Optional;
 
-interface ConfirmationTokenRepository extends Repository<ConfirmationToken, Long> {
-    Optional<ConfirmationToken> findByToken(String token);
-    ConfirmationToken save(ConfirmationToken confirmationToken);
+interface ConfirmationTokenRepository extends Repository<VerificationToken, Long> {
+    Optional<VerificationToken> findByToken(String token);
+    VerificationToken save(VerificationToken verificationToken);
 }
