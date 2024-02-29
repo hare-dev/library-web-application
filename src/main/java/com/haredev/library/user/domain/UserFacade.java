@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class UserFacade {
 
     private final UserPromotion userPromotion;
-    private final UserUpdate userUpdate;
+    private final UserUpdater userUpdater;
     private final UserRegistration userRegistration;
     private final VerificationRegistration verificationRegistration;
     private final UserManager userManager;
@@ -54,7 +54,7 @@ public class UserFacade {
     }
 
     public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String newUsername) {
-        return userUpdate.changeUsername(userId, newUsername);
+        return userUpdater.changeUsername(userId, newUsername);
     }
 
     public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {

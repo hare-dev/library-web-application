@@ -22,7 +22,7 @@ class UserConfiguration {
         final VerificationTokenValidator verificationTokenValidator = new VerificationTokenValidator();
         final VerificationTokenMapper verificationTokenMapper = new VerificationTokenMapper();
         final UserPromotion userPromotion = new UserPromotion(userManager, userMapper);
-        final UserUpdate userUpdate = new UserUpdate(userManager, userMapper);
+        final UserUpdater userUpdater = new UserUpdater(userManager, userMapper);
         final UserRegistration userRegistration = new UserRegistration(userFactory, userManager, userMapper);
         final VerificationRegistration verificationRegistration = new VerificationRegistration(
                 userManager,
@@ -31,6 +31,6 @@ class UserConfiguration {
                 verificationTokenRepository,
                 verificationTokenValidator,
                 verificationTokenMapper);
-        return new UserFacade(userPromotion, userUpdate, userRegistration, verificationRegistration, userManager, userMapper);
+        return new UserFacade(userPromotion, userUpdater, userRegistration, verificationRegistration, userManager, userMapper);
     }
 }

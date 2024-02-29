@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import static com.haredev.library.user.domain.api.UserError.USER_NOT_FOUND;
 
 @RequiredArgsConstructor
-class UserUpdate {
+class UserUpdater {
 
     private final UserManager userManager;
     private final UserMapper userMapper;
