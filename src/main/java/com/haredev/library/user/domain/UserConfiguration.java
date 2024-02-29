@@ -9,11 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class UserConfiguration {
 
     UserFacade userFacade() {
-        return userFacade(new InMemoryUserRepository(), new InMemoryConfirmationTokenRepository());
+        return userFacade(new InMemoryUserRepository(), new InMemoryVerificationTokenRepository());
     }
 
     @Bean
-    UserFacade userFacade(UserRepository userRepository, ConfirmationTokenRepository confirmationTokenRepository) {
+    UserFacade userFacade(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository) {
         final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         final UserFactory userFactory = new UserFactory(passwordEncoder);
         final UserManager userManager = new UserManager(userRepository);
@@ -28,7 +28,7 @@ class UserConfiguration {
                 userManager,
                 userMapper,
                 verificationTokenFactory,
-                confirmationTokenRepository,
+                verificationTokenRepository,
                 confirmationTokenValidation,
                 verificationTokenMapper);
         return new UserFacade(userPromotion, userUpdate, userRegistration, userRegistrationConfirmation, userManager, userMapper);

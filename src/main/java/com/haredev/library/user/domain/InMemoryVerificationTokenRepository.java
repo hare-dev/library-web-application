@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
-class InMemoryConfirmationTokenRepository implements ConfirmationTokenRepository {
+class InMemoryVerificationTokenRepository implements VerificationTokenRepository {
 
     private final HashMap<Long, VerificationToken> inMemoryConfirmationToken = new HashMap<>();
 

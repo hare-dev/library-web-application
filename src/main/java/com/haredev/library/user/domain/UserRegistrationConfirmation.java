@@ -18,7 +18,7 @@ class UserRegistrationConfirmation {
     private final UserManager userManager;
     private final UserMapper userMapper;
     private final VerificationTokenFactory verificationTokenFactory;
-    private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final VerificationTokenRepository verificationTokenRepository;
     private final ConfirmationTokenValidation confirmationTokenValidation;
     private final VerificationTokenMapper verificationTokenMapper;
 
@@ -26,7 +26,7 @@ class UserRegistrationConfirmation {
         return userManager.findUserById(userId)
                 .toEither(USER_NOT_FOUND)
                 .map(verificationTokenFactory::buildToken)
-                .map(confirmationTokenRepository::save)
+                .map(verificationTokenRepository::save)
                 .map(verificationTokenMapper::toConfirmationTokenResponse);
     }
 
@@ -36,12 +36,12 @@ class UserRegistrationConfirmation {
                 .flatMap(confirmationTokenValidation::isConfirmed)
                 .flatMap(confirmationTokenValidation::isExpired)
                 .map(setConfirmationTime(token))
-                .map(confirmationTokenRepository::save)
+                .map(verificationTokenRepository::save)
                 .flatMap(UserApplication -> activateAccount(userId));
     }
 
     private Option<VerificationToken> getConfirmationToken(final String token) {
-        return Option.ofOptional(confirmationTokenRepository.findByToken(token));
+        return Option.ofOptional(verificationTokenRepository.findByToken(token));
     }
 
     private static Function<VerificationToken, VerificationToken> setConfirmationTime(final String token) {
