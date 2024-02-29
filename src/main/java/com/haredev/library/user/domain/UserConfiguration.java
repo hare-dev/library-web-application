@@ -24,13 +24,13 @@ class UserConfiguration {
         final UserPromotion userPromotion = new UserPromotion(userManager, userMapper);
         final UserUpdate userUpdate = new UserUpdate(userManager, userMapper);
         final UserRegistration userRegistration = new UserRegistration(userFactory, userManager, userMapper);
-        final UserRegistrationConfirmation userRegistrationConfirmation = new UserRegistrationConfirmation(
+        final VerificationRegistration verificationRegistration = new VerificationRegistration(
                 userManager,
                 userMapper,
                 verificationTokenFactory,
                 verificationTokenRepository,
                 verificationTokenValidator,
                 verificationTokenMapper);
-        return new UserFacade(userPromotion, userUpdate, userRegistration, userRegistrationConfirmation, userManager, userMapper);
+        return new UserFacade(userPromotion, userUpdate, userRegistration, verificationRegistration, userManager, userMapper);
     }
 }

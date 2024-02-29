@@ -18,7 +18,7 @@ public class UserFacade {
     private final UserPromotion userPromotion;
     private final UserUpdate userUpdate;
     private final UserRegistration userRegistration;
-    private final UserRegistrationConfirmation userRegistrationConfirmation;
+    private final VerificationRegistration verificationRegistration;
     private final UserManager userManager;
     private final UserMapper userMapper;
 
@@ -58,11 +58,11 @@ public class UserFacade {
     }
 
     public Either<UserError, ConfirmationTokenResponse> createConfirmationToken(final Long userId) {
-        return userRegistrationConfirmation.createConfirmationToken(userId);
+        return verificationRegistration.createConfirmationToken(userId);
     }
 
     public Either<UserError, UserDetailsDto> confirmRegistration(final String token, final Long userId) {
-        return userRegistrationConfirmation.confirmToken(token, userId);
+        return verificationRegistration.confirmToken(token, userId);
     }
 
     public void removeUserById(final Long userId) {

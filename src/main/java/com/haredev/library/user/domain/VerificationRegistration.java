@@ -13,7 +13,7 @@ import static com.haredev.library.user.domain.api.UserError.CONFIRMATION_TOKEN_N
 import static com.haredev.library.user.domain.api.UserError.USER_NOT_FOUND;
 
 @RequiredArgsConstructor
-class UserRegistrationConfirmation {
+class VerificationRegistration {
 
     private final UserManager userManager;
     private final UserMapper userMapper;
