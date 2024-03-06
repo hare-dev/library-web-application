@@ -1,7 +1,7 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.user.controller.output.VerificationTokenResponse;
-import com.haredev.library.user.domain.api.UserError;
+import com.haredev.library.user.domain.api.error.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.function.Function;
 
-import static com.haredev.library.user.domain.api.UserError.CONFIRMATION_TOKEN_NOT_FOUND;
-import static com.haredev.library.user.domain.api.UserError.USER_NOT_FOUND;
+import static com.haredev.library.user.domain.api.error.UserError.VERIFICATION_TOKEN_NOT_FOUND;
+import static com.haredev.library.user.domain.api.error.UserError.USER_NOT_FOUND;
 
 @RequiredArgsConstructor
 class VerificationRegistration {
@@ -32,7 +32,7 @@ class VerificationRegistration {
 
     public Either<UserError, UserDetailsDto> confirmVerificationToken(final String token, final Long userId) {
         return getVerificationToken(token)
-                .toEither(CONFIRMATION_TOKEN_NOT_FOUND)
+                .toEither(VERIFICATION_TOKEN_NOT_FOUND)
                 .flatMap(verificationTokenValidator::isConfirmed)
                 .flatMap(verificationTokenValidator::isExpired)
                 .map(setVerificationTime(token))

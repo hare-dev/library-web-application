@@ -4,7 +4,7 @@ import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.controller.output.VerificationTokenResponse;
 import com.haredev.library.user.domain.UserFacade;
-import com.haredev.library.user.domain.api.UserError;
+import com.haredev.library.user.domain.api.error.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import io.vavr.control.Either;
 import jakarta.validation.Valid;

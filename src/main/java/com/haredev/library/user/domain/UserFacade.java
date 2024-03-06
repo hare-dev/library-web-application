@@ -3,7 +3,7 @@ package com.haredev.library.user.domain;
 import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.controller.output.VerificationTokenResponse;
 import com.haredev.library.user.controller.output.RegistrationResponse;
-import com.haredev.library.user.domain.api.UserError;
+import com.haredev.library.user.domain.api.error.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import com.haredev.library.user.domain.dto.UserLoginDto;
 import io.vavr.control.Either;

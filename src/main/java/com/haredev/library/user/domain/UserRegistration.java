@@ -2,11 +2,11 @@ package com.haredev.library.user.domain;
 
 import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.controller.output.RegistrationResponse;
-import com.haredev.library.user.domain.api.UserError;
+import com.haredev.library.user.domain.api.error.UserError;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 
-import static com.haredev.library.user.domain.api.UserError.DUPLICATED_USERNAME;
+import static com.haredev.library.user.domain.api.error.UserError.DUPLICATED_USERNAME;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 

@@ -1,11 +1,11 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.user.domain.api.UserError;
+import com.haredev.library.user.domain.api.error.UserError;
 import com.haredev.library.user.domain.dto.UserDetailsDto;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 
-import static com.haredev.library.user.domain.api.UserError.USER_NOT_FOUND;
+import static com.haredev.library.user.domain.api.error.UserError.USER_NOT_FOUND;
 
 @RequiredArgsConstructor
 class UserUpdater {
