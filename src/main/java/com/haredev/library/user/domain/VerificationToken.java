@@ -5,8 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import pl.amazingcode.timeflow.Time;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -17,20 +18,21 @@ class VerificationToken {
     @Id
     private Long id;
     private String token;
-    private LocalDateTime createdAt;
-    private LocalDateTime expiredAt;
-    private LocalDateTime confirmedAt;
+    private Instant createdAt;
+    private Instant expiredAt;
+    private Instant confirmedAt;
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private UserApplication userApplication;
 
     VerificationToken setConfirmedAt(String token) {
+        final var now = Time.instance().now();
         return VerificationToken.builder()
                 .id(id)
                 .token(token)
                 .createdAt(createdAt)
                 .expiredAt(expiredAt)
-                .confirmedAt(LocalDateTime.now())
+                .confirmedAt(now)
                 .build();
     }
 }

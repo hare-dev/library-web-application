@@ -1,17 +1,20 @@
 package com.haredev.library.user.domain;
 
-import java.time.LocalDateTime;
+import pl.amazingcode.timeflow.Time;
+
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 class VerificationTokenFactory {
 
-    private static final Long expirationTimeInMinutes = 30L;
-
     public final VerificationToken buildToken(final UserApplication userApplication) {
+        var expiredAt = Time.instance().now().plus(1, ChronoUnit.DAYS);
+        var now = Time.instance().now();
+        var token = UUID.randomUUID().toString();
         return VerificationToken.builder()
-                .token(UUID.randomUUID().toString())
-                .createdAt(LocalDateTime.now())
-                .expiredAt(LocalDateTime.now().plusMinutes(expirationTimeInMinutes))
+                .token(token)
+                .createdAt(now)
+                .expiredAt(expiredAt)
                 .userApplication(userApplication)
                 .build();
     }
