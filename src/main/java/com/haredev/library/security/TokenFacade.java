@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.amazingcode.timeflow.Time;
 
 import javax.crypto.SecretKey;
 import java.time.Clock;
@@ -23,7 +24,7 @@ public class TokenFacade {
     @Value("${token.expirationTime}")
     private final Long expirationTime;
 
-    private final Clock clock;
+    private final Clock now = Time.instance().clock();
 
     public String extractLogin(String token) {
         return extractAllClaims(token).getSubject();
@@ -35,7 +36,7 @@ public class TokenFacade {
     }
 
     private boolean isTokenExpired(String token) {
-        return getTokenExpiration(token).before(Date.from(Instant.now(clock)));
+        return getTokenExpiration(token).before(Date.from(Instant.now(now)));
     }
 
     private Date getTokenExpiration(String token) {
@@ -46,8 +47,8 @@ public class TokenFacade {
         return Jwts
                 .builder()
                 .subject(username)
-                .issuedAt(Date.from(Instant.now(clock)))
-                .expiration(Date.from(Instant.ofEpochMilli(Date.from(Instant.now(clock)).getTime() + expirationTime)))
+                .issuedAt(Date.from(Instant.now(now)))
+                .expiration(Date.from(Instant.ofEpochMilli(Date.from(Instant.now(now)).getTime() + expirationTime)))
                 .signWith(
                         getSignInKey(),
                         Jwts.SIG.HS256)
