@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import pl.amazingcode.timeflow.Time;
 
 import javax.crypto.SecretKey;
-import java.time.Clock;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Service
@@ -20,11 +20,6 @@ public class TokenFacade {
 
     @Value("${token.secretKey}")
     private final String secretKey;
-
-    @Value("${token.expirationTime}")
-    private final Long expirationTime;
-
-    private final Clock now = Time.instance().clock();
 
     public String extractLogin(String token) {
         return extractAllClaims(token).getSubject();
@@ -36,19 +31,19 @@ public class TokenFacade {
     }
 
     private boolean isTokenExpired(String token) {
-        return getTokenExpiration(token).before(Date.from(Instant.now(now)));
+        return getTokenExpiration(token).isBefore(Time.instance().now());
     }
 
-    private Date getTokenExpiration(String token) {
-        return extractAllClaims(token).getExpiration();
+    private Instant getTokenExpiration(String token) {
+        return extractAllClaims(token).getExpiration().toInstant();
     }
 
     public String buildToken(String username) {
         return Jwts
                 .builder()
                 .subject(username)
-                .issuedAt(Date.from(Instant.now(now)))
-                .expiration(Date.from(Instant.ofEpochMilli(Date.from(Instant.now(now)).getTime() + expirationTime)))
+                .issuedAt(Date.from(Time.instance().now()))
+                .expiration(Date.from(Time.instance().now().plus(10, ChronoUnit.MINUTES)))
                 .signWith(
                         getSignInKey(),
                         Jwts.SIG.HS256)

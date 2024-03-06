@@ -7,7 +7,6 @@ server:
 
 token:
     secretKey: 72357538782F4125442A472D4B6150645367566B597033733676397924422645
-    expirationTime: 86400000
   
   # Spring-Boot Configuration
 

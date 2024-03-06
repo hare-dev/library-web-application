@@ -1,27 +1,23 @@
 package com.haredev.library.security
 
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.io.Decoders
-import io.jsonwebtoken.security.Keys
+import pl.amazingcode.timeflow.TestTime
+import pl.amazingcode.timeflow.Time
 import spock.lang.Specification
-import spock.lang.Unroll
 
-import javax.crypto.SecretKey
 import java.time.Clock
-import java.time.Instant
+import java.time.Duration
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 
 import static com.haredev.library.security.samples.TokenPropertiesSample.secretKey
-import static com.haredev.library.security.samples.TokenPropertiesSample.tokenExpiration
-import static java.time.temporal.ChronoUnit.DAYS
 
 class TokenSpecificationTest extends Specification {
-    Clock clock = Clock.fixed(Instant.now().plus(5, DAYS), ZoneId.of("UTC"))
 
-    TokenFacade tokenFacade = new TokenFacade(
-            secretKey,
-            tokenExpiration,
-            clock);
+    TokenFacade tokenFacade = new TokenFacade(secretKey)
+
+    def cleanup() {
+        TestTime.testInstance().resetClock()
+    }
 
     def "Should get username"() {
         given: "Create token"
@@ -46,27 +42,18 @@ class TokenSpecificationTest extends Specification {
         result
     }
 
-    @Unroll
-    def "Should return false if token isn't valid"() {
+    def "Should return false if token is expired"() {
         given: "Create expired token"
-        def token = Jwts.builder()
-                .subject(username)
-                .expiration(getOldDate())
-                .signWith(getSignInKey(secretKey))
-                .compact()
+        TestTime.testInstance().setClock(FIXED_CLOCK)
+        var duration = Duration.of(20, ChronoUnit.MINUTES);
+        def token = buildToken()
+
         when:
+        TestTime.testInstance().fastForward(duration)
         def result = tokenFacade.isTokenValid(token, username)
 
         then:
         !result
-    }
-
-    private static SecretKey getSignInKey(String secretKey) {
-        Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey))
-    }
-
-    private static Date getOldDate() {
-        return Date.from(Instant.now().plus(1, DAYS))
     }
 
     private String extractUsername(String token) {
@@ -78,4 +65,7 @@ class TokenSpecificationTest extends Specification {
     }
 
     private static final String username = "test-user"
+
+    private final ZoneId ZONE_ID = TimeZone.getTimeZone("Europe/Warsaw").toZoneId();
+    private final FIXED_CLOCK = Clock.fixed(Time.instance().now(), ZONE_ID)
 }
