@@ -1,26 +1,24 @@
 package com.haredev.library.security
 
+import com.haredev.library.TimeManager
 import spock.lang.Specification
 
-import java.time.Clock
 import java.time.Duration
-import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 import static com.haredev.library.security.samples.TokenPropertiesSample.secretKey
 import static pl.amazingcode.timeflow.TestTime.testInstance
-import static pl.amazingcode.timeflow.Time.instance
 
 class TokenSpecificationTest extends Specification {
 
     TokenFacade tokenFacade = new TokenFacade(secretKey)
 
     def setup() {
-        setClock()
+        TimeManager.setClock()
     }
 
     def cleanup() {
-        resetClock()
+        TimeManager.resetClock()
     }
 
     def "Should get username"() {
@@ -74,14 +72,5 @@ class TokenSpecificationTest extends Specification {
     private static void jumpInMinutesForward(final Integer minutes) {
         final Duration duration = Duration.of(minutes, ChronoUnit.MINUTES)
         testInstance().fastForward(duration)
-    }
-
-    private static void resetClock() {
-        testInstance().resetClock();
-    }
-
-    private static Clock setClock() {
-        final ZoneId ZONE_ID = TimeZone.getTimeZone("Europe/Warsaw").toZoneId()
-        return Clock.fixed(instance().now(), ZONE_ID)
     }
 }
