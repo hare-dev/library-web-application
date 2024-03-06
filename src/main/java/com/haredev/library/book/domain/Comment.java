@@ -2,7 +2,7 @@ package com.haredev.library.book.domain;
 
 import com.haredev.library.book.domain.dto.CommentCreateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
-import com.haredev.library.book.domain.dto.CommentUpdateDto;
+import com.haredev.library.book.domain.dto.update.CommentUpdateDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -24,16 +24,16 @@ class Comment extends BaseEntity {
     private Long id;
     private Long bookId;
     private String description;
-    private LocalDateTime creationDate;
-    private LocalDateTime updateTime;
+    private Instant createdAt;
+    private Instant updatedAt;
 
     Comment toUpdate(final CommentUpdateDto toUpdate) {
         return Comment.builder()
-                .id(this.id)
-                .bookId(this.bookId)
+                .id(id)
+                .bookId(bookId)
                 .description(toUpdate.description())
-                .creationDate(this.creationDate)
-                .updateTime(toUpdate.updateTime())
+                .createdAt(createdAt)
+                .updatedAt(toUpdate.updatedAt())
                 .build();
     }
 
@@ -41,15 +41,15 @@ class Comment extends BaseEntity {
         return CommentCreateDto.builder()
                 .commentId(id)
                 .description(description)
-                .creationDate(creationDate)
+                .createdAt(createdAt)
                 .build();
     }
 
     CommentDto toDto() {
         return CommentDto.builder()
                 .description(description)
-                .creationDate(creationDate)
-                .updateTime(updateTime)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
                 .build();
     }
 }

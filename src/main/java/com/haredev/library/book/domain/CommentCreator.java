@@ -13,8 +13,8 @@ class CommentCreator {
                 .id(request.commentId())
                 .bookId(bookId)
                 .description(request.description())
-                .creationDate(request.creationDate())
-                .updateTime(null)
+                .createdAt(request.createdAt())
+                .updatedAt(null)
                 .build();
     }
 }

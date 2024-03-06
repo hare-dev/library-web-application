@@ -7,8 +7,6 @@ import com.haredev.library.book.samples.SampleBooks
 import com.haredev.library.book.samples.SampleComments
 import spock.lang.Specification
 
-import java.time.LocalDateTime
-
 import static com.haredev.library.book.domain.api.error.BookError.*
 
 class BookSpecificationTest extends Specification {
@@ -107,11 +105,11 @@ class BookSpecificationTest extends Specification {
         facade.addBook(BOOK_ONE)
 
         when: "Add comment to book"
-        def RESULT = facade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id()).get()
+        def RESULT = facade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id()).get().description()
+        def COMMENT_ONE = facade.findCommentById(BOOK_ONE.id()).get().description()
 
         then: "Return comment added to book"
-        def COMMENT_ONE = facade.findCommentById(BOOK_ONE.id())
-        RESULT.description() == COMMENT_ONE.get().description()
+        RESULT == COMMENT_ONE
     }
 
     def "Should not add comment to not exist book"() {
@@ -128,10 +126,10 @@ class BookSpecificationTest extends Specification {
         facade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id())
 
         when: "Find book and return size of list with comments"
-        def COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id()).get()
+        def COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id()).get().size()
 
         then: "Book has one comment"
-        COMMENTS_SIZE.size() == 1
+        COMMENTS_SIZE == 1
     }
 
     def "Should get two comments from book"() {
@@ -141,10 +139,10 @@ class BookSpecificationTest extends Specification {
         facade.addCommentToBook(COMMENT_TWO, BOOK_ONE.id())
 
         when: "Find book and return size of list with comments"
-        def COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id()).get()
+        def COMMENTS_SIZE = facade.getBookByIdWithComments(BOOK_ONE.id()).get().size()
 
         then: "Book has two comments"
-        COMMENTS_SIZE.size() == 2
+        COMMENTS_SIZE == 2
     }
 
     def "Should return empty list of comments from book"() {
@@ -222,10 +220,10 @@ class BookSpecificationTest extends Specification {
         facade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id())
 
         when: "Update comment"
-        def UPDATE_RESULT = facade.updateCommentById(COMMENT_ONE.commentId(), COMMENT_UPDATE).get()
+        def UPDATE_RESULT = facade.updateCommentById(COMMENT_ONE.commentId(), COMMENT_UPDATE).get().description()
 
         then: "Compare comment input update with output update"
-        UPDATE_RESULT.description() == COMMENT_UPDATE.description()
+        UPDATE_RESULT == COMMENT_UPDATE.description()
     }
 
     def "Should not update not exist comment"() {
@@ -241,6 +239,6 @@ class BookSpecificationTest extends Specification {
     def final BOOK_ONE = SampleBooks.createBookSampleToUpdate(0L, "Twilight", "Stephenie Meyer", "0-596-52068-9")
     def final BOOK_TWO = SampleBooks.createBookSampleToUpdate(1L, "Django", "Quentin Tarantino", "978 0 596 52068 7")
 
-    def final COMMENT_ONE = SampleComments.createCommentSample(0L, "Best book!", LocalDateTime.now())
-    def final COMMENT_TWO = SampleComments.createCommentSample(1L,"Fantastic book!", LocalDateTime.now())
+    def final COMMENT_ONE = SampleComments.createCommentSample(0L, "Best book!")
+    def final COMMENT_TWO = SampleComments.createCommentSample(1L,"Fantastic book!")
 }

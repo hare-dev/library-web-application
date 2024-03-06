@@ -1,4 +1,4 @@
-package com.haredev.library.book.domain.dto;
+package com.haredev.library.book.domain.dto.update;
 
 import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;

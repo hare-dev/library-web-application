@@ -4,7 +4,7 @@ import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
 import com.haredev.library.book.domain.api.BookStatus;
 import com.haredev.library.book.domain.dto.BookCreateDto;
-import com.haredev.library.book.domain.dto.BookUpdateDto;
+import com.haredev.library.book.domain.dto.update.BookUpdateDto;
 import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import jakarta.persistence.*;

@@ -2,7 +2,7 @@ package com.haredev.library.book.samples
 
 import com.haredev.library.book.domain.api.BookCover
 import com.haredev.library.book.domain.dto.BookCreateDto
-import com.haredev.library.book.domain.dto.BookUpdateDto
+import com.haredev.library.book.domain.dto.update.BookUpdateDto
 import groovy.transform.CompileStatic
 
 @CompileStatic
