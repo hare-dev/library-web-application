@@ -5,12 +5,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.Clock;
 
-import static java.time.Clock.systemUTC;
-
 @Configuration
 class ClockConfiguration {
     @Bean
     Clock clock() {
-        return systemUTC();
+        return Clock.systemDefaultZone();
     }
 }
