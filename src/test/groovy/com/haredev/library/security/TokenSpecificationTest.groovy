@@ -1,7 +1,5 @@
 package com.haredev.library.security
 
-import pl.amazingcode.timeflow.TestTime
-import pl.amazingcode.timeflow.Time
 import spock.lang.Specification
 
 import java.time.Clock
@@ -10,13 +8,19 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 import static com.haredev.library.security.samples.TokenPropertiesSample.secretKey
+import static pl.amazingcode.timeflow.TestTime.testInstance
+import static pl.amazingcode.timeflow.Time.instance
 
 class TokenSpecificationTest extends Specification {
 
     TokenFacade tokenFacade = new TokenFacade(secretKey)
 
+    def setup() {
+        setClock()
+    }
+
     def cleanup() {
-        TestTime.testInstance().resetClock()
+        resetClock()
     }
 
     def "Should get username"() {
@@ -36,7 +40,7 @@ class TokenSpecificationTest extends Specification {
         def token = buildToken()
 
         when:
-        boolean result = tokenFacade.isTokenValid(token, username)
+        boolean result = tokenFacade.isTokenValid(token, getUsername())
 
         then:
         result
@@ -44,13 +48,11 @@ class TokenSpecificationTest extends Specification {
 
     def "Should return false if token is expired"() {
         given: "Create expired token"
-        TestTime.testInstance().setClock(FIXED_CLOCK)
-        var duration = Duration.of(20, ChronoUnit.MINUTES);
         def token = buildToken()
 
         when:
-        TestTime.testInstance().fastForward(duration)
-        def result = tokenFacade.isTokenValid(token, username)
+        jumpInMinutesForward(10)
+        def result = tokenFacade.isTokenValid(token, getUsername())
 
         then:
         !result
@@ -64,8 +66,22 @@ class TokenSpecificationTest extends Specification {
         tokenFacade.buildToken(username)
     }
 
-    private static final String username = "test-user"
+    private static String getUsername() {
+        final String username = "test-user"
+        return username;
+    }
 
-    private final ZoneId ZONE_ID = TimeZone.getTimeZone("Europe/Warsaw").toZoneId();
-    private final FIXED_CLOCK = Clock.fixed(Time.instance().now(), ZONE_ID)
+    private static void jumpInMinutesForward(final Integer minutes) {
+        final Duration duration = Duration.of(minutes, ChronoUnit.MINUTES)
+        testInstance().fastForward(duration)
+    }
+
+    private static void resetClock() {
+        testInstance().resetClock();
+    }
+
+    private static Clock setClock() {
+        final ZoneId ZONE_ID = TimeZone.getTimeZone("Europe/Warsaw").toZoneId()
+        return Clock.fixed(instance().now(), ZONE_ID)
+    }
 }
