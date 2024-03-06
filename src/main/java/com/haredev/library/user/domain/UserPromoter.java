@@ -11,7 +11,7 @@ import static com.haredev.library.user.domain.api.UserError.USER_NOT_FOUND;
 import static io.vavr.control.Either.left;
 
 @RequiredArgsConstructor
-class UserPromotion {
+class UserPromoter {
 
     private final UserManager userManager;
     private final UserMapper userMapper;
