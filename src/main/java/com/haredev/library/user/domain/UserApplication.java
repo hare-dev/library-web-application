@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -54,17 +53,6 @@ class UserApplication extends BaseEntity {
 
     void promoteToAdmin() {
         this.authorities.add(Authority.ADMIN);
-    }
-
-    public static UserApplication newInstance(Long userId, String username, String email, String password, Authority... authorities) {
-        final UserApplication userApplication = new UserApplication();
-        userApplication.id = userId;
-        userApplication.username = username;
-        userApplication.email = email;
-        userApplication.password = password;
-        userApplication.isActivated = false;
-        userApplication.authorities = new HashSet<>(Set.of(authorities));
-        return userApplication;
     }
 
     @Override

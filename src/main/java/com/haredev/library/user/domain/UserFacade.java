@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserFacade {
 
-    private final UserPromotion userPromotion;
+    private final UserPromoter userPromoter;
     private final UserUpdater userUpdater;
     private final UserRegistration userRegistration;
     private final VerificationRegistration verificationRegistration;
@@ -50,7 +50,7 @@ public class UserFacade {
     }
 
     public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
-        return userPromotion.promoteToAdmin(userId);
+        return userPromoter.promoteToAdmin(userId);
     }
 
     public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String newUsername) {
