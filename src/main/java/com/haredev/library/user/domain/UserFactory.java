@@ -5,6 +5,8 @@ import com.haredev.library.user.domain.api.Authority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ class UserFactory {
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .isActivated(false)
-                .authorities(Set.of(Authority.USER))
+                .authorities(userAuthorities())
                 .build();
     }
 
@@ -30,7 +32,15 @@ class UserFactory {
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .isActivated(false)
-                .authorities(Set.of(Authority.USER, Authority.ADMIN))
+                .authorities(adminAuthorities())
                 .build();
+    }
+
+    private Set<Authority> userAuthorities() {
+        return new HashSet<>(List.of(Authority.USER));
+    }
+
+    private Set<Authority> adminAuthorities() {
+        return new HashSet<>(List.of(Authority.USER, Authority.ADMIN));
     }
 }

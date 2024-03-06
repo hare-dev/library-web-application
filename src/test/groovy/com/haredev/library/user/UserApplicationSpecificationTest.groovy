@@ -138,10 +138,10 @@ class UserApplicationSpecificationTest extends Specification {
         facade.registerAsUser(USER)
 
         when: "Promote user to be admin"
-        def EXPECTED_RESULT = facade.promoteToAdmin(USER.userId()).get()
+        def EXPECTED_RESULT = facade.promoteToAdmin(USER.userId()).get().authorities()
 
         then: "User has two authorities"
-        EXPECTED_RESULT.authorities() == Set.of(Authority.ADMIN, Authority.USER)
+        EXPECTED_RESULT == Set.of(Authority.ADMIN, Authority.USER)
     }
 
     def "Should not promote user to be admin with admin authority"() {
