@@ -6,9 +6,7 @@ import com.haredev.library.security.authentication.output.AuthenticationResponse
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class AuthenticationFacade {
     private final TokenFacade tokenFacade;
