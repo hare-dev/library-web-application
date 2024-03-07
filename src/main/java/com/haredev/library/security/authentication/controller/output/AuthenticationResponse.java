@@ -1,4 +1,4 @@
-package com.haredev.library.security.authentication.output;
+package com.haredev.library.security.authentication.controller.output;
 
 import lombok.Builder;
 

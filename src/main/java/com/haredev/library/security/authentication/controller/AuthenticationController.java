@@ -1,6 +1,7 @@
-package com.haredev.library.security.authentication;
+package com.haredev.library.security.authentication.controller;
 
-import com.haredev.library.security.authentication.input.AuthenticationRequest;
+import com.haredev.library.security.authentication.AuthenticationFacade;
+import com.haredev.library.security.authentication.controller.input.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

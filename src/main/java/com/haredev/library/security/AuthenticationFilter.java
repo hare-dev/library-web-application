@@ -1,5 +1,6 @@
 package com.haredev.library.security;
 
+import com.haredev.library.security.token.TokenFacade;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @RequiredArgsConstructor
-class TokenAuthenticationFilter extends OncePerRequestFilter {
+class AuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenFacade tokenFacade;
     private final UserDetailsService userDetailsService;

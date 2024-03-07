@@ -1,4 +1,4 @@
-package com.haredev.library.security;
+package com.haredev.library.security.token;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -6,7 +6,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import pl.amazingcode.timeflow.Time;
 
 import javax.crypto.SecretKey;
@@ -14,7 +13,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
-@Service
 @RequiredArgsConstructor
 public class TokenFacade {
 

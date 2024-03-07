@@ -1,4 +1,4 @@
-package com.haredev.library.security.authentication.input;
+package com.haredev.library.security.authentication.controller.input;
 
 public record AuthenticationRequest(
     String username,

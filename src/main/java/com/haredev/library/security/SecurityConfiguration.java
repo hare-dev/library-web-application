@@ -1,5 +1,6 @@
 package com.haredev.library.security;
 
+import com.haredev.library.security.token.TokenFacade;
 import com.haredev.library.user.domain.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -58,8 +59,8 @@ class SecurityConfiguration {
     }
 
     @Bean
-    TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenFacade, userDetailsService());
+    AuthenticationFilter tokenAuthenticationFilter() {
+        return new AuthenticationFilter(tokenFacade, userDetailsService());
     }
 
     @Bean
