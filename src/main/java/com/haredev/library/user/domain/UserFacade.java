@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.haredev.library.user.domain.api.error.UserError.*;
+
 @RequiredArgsConstructor
 public class UserFacade {
 
@@ -33,13 +35,13 @@ public class UserFacade {
     public Either<UserError, UserLoginDto> findByUsername(final String username) {
         return userManager.getUserByUsername(username)
                 .map(userMapper::toLoginDto)
-                .toEither(UserError.USER_NOT_FOUND);
+                .toEither(USER_NOT_FOUND);
     }
 
     public Either<UserError, UserDetailsDto> findUserById(final Long userId) {
         return userManager.findUserById(userId)
                 .map(userMapper::toUserDetailsDto)
-                .toEither(UserError.USER_NOT_FOUND);
+                .toEither(USER_NOT_FOUND);
     }
 
     public List<UserDetailsDto> fetchAllUsers(final int page) {

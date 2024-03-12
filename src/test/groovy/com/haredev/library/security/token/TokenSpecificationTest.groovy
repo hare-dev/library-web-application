@@ -1,4 +1,4 @@
-package com.haredev.library.security
+package com.haredev.library.security.token
 
 import com.haredev.library.TimeManager
 import com.haredev.library.security.token.TokenFacade
