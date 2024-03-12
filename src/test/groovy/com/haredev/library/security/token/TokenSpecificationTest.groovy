@@ -1,7 +1,6 @@
 package com.haredev.library.security.token
 
 import com.haredev.library.TimeManager
-import com.haredev.library.security.token.TokenFacade
 import spock.lang.Specification
 
 import java.time.Duration
@@ -11,8 +10,7 @@ import static com.haredev.library.security.samples.TokenPropertiesSample.secretK
 import static pl.amazingcode.timeflow.TestTime.testInstance
 
 class TokenSpecificationTest extends Specification {
-
-    TokenFacade tokenFacade = new TokenFacade(secretKey)
+    final def tokenFacade = new TokenFacade(secretKey)
 
     def setup() {
         TimeManager.setClock()

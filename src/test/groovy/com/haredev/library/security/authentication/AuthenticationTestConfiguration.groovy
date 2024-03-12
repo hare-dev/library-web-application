@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import static com.haredev.library.security.samples.TokenPropertiesSample.secretKey
 
 final class AuthenticationTestConfiguration {
-    static AuthenticationFacade setConfiguration(final UserFacade userFacade) {
+    static final AuthenticationFacade getConfiguration(final UserFacade userFacade) {
         final TokenFacade tokenFacade = new TokenFacade(secretKey)
         final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder()
         return new AuthenticationFacade(tokenFacade, userFacade, passwordEncoder)

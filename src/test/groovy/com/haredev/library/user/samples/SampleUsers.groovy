@@ -8,7 +8,7 @@ final class SampleUsers {
     static final Long notExistUserWithThisId = 5000L;
     static final String notExistToken = 12345;
 
-    static RegistrationRequest createUserSample(Long userId, String username, String password, String email) {
+    static RegistrationRequest createUserSample(final Long userId, final String username, final String password, final String email) {
         return RegistrationRequest.builder()
                 .userId(userId)
                 .username(username)

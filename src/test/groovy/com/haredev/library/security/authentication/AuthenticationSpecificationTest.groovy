@@ -1,19 +1,15 @@
 package com.haredev.library.security.authentication
 
-
 import com.haredev.library.security.samples.LoginCredentialsSample
-import com.haredev.library.user.domain.InMemoryUserRepository
-import com.haredev.library.user.domain.InMemoryVerificationTokenRepository
-import com.haredev.library.user.domain.UserConfiguration
-import com.haredev.library.user.domain.UserFacade
+import com.haredev.library.user.UserApplicationTestConfiguration
 import spock.lang.Specification
 
 import static com.haredev.library.security.authentication.errors.AuthenticationError.WRONG_AUTHENTICATION_LOGIN_OR_PASSWORD
 import static com.haredev.library.user.samples.SampleUsers.createUserSample
 
-class AuthenticationSpecificationTest extends Specification {
-    final UserFacade userFacade = new UserConfiguration().userFacade(new InMemoryUserRepository(), new InMemoryVerificationTokenRepository())
-    def authenticationFacade = AuthenticationTestConfiguration.setConfiguration(userFacade)
+final class AuthenticationSpecificationTest extends Specification {
+    final def userFacade = UserApplicationTestConfiguration.getConfiguration()
+    final def authenticationFacade = AuthenticationTestConfiguration.getConfiguration(userFacade)
 
     def "Should sign in user"() {
         when: "Register user"
