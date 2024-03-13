@@ -24,14 +24,15 @@ public class AuthenticationFacade {
         return userFacade
                 .findByUsername(request.username())
                 .mapLeft(this::mapUserErrors)
-                .flatMap(user -> authenticate(request.password(), user.password()));
+                .flatMap(user -> authenticate(request, user.password()));
     }
 
-    private Either<AuthenticationError, AuthenticationResponse> authenticate(final String requestPassword,
+    private Either<AuthenticationError, AuthenticationResponse> authenticate(final AuthenticationRequest request,
                                                                              final String userPassword) {
-        if (!passwordEncoder.matches(requestPassword, userPassword)) {
+        if (!passwordEncoder.matches(request.password(), userPassword)) {
             return left(WRONG_AUTHENTICATION_LOGIN_OR_PASSWORD);
-        } else return right(generateToken(requestPassword));
+        }
+        return right(generateToken(request.username()));
     }
 
     private AuthenticationResponse generateToken(final String username) {
