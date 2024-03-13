@@ -194,8 +194,8 @@ class UserApplicationSpecificationTest extends Specification {
 
         when: "Create verification token for user and confirm registration"
         def TOKEN = userFacade.createConfirmationToken(USER_ID).get().token()
-        def EXPECTED_ACTIVATION_STATUS = userFacade.confirmRegistration(TOKEN, USER_ID).get().isActivated()
-        def USER_ACTIVATION_STATUS = userFacade.findUserById(USER_ID).get().isActivated()
+        def EXPECTED_ACTIVATION_STATUS = userFacade.confirmRegistration(TOKEN, USER_ID).get().accountStatus()
+        def USER_ACTIVATION_STATUS = userFacade.findUserById(USER_ID).get().accountStatus()
 
         then: "User is activated"
         EXPECTED_ACTIVATION_STATUS == USER_ACTIVATION_STATUS

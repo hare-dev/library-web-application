@@ -1,6 +1,7 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.user.controller.input.RegistrationRequest;
+import com.haredev.library.user.domain.api.AccountStatus;
 import com.haredev.library.user.domain.api.Authority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +21,7 @@ class UserFactory {
                 .username(request.username())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
-                .isActivated(false)
+                .accountStatus(AccountStatus.NOT_ACTIVATED)
                 .authorities(userAuthorities())
                 .build();
     }
@@ -31,7 +32,7 @@ class UserFactory {
                 .username(request.username())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
-                .isActivated(false)
+                .accountStatus(AccountStatus.NOT_ACTIVATED)
                 .authorities(adminAuthorities())
                 .build();
     }

@@ -11,7 +11,7 @@ class UserMapper {
                 .id(userApplication.getId())
                 .username(userApplication.getUsername())
                 .email(userApplication.getEmail())
-                .isActivated(userApplication.getIsActivated())
+                .accountStatus(userApplication.getAccountStatus())
                 .build();
     }
 
@@ -19,7 +19,7 @@ class UserMapper {
         return UserDetailsDto.builder()
                 .id(userApplication.getId())
                 .username(userApplication.getUsername())
-                .isActivated(userApplication.getIsActivated())
+                .accountStatus(userApplication.getAccountStatus())
                 .authorities(userApplication.getAuthorities())
                 .build();
     }

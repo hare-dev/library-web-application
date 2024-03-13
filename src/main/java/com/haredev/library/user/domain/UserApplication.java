@@ -2,6 +2,7 @@ package com.haredev.library.user.domain;
 
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import com.haredev.library.infrastructure.mapper.AuthoritiesToStringConverter;
+import com.haredev.library.user.domain.api.AccountStatus;
 import com.haredev.library.user.domain.api.Authority;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,8 @@ class UserApplication extends BaseEntity {
     private String username;
     private String email;
     private String password;
-    private Boolean isActivated;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus accountStatus;
 
     @Convert(converter = AuthoritiesToStringConverter.class)
     private Set<Authority> authorities;
@@ -35,7 +37,7 @@ class UserApplication extends BaseEntity {
                 .username(username)
                 .email(email)
                 .password(password)
-                .isActivated(isActivated)
+                .accountStatus(accountStatus)
                 .authorities(authorities)
                 .build();
     }
@@ -46,7 +48,7 @@ class UserApplication extends BaseEntity {
                 .username(username)
                 .email(email)
                 .password(password)
-                .isActivated(true)
+                .accountStatus(AccountStatus.ACTIVATED)
                 .authorities(authorities)
                 .build();
     }
