@@ -7,12 +7,11 @@ import com.haredev.library.security.token.TokenFacade;
 import com.haredev.library.user.domain.UserFacade;
 import com.haredev.library.user.domain.api.error.UserError;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.haredev.library.security.authentication.errors.AuthenticationError.WRONG_AUTHENTICATION_LOGIN_OR_PASSWORD;
-import static io.vavr.control.Either.left;
-import static io.vavr.control.Either.right;
 
 @RequiredArgsConstructor
 public class AuthenticationFacade {
@@ -20,19 +19,19 @@ public class AuthenticationFacade {
     private final UserFacade userFacade;
     private final PasswordEncoder passwordEncoder;
 
-    public Either<AuthenticationError, AuthenticationResponse> signIn(final AuthenticationRequest request) {
+    public Either<AuthenticationError, AuthenticationResponse> signIn(final AuthenticationRequest authenticationRequest) {
         return userFacade
-                .findByUsername(request.username())
-                .mapLeft(this::mapUserErrors)
-                .flatMap(user -> authenticate(request, user.password()));
+                .findByUsername(authenticationRequest.username())
+                .mapLeft(this::mapError)
+                .flatMap(user -> checkCandidate(authenticationRequest, user.password()))
+                .map(request -> generateToken(request.username()));
     }
 
-    private Either<AuthenticationError, AuthenticationResponse> authenticate(final AuthenticationRequest request,
-                                                                             final String userPassword) {
-        if (!passwordEncoder.matches(request.password(), userPassword)) {
-            return left(WRONG_AUTHENTICATION_LOGIN_OR_PASSWORD);
-        }
-        return right(generateToken(request.username()));
+    private Either<AuthenticationError, AuthenticationRequest> checkCandidate(final AuthenticationRequest authenticationRequest,
+                                                                              final String userPassword) {
+        return Option.of(authenticationRequest)
+                .filter(request -> passwordEncoder.matches(request.password(), userPassword))
+                .toEither(WRONG_AUTHENTICATION_LOGIN_OR_PASSWORD);
     }
 
     private AuthenticationResponse generateToken(final String username) {
@@ -41,7 +40,7 @@ public class AuthenticationFacade {
                 .build();
     }
 
-    private AuthenticationError mapUserErrors(final UserError error) {
+    private AuthenticationError mapError(final UserError error) {
         return WRONG_AUTHENTICATION_LOGIN_OR_PASSWORD;
     }
 }
