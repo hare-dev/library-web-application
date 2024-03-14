@@ -1,3 +1,51 @@
+# Application Global Properties for DEV and PROD configurations
+
+  # Application Properties
+
 spring:
   profiles:
       active: dev
+  config:
+    import: optional:secrets.properties
+
+  # Mail Sender Configuration
+
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_ID}
+    password: ${EMAIL_PASSWORD}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        mime:
+          charset: UTF
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+  # Spring Security
+
+security:
+  basic:
+    enabled: true
+
+management:
+  security:
+    enabled: true
+
+  # Hibernate Logs
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:descriptor:sql:BasicBinder: TRACE
+
+  # Token Credentials
+
+token:
+  secretKey: ${TOKEN_SECRET_KEY}

@@ -2,13 +2,8 @@
 
 server:
     port: 8181
-
-  # Token Credentials
-
-token:
-    secretKey: 72357538782F4125442A472D4B6150645367566B597033733676397924422645
   
-  # Spring-Boot Configuration
+  # Spring-Boot with H2 Database Configuration
 
 spring:
   h2:
@@ -19,8 +14,10 @@ spring:
     path: /dev-test-h2
     url: jdbc:h2:mem:test-h2
     driverClassName: org.h2.Driver
-    username: admin
-    password: admin
+    username: ${H2_USERNAME}
+    password: ${H2_PASSWORD}
+
+  # JPA Configuration
 
   jpa:
     show-sql: true
@@ -33,24 +30,6 @@ spring:
   database-platform:
     org.hibernate:
       dialect: H2Dialect
-
-  # Spring Security
-
-security:
-  basic:
-    enabled: true
-
-management:
-  security:
-    enabled: true
-
-logging:
-    level:
-        org:
-          hibernate:
-                  SQL: DEBUG
-                  type:descriptor:sql:BasicBinder: TRACE
-
   
   # Swagger UI
 
