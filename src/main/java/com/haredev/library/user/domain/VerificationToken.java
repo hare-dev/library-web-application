@@ -25,14 +25,7 @@ class VerificationToken {
     @MapsId
     private UserApplication userApplication;
 
-    VerificationToken setConfirmedAt(String token) {
-        final var now = Time.instance().now();
-        return VerificationToken.builder()
-                .id(id)
-                .token(token)
-                .createdAt(createdAt)
-                .expiredAt(expiredAt)
-                .confirmedAt(now)
-                .build();
+    void confirmVerificationAt() {
+        this.confirmedAt = Time.instance().now();
     }
 }

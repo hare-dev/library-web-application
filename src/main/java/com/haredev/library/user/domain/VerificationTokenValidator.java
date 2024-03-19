@@ -11,16 +11,11 @@ import static io.vavr.control.Either.right;
 
 class VerificationTokenValidator {
 
-    public final Either<UserError, VerificationToken> isExpired(final VerificationToken verificationToken) {
-        final var now = Time.instance().now();
-        if (verificationToken.getExpiredAt().isBefore(now)) {
+    public final Either<UserError, VerificationToken> isConfirmedOrExpired(final VerificationToken verificationToken) {
+        final var currentTime = Time.instance().now();
+        if (verificationToken.getExpiredAt().isBefore(currentTime)) {
             return left(VERIFICATION_TOKEN_IS_EXPIRED);
-        }
-        return right(verificationToken);
-    }
-
-    public final Either<UserError, VerificationToken> isConfirmed(final VerificationToken verificationToken) {
-        if (verificationToken.getConfirmedAt() != null) {
+        } else if (verificationToken.getConfirmedAt() != null) {
             return left(VERIFICATION_TOKEN_IS_ALREADY_CONFIRMED);
         }
         return right(verificationToken);
