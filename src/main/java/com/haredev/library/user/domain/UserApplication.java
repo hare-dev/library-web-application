@@ -35,15 +35,8 @@ class UserApplication extends BaseEntity {
         this.username = username;
     }
 
-    public UserApplication activateAccount() {
-        return UserApplication.builder()
-                .id(id)
-                .username(username)
-                .email(email)
-                .password(password)
-                .accountStatus(AccountStatus.ACTIVATED)
-                .authorities(authorities)
-                .build();
+    void activateAccount() {
+        this.accountStatus = AccountStatus.ACTIVATED;
     }
 
     void promoteToAdmin() {

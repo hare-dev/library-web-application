@@ -51,7 +51,7 @@ class VerificationRegistration {
     private Either<UserError, UserDetailsDto> activateAccount(final Long userId) {
         return userManager.findUserById(userId).
                 toEither(USER_NOT_FOUND)
-                .map(UserApplication::activateAccount)
+                .peek(UserApplication::activateAccount)
                 .map(userManager::saveUser)
                 .map(userMapper::toUserDetailsDto);
     }
