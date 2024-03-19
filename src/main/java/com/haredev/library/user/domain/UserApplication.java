@@ -31,15 +31,8 @@ class UserApplication extends BaseEntity {
     @Convert(converter = AuthoritiesToStringConverter.class)
     private Set<Authority> authorities;
 
-    UserApplication changeUsername(String username) {
-        return UserApplication.builder()
-                .id(id)
-                .username(username)
-                .email(email)
-                .password(password)
-                .accountStatus(accountStatus)
-                .authorities(authorities)
-                .build();
+    void changeUsername(String username) {
+        this.username = username;
     }
 
     public UserApplication activateAccount() {

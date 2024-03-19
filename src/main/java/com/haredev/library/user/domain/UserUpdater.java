@@ -16,7 +16,7 @@ class UserUpdater {
     public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String newUsername) {
         return userManager.findUserById(userId)
                 .toEither(USER_NOT_FOUND)
-                .map(user -> user.changeUsername(newUsername))
+                .peek(user -> user.changeUsername(newUsername))
                 .map(userManager::saveUser)
                 .map(userMapper::toUserDetailsDto);
     }
