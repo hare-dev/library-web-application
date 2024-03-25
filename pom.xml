@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
+			<version>1.18.32</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -119,15 +119,14 @@
 			<version>1.5.0</version>
 		</dependency>
 	</dependencies>
+
 	<dependencyManagement>
 		<dependencies>
-
 			<dependency>
 				<groupId>org.yaml</groupId>
 				<artifactId>snakeyaml</artifactId>
 				<version>2.2</version>
 			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
 
@@ -146,6 +145,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M7</version>
@@ -218,26 +218,31 @@
 					</excludes>
 				</configuration>
 			</plugin>
-
 		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 
 	<profiles>
 		<profile>
-			<id>dev</id>
+			<id>development</id>
 			<properties>
-				<activatedProperties>dev</activatedProperties>
+				<activatedProperties>development</activatedProperties>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 		</profile>
 		<profile>
-			<id>prod</id>
+			<id>production</id>
 			<properties>
-				<activatedProperties>prod</activatedProperties>
+				<activatedProperties>production</activatedProperties>
 			</properties>
 		</profile>
 	</profiles>
-
 </project>
