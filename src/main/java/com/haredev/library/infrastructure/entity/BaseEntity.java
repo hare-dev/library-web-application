@@ -13,7 +13,7 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
-    @Column(columnDefinition = "BINARY(16)", updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false)
     private final UUID uuid = UUID.randomUUID();
 
     @Version

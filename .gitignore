@@ -48,3 +48,7 @@ buildNumber.properties
 ### Secrets Properties ###
 
 secrets.properties
+
+### Environment credentials ###
+
+.env

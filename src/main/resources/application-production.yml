@@ -6,10 +6,11 @@ server:
     # JPA/Hibernate/PostgreSQL Configuration
 
 spring:
+    datasource:
+        url: ${POSTGRES_URL}
     show-sql: true
     generate-ddl: true
     hibernate:
         ddl-auto: create-drop
     properties:
         hibernate:format_sql: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
