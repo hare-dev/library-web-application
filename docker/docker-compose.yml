@@ -1,44 +1,47 @@
 version: "3.8"
 services:
-  backend-spring-boot:
-    build:
-      context: ..
-    container_name: library-spring-boot
-    image: haredev/library-web-application:latest
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://database-postgres:5555/postgres
-      - SPRING_DATASOURCE_USERNAME=admin
-      - SPRING_DATASOURCE_PASSWORD=admin
-      - SPRING_PROFILES_ACTIVE=prod
-    ports:
-      - "9090:9090"
-    command: --spring.profiles.active=prod
-    networks:
-      - spring-boot-postgres
-    depends_on:
-      database-postgres:
-        condition: service_healthy
-    restart: on-failure
 
-  database-postgres:
-    image: postgres:14.5
-    container_name: library-postgresql
+  database:
+    image: postgres:16
+    restart: always
+    ports:
+      - "5432:5432"
+    container_name: library-database
     networks:
       - spring-boot-postgres
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_DATABASE=postgres
+      - POSTGRES_DB=library
     volumes:
       - database-data:/var/lib/postgresql
-    ports:
-      - "5555:5555"
-    restart: always
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  application:
+    image: haredev/library-web-application:latest
+    build:
+      context: docker
+    container_name: library-application
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: on-failure
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/library
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+    ports:
+      - "9090:9090"
+    networks:
+      - spring-boot-postgres
 
 networks:
   spring-boot-postgres:

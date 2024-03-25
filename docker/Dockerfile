@@ -1,12 +1,5 @@
-# Maven Build
-
-FROM maven:3.8.1-openjdk-17 AS builder
-COPY ../pom.xml /app/
-COPY ../src /app/src
-RUN --mount=type=cache,target=/root/.m2 mvn -f /app/pom.xml clean package
-
-# Run
-FROM openjdk:17
-COPY --from=builder /app/target/library-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 9090
-ENTRYPOINT ["java", "-jar", "app.jar"]
+FROM amazoncorretto:17
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} library-web-application.jar
+CMD apt-get update -y
+ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/library-web-application.jar"]
