@@ -2,7 +2,7 @@ version: "3.8"
 services:
   backend-spring-boot:
     build:
-      context: .
+      context: ..
     container_name: library-spring-boot
     image: haredev/library-web-application:latest
     environment:
