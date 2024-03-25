@@ -26,11 +26,3 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  
-  # Swagger UI
-
-springdoc:
-  swagger-ui.path: swagger-ui.html
-  packagesToScan: com.haredev.library
-  swagger-ui:
-    enabled: true

@@ -4,7 +4,7 @@
 
 spring:
   profiles:
-      active: dev
+      active: prod
   config:
     import: optional:secrets.properties
 
@@ -31,3 +31,11 @@ logging:
 
 token:
   secretKey: ${TOKEN_SECRET_KEY}
+
+  # Swagger UI
+
+springdoc:
+  swagger-ui.path: swagger-ui.html
+  packagesToScan: com.haredev.library
+  swagger-ui:
+    enabled: true
