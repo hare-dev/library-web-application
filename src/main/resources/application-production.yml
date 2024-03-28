@@ -8,6 +8,9 @@ server:
 spring:
     datasource:
         url: ${POSTGRES_URL}
+        username: ${POSTGRES_USERNAME}
+        password: ${POSTGRES_PASSWORD}
+        driver-class-name: org.postgresql.Driver
     show-sql: true
     generate-ddl: true
     hibernate:
