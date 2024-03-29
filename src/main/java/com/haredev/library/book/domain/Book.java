@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Table(name = "books")
 class Book extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookId_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String author;

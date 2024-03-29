@@ -20,7 +20,7 @@ import java.time.Instant;
 @Table(name = "comments")
 class Comment extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commentId_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long bookId;
     private String description;
