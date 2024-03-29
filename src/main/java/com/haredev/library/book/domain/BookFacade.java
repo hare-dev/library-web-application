@@ -18,19 +18,20 @@ import static com.haredev.library.book.domain.api.error.BookError.COMMENT_NOT_FO
 @RequiredArgsConstructor
 public class BookFacade {
     private final BookManager bookManager;
+    private final BookMapper bookMapper;
 
     public Either<BookError, BookCreateDto> addBook(final BookCreateDto request) {
-        return bookManager.addBook(request).map(Book::toBookCreateResponse);
+        return bookManager.addBook(request).map(bookMapper::toBookCreateResponse);
     }
 
     public Either<BookError, BookCreateDto> findBookById(final Long bookId) {
-        return bookManager.findBookById(bookId).map(Book::toBookCreateResponse).toEither(BOOK_NOT_FOUND);
+        return bookManager.findBookById(bookId).map(bookMapper::toBookCreateResponse).toEither(BOOK_NOT_FOUND);
     }
 
     public List<BookCreateDto> fetchAllBooks(final int page) {
         return bookManager.fetchAllBooksWithPageable(page)
                 .stream()
-                .map(Book::toBookCreateResponse)
+                .map(bookMapper::toBookCreateResponse)
                 .collect(Collectors.toList());
     }
 

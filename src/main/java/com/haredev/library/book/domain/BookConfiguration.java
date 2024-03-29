@@ -13,10 +13,12 @@ class BookConfiguration {
 
     @Bean
     BookFacade bookFacade(final BookRepository bookRepository, final CommentRepository commentRepository) {
-        BookCreator bookCreator = new BookCreator();
-        CommentCreator commentCreator = new CommentCreator();
-        BookManager bookManager = new BookManager(bookRepository, commentRepository, bookCreator, commentCreator);
-        return new BookFacade(bookManager);
+        final BookCreator bookCreator = new BookCreator();
+        final CommentCreator commentCreator = new CommentCreator();
+        final BookMapper bookMapper = new BookMapper();
+        final BookManager bookManager = new BookManager(bookRepository, commentRepository,
+                bookCreator, commentCreator, bookMapper);
+        return new BookFacade(bookManager, bookMapper);
     }
 
     @Bean

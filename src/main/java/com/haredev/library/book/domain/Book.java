@@ -75,21 +75,4 @@ class Book extends BaseEntity {
                 .comments(this.comments)
                 .build();
     }
-
-    BookCreateDto toBookCreateResponse() {
-        return BookCreateDto.builder()
-                .id(id)
-                .title(title)
-                .author(author)
-                .isbn(isbn)
-                .publisher(publisher)
-                .yearPublication(yearPublication)
-                .pageNumber(pageNumber)
-                .language(language)
-                .bookCategory(bookCategory)
-                .bookCover(bookCover)
-                .bookStatus(bookStatus)
-                .description(description)
-                .build();
-    }
 }

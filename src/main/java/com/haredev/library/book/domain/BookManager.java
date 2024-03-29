@@ -23,6 +23,7 @@ class BookManager {
     private final CommentRepository commentRepository;
     private final BookCreator bookCreator;
     private final CommentCreator commentCreator;
+    private final BookMapper bookMapper;
     private static final int pageSize = 20;
 
     public Either<BookError, Book> addBook(final BookCreateDto request) {
@@ -82,7 +83,8 @@ class BookManager {
         return findBookById(bookId)
                 .toEither(BOOK_NOT_FOUND)
                 .map(book -> book.toUpdate(request))
-                .map(book -> bookRepository.save(book).toBookCreateResponse());
+                .map(bookRepository::save)
+                .map(bookMapper::toBookCreateResponse);
     }
 
     public Either<BookError, CommentDto> updateCommentById(final Long commentId, final CommentUpdateDto request) {
