@@ -12,7 +12,6 @@ import static io.vavr.control.Either.right;
 
 @RequiredArgsConstructor
 class UserRegistration {
-
     private final UserFactory userFactory;
     private final UserManager userManager;
     private final UserMapper userMapper;

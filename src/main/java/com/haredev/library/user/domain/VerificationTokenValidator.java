@@ -10,7 +10,6 @@ import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 class VerificationTokenValidator {
-
     public final Either<UserError, VerificationToken> isConfirmedOrExpired(final VerificationToken verificationToken) {
         final var currentTime = Time.instance().now();
         if (verificationToken.getExpiredAt().isBefore(currentTime)) {

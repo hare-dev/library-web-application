@@ -8,11 +8,10 @@ import java.util.List;
 
 @RequiredArgsConstructor
 class UserManager {
-
     private final UserRepository userRepository;
     private static final int pageSize = 20;
 
-    public UserApplication saveUser(UserApplication userApplication) {
+    public UserApplication saveUser(final UserApplication userApplication) {
         return userRepository.save(userApplication);
     }
 

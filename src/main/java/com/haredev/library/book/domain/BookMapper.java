@@ -3,7 +3,7 @@ package com.haredev.library.book.domain;
 import com.haredev.library.book.domain.dto.BookCreateDto;
 
 class BookMapper {
-    BookCreateDto toBookCreateResponse(Book book) {
+    BookCreateDto toBookCreateResponse(final Book book) {
         return BookCreateDto.builder()
                 .id(book.getId())
                 .title(book.getTitle())

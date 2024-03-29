@@ -18,9 +18,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Getter
+@Table(name = "users")
 class UserApplication extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userId_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String email;

@@ -12,7 +12,6 @@ import static io.vavr.control.Either.left;
 
 @RequiredArgsConstructor
 class UserPromoter {
-
     private final UserManager userManager;
     private final UserMapper userMapper;
 

@@ -9,7 +9,6 @@ import static com.haredev.library.user.domain.api.error.UserError.USER_NOT_FOUND
 
 @RequiredArgsConstructor
 class UserUpdater {
-
     private final UserManager userManager;
     private final UserMapper userMapper;
 

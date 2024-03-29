@@ -12,7 +12,6 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 class UserFactory {
-
     private final PasswordEncoder passwordEncoder;
 
     public final UserApplication buildUser(final RegistrationRequest request) {

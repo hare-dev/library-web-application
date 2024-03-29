@@ -14,6 +14,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "verification_tokens")
 class VerificationToken {
     @Id
     private Long id;

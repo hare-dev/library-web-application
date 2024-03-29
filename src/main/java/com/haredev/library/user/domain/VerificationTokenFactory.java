@@ -6,7 +6,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 class VerificationTokenFactory {
-
     public final VerificationToken buildToken(final UserApplication userApplication) {
         var expiredAt = Time.instance().now().plus(1, ChronoUnit.DAYS);
         var now = Time.instance().now();

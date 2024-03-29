@@ -12,7 +12,6 @@ import static com.haredev.library.user.domain.api.error.UserError.VERIFICATION_T
 
 @RequiredArgsConstructor
 class VerificationRegistration {
-
     private final UserManager userManager;
     private final UserMapper userMapper;
     private final VerificationTokenFactory verificationTokenFactory;

@@ -16,7 +16,6 @@ import static com.haredev.library.user.domain.api.error.UserError.*;
 
 @RequiredArgsConstructor
 public class UserFacade {
-
     private final UserPromoter userPromoter;
     private final UserUpdater userUpdater;
     private final UserRegistration userRegistration;

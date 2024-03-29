@@ -5,7 +5,6 @@ import com.haredev.library.user.domain.dto.UserDetailsDto;
 import com.haredev.library.user.domain.dto.UserLoginDto;
 
 class UserMapper {
-
     RegistrationResponse toRegistrationResponse(final UserApplication userApplication) {
         return RegistrationResponse.builder()
                 .id(userApplication.getId())

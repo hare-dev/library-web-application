@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 class UserConfiguration {
-
     UserFacade userFacade() {
         return userFacade(new InMemoryUserRepository(), new InMemoryVerificationTokenRepository());
     }
