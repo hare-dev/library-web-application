@@ -16,9 +16,10 @@ class BookConfiguration {
         final BookCreator bookCreator = new BookCreator();
         final CommentCreator commentCreator = new CommentCreator();
         final BookMapper bookMapper = new BookMapper();
+        final CommentMapper commentMapper = new CommentMapper();
         final BookManager bookManager = new BookManager(bookRepository, commentRepository,
-                bookCreator, commentCreator, bookMapper);
-        return new BookFacade(bookManager, bookMapper);
+                bookCreator, commentCreator, bookMapper, commentMapper);
+        return new BookFacade(bookManager, bookMapper, commentMapper);
     }
 
     @Bean

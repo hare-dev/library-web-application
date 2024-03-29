@@ -11,7 +11,7 @@ class InMemoryCommentRepository implements CommentRepository {
     @Override
     public Comment save(final Comment comment) {
         requireNonNull(comment);
-        inMemoryComment.put(comment.toCommentCreateResponse().commentId(), comment);
+        inMemoryComment.put(comment.getId(), comment);
         return comment;
     }
 

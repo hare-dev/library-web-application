@@ -19,6 +19,7 @@ import static com.haredev.library.book.domain.api.error.BookError.COMMENT_NOT_FO
 public class BookFacade {
     private final BookManager bookManager;
     private final BookMapper bookMapper;
+    private final CommentMapper commentMapper;
 
     public Either<BookError, BookCreateDto> addBook(final BookCreateDto request) {
         return bookManager.addBook(request).map(bookMapper::toBookCreateResponse);
@@ -44,13 +45,13 @@ public class BookFacade {
     }
 
     public Either<BookError, CommentDto> findCommentById(final Long commentId) {
-        return bookManager.findCommentById(commentId).map(Comment::toDto).toEither(COMMENT_NOT_FOUND);
+        return bookManager.findCommentById(commentId).map(commentMapper::toDto).toEither(COMMENT_NOT_FOUND);
     }
 
     public Either<BookError, List<CommentDto>> getBookByIdWithComments(final Long bookId) {
         return bookManager.findBookById(bookId)
                 .toEither(BOOK_NOT_FOUND)
-                .map(Book::getAllComments);
+                .map(book -> book.comments.stream().map(commentMapper::toDto).toList());
     }
 
     public void removeCommentById(final Long commentId) {

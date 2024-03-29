@@ -54,10 +54,6 @@ class Book extends BaseEntity {
         comments.add(comment);
     }
 
-    public List<CommentDto> getAllComments() {
-        return comments.stream().map(Comment::toDto).collect(Collectors.toList());
-    }
-
     Book toUpdate(final BookUpdateDto data) {
         return Book.builder()
                 .id(this.id)

@@ -36,20 +36,4 @@ class Comment extends BaseEntity {
                 .updatedAt(toUpdate.updatedAt())
                 .build();
     }
-
-    CommentCreateDto toCommentCreateResponse() {
-        return CommentCreateDto.builder()
-                .commentId(id)
-                .description(description)
-                .createdAt(createdAt)
-                .build();
-    }
-
-    CommentDto toDto() {
-        return CommentDto.builder()
-                .description(description)
-                .createdAt(createdAt)
-                .updatedAt(updatedAt)
-                .build();
-    }
 }
