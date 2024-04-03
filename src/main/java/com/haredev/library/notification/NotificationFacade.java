@@ -1,6 +1,5 @@
 package com.haredev.library.notification;
 
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.mail.SimpleMailMessage;

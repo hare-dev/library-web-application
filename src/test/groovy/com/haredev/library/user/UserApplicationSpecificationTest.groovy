@@ -1,6 +1,7 @@
 package com.haredev.library.user
 
 import com.haredev.library.TimeManager
+import com.haredev.library.notification.NotificationTestConfiguration
 import com.haredev.library.user.domain.api.Authority
 import com.haredev.library.user.domain.api.error.UserError
 import pl.amazingcode.timeflow.TestTime

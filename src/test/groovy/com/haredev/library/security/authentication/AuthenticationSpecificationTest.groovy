@@ -1,5 +1,6 @@
 package com.haredev.library.security.authentication
 
+
 import com.haredev.library.security.samples.LoginCredentialsSample
 import com.haredev.library.user.UserApplicationTestConfiguration
 import spock.lang.Specification
@@ -9,7 +10,7 @@ import static com.haredev.library.user.samples.SampleUsers.createUserSample
 
 final class AuthenticationSpecificationTest extends Specification {
     final def userFacade = UserApplicationTestConfiguration.getConfiguration()
-    final def authenticationFacade = AuthenticationTestConfiguration.getConfiguration(userFacade)
+    final def authenticationFacade = AuthenticationTestConfiguration.getConfiguration()
 
     def "Should sign in user"() {
         when: "Register user"
