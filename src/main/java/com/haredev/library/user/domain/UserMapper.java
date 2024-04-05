@@ -1,21 +1,23 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.user.controller.output.RegistrationResponse;
-import com.haredev.library.user.domain.dto.UserDetailsDto;
+import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
 import com.haredev.library.user.domain.dto.UserLoginDto;
 
 class UserMapper {
-    RegistrationResponse toRegistrationResponse(final UserApplication userApplication) {
+    RegistrationResponse toRegistrationResponse(final UserApplication userApplication,
+                                                final String verificationToken) {
         return RegistrationResponse.builder()
                 .id(userApplication.getId())
                 .username(userApplication.getUsername())
                 .email(userApplication.getEmail())
                 .accountStatus(userApplication.getAccountStatus())
+                .verificationToken(verificationToken)
                 .build();
     }
 
-    UserDetailsDto toUserDetailsDto(final UserApplication userApplication) {
-        return UserDetailsDto.builder()
+    UserPublicDetailsDto toUserDetailsDto(final UserApplication userApplication) {
+        return UserPublicDetailsDto.builder()
                 .id(userApplication.getId())
                 .username(userApplication.getUsername())
                 .accountStatus(userApplication.getAccountStatus())

@@ -1,7 +1,7 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.user.domain.api.error.UserError;
-import com.haredev.library.user.domain.dto.UserDetailsDto;
+import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +12,7 @@ class UserUpdater {
     private final UserManager userManager;
     private final UserMapper userMapper;
 
-    public Either<UserError, UserDetailsDto> changeUsername(final Long userId, final String newUsername) {
+    public Either<UserError, UserPublicDetailsDto> changeUsername(final Long userId, final String newUsername) {
         return userManager.findUserById(userId)
                 .toEither(USER_NOT_FOUND)
                 .peek(user -> user.changeUsername(newUsername))

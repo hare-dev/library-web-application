@@ -1,9 +1,9 @@
 package com.haredev.library.user
 
 import com.haredev.library.TimeManager
-import com.haredev.library.notification.NotificationTestConfiguration
+import com.haredev.library.notification.NotificationFacade
+import com.haredev.library.user.domain.api.AccountStatus
 import com.haredev.library.user.domain.api.Authority
-import com.haredev.library.user.domain.api.error.UserError
 import pl.amazingcode.timeflow.TestTime
 import spock.lang.Specification
 
@@ -14,7 +14,8 @@ import static com.haredev.library.user.domain.api.error.UserError.*
 import static com.haredev.library.user.samples.SampleUsers.*
 
 class UserApplicationSpecificationTest extends Specification {
-    final def userFacade = UserApplicationTestConfiguration.getConfiguration()
+    final def notificationFacade = Mock(NotificationFacade);
+    final def userFacade = UserApplicationTestConfiguration.getConfiguration(notificationFacade)
 
     def setup() {
         TimeManager.setClock()
@@ -40,44 +41,10 @@ class UserApplicationSpecificationTest extends Specification {
         EXPECTED_USERNAME == USERNAME
     }
 
-    def "Should register one admin"() {
-        given: "Add user as admin to system"
-        def USERNAME = userFacade.registerAsAdmin(ADMIN).get().username()
-
-        when: "Find user by username"
-        def EXPECTED_USERNAME = userFacade.findByUsername(ADMIN.username()).get().username()
-
-        then: "Compare registered user with founded user"
-        EXPECTED_USERNAME == USERNAME
-    }
-
-    def "Should register user and admin"() {
-        given: "Add user and admin to system"
-        userFacade.registerAsUser(USER)
-        userFacade.registerAsAdmin(ADMIN)
-
-        when: "Find user and admin by username"
-        def EXPECTED_USERNAME_USER = userFacade.findByUsername(USER.username()).get().username()
-        def EXPECTED_USERNAME_ADMIN = userFacade.findByUsername(ADMIN.username()).get().username()
-
-        then: "Compare registered user with founded user"
-        EXPECTED_USERNAME_USER == USER.username()
-        EXPECTED_USERNAME_ADMIN == ADMIN.username()
-    }
-
     def "Should not register user because username is duplicated"() {
         when: "Add users with the same username to system"
         userFacade.registerAsUser(USER)
         def RESPONSE_ERROR = userFacade.registerAsUser(USER).getLeft()
-
-        then: "Return error because username is duplicated"
-        RESPONSE_ERROR == DUPLICATED_USERNAME
-    }
-
-    def "Should not register admin because username is duplicated"() {
-        when: "Add admin with the same username to system"
-        userFacade.registerAsAdmin(ADMIN)
-        UserError RESPONSE_ERROR = userFacade.registerAsAdmin(ADMIN).getLeft()
 
         then: "Return error because username is duplicated"
         RESPONSE_ERROR == DUPLICATED_USERNAME
@@ -94,7 +61,7 @@ class UserApplicationSpecificationTest extends Specification {
         EXPECTED_USERNAME == USER.username()
     }
 
-    def "Should not find user by id and return error"() {
+    def "Should not find user by id"() {
         when: "Try to find user with not exist id"
         def ERROR_RESPONSE = userFacade.findUserById(notExistUserWithThisId).getLeft()
 
@@ -105,13 +72,12 @@ class UserApplicationSpecificationTest extends Specification {
     def "Should return list with users"() {
         given: "Add two users"
         userFacade.registerAsUser(USER)
-        userFacade.registerAsAdmin(ADMIN)
 
         when: "Return list with users"
         def EXPECTED_SIZE = userFacade.fetchAllUsers(page).size()
 
         then: "Compare expected size with list size"
-        EXPECTED_SIZE == 2
+        EXPECTED_SIZE == 1
     }
 
     def "Should remove one user"() {
@@ -120,19 +86,6 @@ class UserApplicationSpecificationTest extends Specification {
 
         when: "Remove one user"
         userFacade.removeUserById(USER.userId())
-
-        then: "No user in system"
-        userFacade.fetchAllUsers(page).isEmpty()
-    }
-
-    def "Should remove user and admin"() {
-        given: "Add one user and one admin"
-        userFacade.registerAsUser(USER)
-        userFacade.registerAsAdmin(ADMIN)
-
-        when: "Remove user and admin"
-        userFacade.removeUserById(USER.userId())
-        userFacade.removeUserById(ADMIN.userId())
 
         then: "No user in system"
         userFacade.fetchAllUsers(page).isEmpty()
@@ -151,10 +104,11 @@ class UserApplicationSpecificationTest extends Specification {
 
     def "Should not promote user to be admin with admin authority"() {
         given: "Add one user"
-        userFacade.registerAsAdmin(ADMIN)
+        def userId = userFacade.registerAsUser(USER).get().id()
 
         when: "Promote user with admin authority to be admin"
-        def RESPONSE_ERROR = userFacade.promoteToAdmin(ADMIN.userId()).getLeft()
+        userFacade.promoteToAdmin(userId)
+        def RESPONSE_ERROR = userFacade.promoteToAdmin(userId).getLeft()
 
         then: "User is already admin response error"
         RESPONSE_ERROR == USER_IS_ALREADY_ADMIN
@@ -189,33 +143,26 @@ class UserApplicationSpecificationTest extends Specification {
         RESPONSE_ERROR == USER_NOT_FOUND
     }
 
-    def "Should create verification token for user and confirm registration"() {
+    def "Should register one user and confirm registration"() {
         given: "Register user"
-        def USER_ID = userFacade.registerAsUser(USER).get().id()
+        def REGISTRATION_RESPONSE = userFacade.registerAsUser(USER).get()
+        def VERIFICATION_TOKEN = REGISTRATION_RESPONSE.verificationToken()
+        def USER_ID = REGISTRATION_RESPONSE.id()
 
         when: "Create verification token for user and confirm registration"
-        def TOKEN = userFacade.createConfirmationToken(USER_ID).get().token()
-        def EXPECTED_ACTIVATION_STATUS = userFacade.confirmRegistration(TOKEN, USER_ID).get().accountStatus()
-        def USER_ACTIVATION_STATUS = userFacade.findUserById(USER_ID).get().accountStatus()
+        def EXPECTED_ACTIVATION_STATUS = userFacade.confirmRegistration(VERIFICATION_TOKEN).get().accountStatus()
+        def USER_ACTIVATION_STATUS = AccountStatus.ACTIVATED
 
         then: "User is activated"
         EXPECTED_ACTIVATION_STATUS == USER_ACTIVATION_STATUS
     }
 
-    def "Should not build verification token for not exist user"() {
-        when: "Try to build verification token for not exist user"
-        def RESPONSE_ERROR = userFacade.createConfirmationToken(notExistUserWithThisId).getLeft()
-
-        then: "Return user not found"
-        RESPONSE_ERROR == USER_NOT_FOUND
-    }
-
     def "Should not confirm registration with not exist token"() {
         given: "Register user"
-        def USER_ID = userFacade.registerAsUser(USER).get().id()
+        userFacade.registerAsUser(USER)
 
         when: "Create verification token and try to confirm registration with not exist token"
-        def RESPONSE_ERROR = userFacade.confirmRegistration(notExistToken, USER_ID).getLeft()
+        def RESPONSE_ERROR = userFacade.confirmRegistration(notExistToken).getLeft()
 
         then: "Return verification token not found"
         RESPONSE_ERROR == VERIFICATION_TOKEN_NOT_FOUND
@@ -223,12 +170,12 @@ class UserApplicationSpecificationTest extends Specification {
 
     def "Should not confirm registration for user which is already activated"() {
         given: "Register user"
-        def USER_ID = userFacade.registerAsUser(USER).get().id()
+        def REGISTRATION_RESPONSE = userFacade.registerAsUser(USER).get()
+        def VERIFICATION_TOKEN = REGISTRATION_RESPONSE.verificationToken()
 
         when: "Create verification token which is already confirmed"
-        def TOKEN = userFacade.createConfirmationToken(USER_ID).get().token()
-        userFacade.confirmRegistration(TOKEN, USER_ID)
-        def RESPONSE_ERROR = userFacade.confirmRegistration(TOKEN, USER_ID).getLeft()
+        userFacade.confirmRegistration(VERIFICATION_TOKEN)
+        def RESPONSE_ERROR = userFacade.confirmRegistration(VERIFICATION_TOKEN).getLeft()
 
         then: "Return verification token not found"
         RESPONSE_ERROR == VERIFICATION_TOKEN_IS_ALREADY_CONFIRMED
@@ -236,12 +183,12 @@ class UserApplicationSpecificationTest extends Specification {
 
     def "Should not confirm user registration with expired verification token"() {
         given: "Register user"
-        def USER_ID = userFacade.registerAsUser(USER).get().id()
+        def REGISTRATION_RESPONSE = userFacade.registerAsUser(USER).get()
+        def VERIFICATION_TOKEN = REGISTRATION_RESPONSE.verificationToken()
 
         when: "Create verification token and try to confirm registration with expired token"
-        def TOKEN = userFacade.createConfirmationToken(USER_ID).get().token()
-        jumpInDaysForward(3)
-        def RESPONSE_ERROR = userFacade.confirmRegistration(TOKEN, USER_ID).getLeft()
+        jumpInDaysForward(5)
+        def RESPONSE_ERROR = userFacade.confirmRegistration(VERIFICATION_TOKEN).getLeft()
 
         then: "Return verification token is expired"
         RESPONSE_ERROR == VERIFICATION_TOKEN_IS_EXPIRED
@@ -249,7 +196,6 @@ class UserApplicationSpecificationTest extends Specification {
 
     static final int page = 20
     def final USER = createUserSample(0L, "user", "a12345678Z!@", "user_example@gmail.com")
-    def final ADMIN = createUserSample(1L, "admin", "a12345678Z!@", "admin_example@gmail.com")
 
     private static final void jumpInDaysForward(final Integer days) {
         final Duration duration = Duration.of(days, ChronoUnit.DAYS)

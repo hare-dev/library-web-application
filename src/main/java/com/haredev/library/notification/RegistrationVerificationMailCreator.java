@@ -2,14 +2,14 @@ package com.haredev.library.notification;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 
 @RequiredArgsConstructor
 class RegistrationVerificationMailCreator {
-    private final Environment environment;
     @Value("${spring.mail.username}")
-    private final String sender;
+    private final String emailSender;
+    @Value("${server.port}")
+    private final int applicationPort;
 
     public SimpleMailMessage createVerificationMail(final String name,
                                                     final String receiver,
@@ -17,7 +17,7 @@ class RegistrationVerificationMailCreator {
         try {
             final SimpleMailMessage message = new SimpleMailMessage();
             message.setText(buildMessage(name, token));
-            message.setFrom(sender);
+            message.setFrom(emailSender);
             message.setTo(receiver);
             message.setSubject("Account Registration Verification");
             return message;
@@ -28,8 +28,7 @@ class RegistrationVerificationMailCreator {
     }
 
     private String buildMessage(final String name, final String token) {
-        final String port = environment.getProperty("server.port");
-        final String applicationHost = "http://localhost:" + port;
+        final String applicationHost = "http://localhost:" + applicationPort;
         return "Hello " + name +
                 ",\n\nYour new account has been created. Please click the link below to verify your account. \n\n" +
                 getVerificationUrl(applicationHost, token) +

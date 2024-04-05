@@ -1,5 +1,6 @@
 package com.haredev.library.user.domain;
 
+import com.haredev.library.notification.NotificationFacade;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -7,29 +8,36 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 class UserConfiguration {
-    UserFacade userFacade() {
-        return userFacade(new InMemoryUserRepository(), new InMemoryVerificationTokenRepository());
+    UserFacade userFacade(final NotificationFacade notificationFacade) {
+        final VerificationTokenRepository verificationTokenRepository = new InMemoryVerificationTokenRepository();
+        final UserRepository userRepository = new InMemoryUserRepository();
+        return userFacade(userRepository, verificationTokenRepository, notificationFacade);
     }
 
     @Bean
-    UserFacade userFacade(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository) {
+    UserFacade userFacade(final UserRepository userRepository,
+                          final VerificationTokenRepository verificationTokenRepository,
+                          final NotificationFacade notificationFacade) {
         final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         final UserFactory userFactory = new UserFactory(passwordEncoder);
         final UserManager userManager = new UserManager(userRepository);
         final UserMapper userMapper = new UserMapper();
-        final VerificationTokenFactory verificationTokenFactory = new VerificationTokenFactory();
-        final VerificationTokenValidator verificationTokenValidator = new VerificationTokenValidator();
-        final VerificationTokenMapper verificationTokenMapper = new VerificationTokenMapper();
         final UserPromoter userPromoter = new UserPromoter(userManager, userMapper);
         final UserUpdater userUpdater = new UserUpdater(userManager, userMapper);
-        final UserRegistration userRegistration = new UserRegistration(userFactory, userManager, userMapper);
+        final VerificationTokenFactory verificationTokenFactory = new VerificationTokenFactory();
+        final VerificationTokenValidator verificationTokenValidator = new VerificationTokenValidator();
         final VerificationRegistration verificationRegistration = new VerificationRegistration(
-                userManager,
                 userMapper,
+                userManager,
                 verificationTokenFactory,
-                verificationTokenRepository,
                 verificationTokenValidator,
-                verificationTokenMapper);
-        return new UserFacade(userPromoter, userUpdater, userRegistration, verificationRegistration, userManager, userMapper);
+                verificationTokenRepository);
+        final UserRegistration userRegistration = new UserRegistration(
+                userMapper,
+                userManager,
+                userFactory,
+                verificationRegistration,
+                notificationFacade);
+        return new UserFacade(userMapper, userManager, userUpdater, userPromoter, userRegistration, verificationRegistration);
     }
 }

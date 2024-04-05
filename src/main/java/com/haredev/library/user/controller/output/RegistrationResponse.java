@@ -8,5 +8,6 @@ public record RegistrationResponse(
     Long id,
     String username,
     String email,
-    AccountStatus accountStatus
+    AccountStatus accountStatus,
+    String verificationToken
 ) { }

@@ -22,6 +22,7 @@ class VerificationToken {
     private Instant createdAt;
     private Instant expiredAt;
     private Instant confirmedAt;
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private UserApplication userApplication;

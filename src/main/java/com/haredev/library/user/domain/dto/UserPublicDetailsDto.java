@@ -7,7 +7,7 @@ import lombok.Builder;
 import java.util.Set;
 
 @Builder
-public record UserDetailsDto(
+public record UserPublicDetailsDto(
         Long id,
         String username,
         Set<Authority> authorities,

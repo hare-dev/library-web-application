@@ -1,7 +1,5 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.domain.dto.CommentCreateDto;
-import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.book.domain.dto.update.CommentUpdateDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import jakarta.persistence.*;

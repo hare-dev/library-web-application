@@ -2,10 +2,9 @@ package com.haredev.library.user.controller;
 
 import com.haredev.library.infrastructure.errors.ResponseResolver;
 import com.haredev.library.user.controller.input.RegistrationRequest;
-import com.haredev.library.user.controller.output.VerificationTokenResponse;
 import com.haredev.library.user.domain.UserFacade;
 import com.haredev.library.user.domain.api.error.UserError;
-import com.haredev.library.user.domain.dto.UserDetailsDto;
+import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
 import io.vavr.control.Either;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,21 +23,16 @@ class UserController {
         return ResponseResolver.resolve(userFacade.registerAsUser(request));
     }
 
-    @PostMapping("/registration/admin")
-    public ResponseEntity<?> registerAsAdmin(@RequestBody @Valid final RegistrationRequest request) {
-        return ResponseResolver.resolve(userFacade.registerAsAdmin(request));
-    }
-
     @GetMapping("/users")
     ResponseEntity<?> fetchAllUsers(@RequestParam(required = false) final Integer page) {
         int pageNumber = page != null && page >= 0 ? page : 0;
-        List<UserDetailsDto> response = userFacade.fetchAllUsers(pageNumber);
+        List<UserPublicDetailsDto> response = userFacade.fetchAllUsers(pageNumber);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/users/{id}")
     ResponseEntity<?> findUserById(@PathVariable final Long id) {
-        Either<UserError, UserDetailsDto> response = userFacade.findUserById(id);
+        Either<UserError, UserPublicDetailsDto> response = userFacade.findUserById(id);
         return ResponseResolver.resolve(response);
     }
 
@@ -50,25 +44,19 @@ class UserController {
 
     @PutMapping("/users/promote/{id}")
     ResponseEntity<?> promoteToAdmin(@PathVariable final Long id) {
-        Either<UserError, UserDetailsDto> response = userFacade.promoteToAdmin(id);
+        Either<UserError, UserPublicDetailsDto> response = userFacade.promoteToAdmin(id);
         return ResponseResolver.resolve(response);
     }
 
     @PutMapping("/users/{id}")
     ResponseEntity<?> changeUsername(@PathVariable final Long id, @RequestParam final String newUsername) {
-        Either<UserError, UserDetailsDto> response = userFacade.changeUsername(id, newUsername);
+        Either<UserError, UserPublicDetailsDto> response = userFacade.changeUsername(id, newUsername);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("users/confirmation/{id}")
-    ResponseEntity<?> createConfirmationToken(@PathVariable final Long id) {
-        Either<UserError, VerificationTokenResponse> response = userFacade.createConfirmationToken(id);
-        return ResponseResolver.resolve(response);
-    }
-
-    @PutMapping("users/registration/confirm/{id}")
-    ResponseEntity<?> confirmRegistration(@RequestParam final String token, @PathVariable final Long id) {
-        Either<UserError, UserDetailsDto> response = userFacade.confirmRegistration(token, id);
+    @PutMapping("users/registration/confirmation")
+    ResponseEntity<?> confirmRegistration(@RequestParam final String token) {
+        Either<UserError, UserPublicDetailsDto> response = userFacade.confirmRegistration(token);
         return ResponseResolver.resolve(response);
     }
 }

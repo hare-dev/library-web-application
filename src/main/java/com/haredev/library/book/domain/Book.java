@@ -3,9 +3,7 @@ package com.haredev.library.book.domain;
 import com.haredev.library.book.domain.api.BookCategory;
 import com.haredev.library.book.domain.api.BookCover;
 import com.haredev.library.book.domain.api.BookStatus;
-import com.haredev.library.book.domain.dto.BookCreateDto;
 import com.haredev.library.book.domain.dto.update.BookUpdateDto;
-import com.haredev.library.book.domain.dto.CommentDto;
 import com.haredev.library.infrastructure.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,9 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter

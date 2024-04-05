@@ -7,12 +7,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 
 @RequiredArgsConstructor
-class RegistrationVerificationMailSender implements NotificationMailSender {
+public class NotificationFacade {
     private final RegistrationVerificationMailCreator registrationVerificationMailCreator;
     private final JavaMailSender mailSender;
 
     @SneakyThrows
-    @Override
     @Async
     public void sendRegistrationVerificationMail(final String name,
                                                  final String receiver,

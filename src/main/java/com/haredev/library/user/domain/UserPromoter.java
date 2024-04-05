@@ -1,7 +1,7 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.user.domain.api.error.UserError;
-import com.haredev.library.user.domain.dto.UserDetailsDto;
+import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +15,7 @@ class UserPromoter {
     private final UserManager userManager;
     private final UserMapper userMapper;
 
-    public Either<UserError, UserDetailsDto> promoteToAdmin(final Long userId) {
+    public Either<UserError, UserPublicDetailsDto> promoteToAdmin(final Long userId) {
         return userManager.findUserById(userId)
                 .toEither(USER_NOT_FOUND)
                 .flatMap(this::canPromoteToAdmin)

@@ -1,8 +1,7 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.user.controller.output.VerificationTokenResponse;
 import com.haredev.library.user.domain.api.error.UserError;
-import com.haredev.library.user.domain.dto.UserDetailsDto;
+import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
@@ -12,35 +11,32 @@ import static com.haredev.library.user.domain.api.error.UserError.VERIFICATION_T
 
 @RequiredArgsConstructor
 class VerificationRegistration {
-    private final UserManager userManager;
     private final UserMapper userMapper;
+    private final UserManager userManager;
     private final VerificationTokenFactory verificationTokenFactory;
-    private final VerificationTokenRepository verificationTokenRepository;
     private final VerificationTokenValidator verificationTokenValidator;
-    private final VerificationTokenMapper verificationTokenMapper;
+    private final VerificationTokenRepository verificationTokenRepository;
 
-    public Either<UserError, VerificationTokenResponse> createVerificationToken(final Long userId) {
-        return userManager.findUserById(userId)
-                .toEither(USER_NOT_FOUND)
-                .map(verificationTokenFactory::buildToken)
-                .map(verificationTokenRepository::save)
-                .map(verificationTokenMapper::verificationTokenResponse);
+    public VerificationToken createVerificationToken(final UserApplication userApplication) {
+        var token = verificationTokenFactory.buildToken(userApplication);
+        return verificationTokenRepository.save(token);
     }
 
-    public Either<UserError, UserDetailsDto> confirmVerificationToken(final String token, final Long userId) {
+    public Either<UserError, UserPublicDetailsDto> confirmVerificationToken(final String token) {
         return getVerificationToken(token)
                 .toEither(VERIFICATION_TOKEN_NOT_FOUND)
                 .flatMap(verificationTokenValidator::isConfirmedOrExpired)
                 .peek(VerificationToken::confirmVerificationAt)
                 .map(verificationTokenRepository::save)
-                .flatMap(UserApplication -> activateAccount(userId));
+                .peek(user -> activateAccount(user.getUserApplication().getId()))
+                .map(user -> userMapper.toUserDetailsDto(user.getUserApplication()));
     }
 
     private Option<VerificationToken> getVerificationToken(final String token) {
         return Option.ofOptional(verificationTokenRepository.findByToken(token));
     }
 
-    private Either<UserError, UserDetailsDto> activateAccount(final Long userId) {
+    private Either<UserError, UserPublicDetailsDto> activateAccount(final Long userId) {
         return userManager.findUserById(userId).
                 toEither(USER_NOT_FOUND)
                 .peek(UserApplication::activateAccount)
