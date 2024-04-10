@@ -3,7 +3,7 @@ package com.haredev.library.book.domain;
 import com.haredev.library.book.domain.dto.CommentPublicDetailsDto;
 
 class CommentMapper {
-    CommentPublicDetailsDto toDto(Comment comment) {
+    CommentPublicDetailsDto toDto(final Comment comment) {
         return CommentPublicDetailsDto.builder()
                 .description(comment.getDescription())
                 .createdAt(comment.getCreatedAt())

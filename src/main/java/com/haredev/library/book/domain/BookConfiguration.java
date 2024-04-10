@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class BookConfiguration {
     BookFacade bookFacade() {
-        return bookFacade(new InMemoryBookRepository(), new InMemoryCommentRepository());
+        final BookRepository inMemoryBookRepository = new InMemoryBookRepository();
+        final CommentRepository inMemoryCommentRepository = new InMemoryCommentRepository();
+        return bookFacade(inMemoryBookRepository, inMemoryCommentRepository);
     }
 
     @Bean

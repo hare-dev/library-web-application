@@ -120,7 +120,7 @@ class BookSpecificationTest extends Specification implements SampleBooks, Sample
         bookFacade.addCommentToBook(comment_best_book, twilight.id())
 
         when: "Find book and return size of list with comments"
-        def COMMENTS_SIZE = bookFacade.getBookByIdWithComments(twilight.id()).get().size()
+        def COMMENTS_SIZE = bookFacade.fetchCommentByBookId(twilight.id()).get().size()
 
         then: "Book has one comment"
         COMMENTS_SIZE == 1
@@ -133,7 +133,7 @@ class BookSpecificationTest extends Specification implements SampleBooks, Sample
         bookFacade.addCommentToBook(comment_amazing_adventure, twilight.id())
 
         when: "Find book and return size of list with comments"
-        def comments_collection_size = bookFacade.getBookByIdWithComments(twilight.id()).get().size()
+        def comments_collection_size = bookFacade.fetchCommentByBookId(twilight.id()).get().size()
 
         then: "Book has two comments"
         comments_collection_size == 2
@@ -144,7 +144,7 @@ class BookSpecificationTest extends Specification implements SampleBooks, Sample
         bookFacade.addBook(twilight)
 
         when: "Find book and return list with comments"
-        def comments_collection = bookFacade.getBookByIdWithComments(twilight.id()).get()
+        def comments_collection = bookFacade.fetchCommentByBookId(twilight.id()).get()
 
         then: "Comments collection is empty"
         comments_collection.isEmpty()
