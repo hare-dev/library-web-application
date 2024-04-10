@@ -1,6 +1,6 @@
 package com.haredev.library.security;
 
-import com.haredev.library.security.token.TokenFacade;
+import com.haredev.library.security.authentication.token.TokenFacade;
 import com.haredev.library.user.domain.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

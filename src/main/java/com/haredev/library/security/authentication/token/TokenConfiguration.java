@@ -1,4 +1,4 @@
-package com.haredev.library.security.token;
+package com.haredev.library.security.authentication.token;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

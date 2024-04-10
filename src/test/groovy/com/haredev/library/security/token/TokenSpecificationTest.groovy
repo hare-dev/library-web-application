@@ -1,6 +1,7 @@
 package com.haredev.library.security.token
 
 import com.haredev.library.TimeManager
+import com.haredev.library.security.authentication.token.TokenFacade
 import spock.lang.Specification
 
 import java.time.Duration
@@ -45,8 +46,8 @@ class TokenSpecificationTest extends Specification {
         expect_result == result
     }
 
-    def "Should return false if token is expired"() {
-        given: "Create expired token"
+    def "Should return false if token is valid"() {
+        given: "Create token"
         def token = buildToken()
         def expect_result = false
 

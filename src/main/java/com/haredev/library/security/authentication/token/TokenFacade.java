@@ -1,4 +1,4 @@
-package com.haredev.library.security.token;
+package com.haredev.library.security.authentication.token;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,13 +20,13 @@ public class TokenFacade {
     @Value("${token.expirationTime}")
     private final Long expirationTimeInMilliseconds;
 
-    public String extractLogin(String token) {
-        return extractAllClaims(token).getSubject();
-    }
-
     public boolean isTokenValid(String token, String username) {
         final String login = extractLogin(token);
         return login.equals(username) && !isTokenExpired(token);
+    }
+
+    public String extractLogin(String token) {
+        return extractAllClaims(token).getSubject();
     }
 
     private boolean isTokenExpired(String token) {

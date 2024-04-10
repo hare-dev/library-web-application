@@ -3,7 +3,7 @@ package com.haredev.library.security.authentication;
 import com.haredev.library.security.authentication.controller.input.AuthenticationRequest;
 import com.haredev.library.security.authentication.controller.output.AuthenticationResponse;
 import com.haredev.library.security.authentication.errors.AuthenticationError;
-import com.haredev.library.security.token.TokenFacade;
+import com.haredev.library.security.authentication.token.TokenFacade;
 import com.haredev.library.user.domain.UserFacade;
 import com.haredev.library.user.domain.api.error.UserError;
 import io.vavr.control.Either;
