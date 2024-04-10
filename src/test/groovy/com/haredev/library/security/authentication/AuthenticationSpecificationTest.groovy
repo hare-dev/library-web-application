@@ -11,7 +11,7 @@ import static com.haredev.library.security.authentication.errors.AuthenticationE
 class AuthenticationSpecificationTest extends Specification implements AuthenticationCredentialsSample {
     final def notificationFacade = Mock(NotificationFacade)
     final def userFacade = UserApplicationTestConfiguration.getConfiguration(notificationFacade)
-    final def authenticationFacade = AuthenticationTestConfiguration.getConfiguration()
+    final def authenticationFacade = AuthenticationTestConfiguration.getConfiguration(notificationFacade)
 
     def "Should sign in user"() {
         when: "Register user"
