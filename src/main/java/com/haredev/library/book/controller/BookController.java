@@ -56,7 +56,7 @@ final class BookController {
 
     @GetMapping("/{id}/comments")
     ResponseEntity<?> findCommentsByBookId(@PathVariable final Long id) {
-        var response = bookFacade.fetchCommentByBookId(id);
+        var response = bookFacade.fetchCommentsByBookId(id);
         return ResponseResolver.resolve(response);
     }
 

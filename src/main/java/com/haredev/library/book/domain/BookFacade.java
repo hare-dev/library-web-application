@@ -48,7 +48,7 @@ public class BookFacade {
         return bookManager.findCommentById(commentId).map(commentMapper::toDto).toEither(COMMENT_NOT_FOUND);
     }
 
-    public Either<BookError, List<CommentPublicDetailsDto>> fetchCommentByBookId(final Long bookId) {
+    public Either<BookError, List<CommentPublicDetailsDto>> fetchCommentsByBookId(final Long bookId) {
         return bookManager.findBookById(bookId)
                 .toEither(BOOK_NOT_FOUND)
                 .map(book -> book.comments.stream().map(commentMapper::toDto).toList());
