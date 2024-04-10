@@ -10,7 +10,7 @@ class CommentCreator {
     Comment from(final CommentCreateDto request, final Long bookId) {
         requireNonNull(request);
         return Comment.builder()
-                .id(request.commentId())
+                .id(request.id())
                 .bookId(bookId)
                 .description(request.description())
                 .createdAt(request.createdAt())

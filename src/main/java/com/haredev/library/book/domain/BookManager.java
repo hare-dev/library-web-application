@@ -3,7 +3,7 @@ package com.haredev.library.book.domain;
 import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.BookCreateDto;
 import com.haredev.library.book.domain.dto.CommentCreateDto;
-import com.haredev.library.book.domain.dto.CommentDto;
+import com.haredev.library.book.domain.dto.CommentPublicDetailsDto;
 import com.haredev.library.book.domain.dto.update.BookUpdateDto;
 import com.haredev.library.book.domain.dto.update.CommentUpdateDto;
 import io.vavr.control.Either;
@@ -62,7 +62,7 @@ class BookManager {
         return comment;
     }
 
-    public Either<BookError, CommentDto> addCommentToBook(final CommentCreateDto request, final Long bookId) {
+    public Either<BookError, CommentPublicDetailsDto> addCommentToBook(final CommentCreateDto request, final Long bookId) {
         return findBookById(bookId)
                 .toEither(BOOK_NOT_FOUND)
                 .map(book -> {
@@ -88,7 +88,7 @@ class BookManager {
                 .map(bookMapper::toBookCreateResponse);
     }
 
-    public Either<BookError, CommentDto> updateCommentById(final Long commentId, final CommentUpdateDto request) {
+    public Either<BookError, CommentPublicDetailsDto> updateCommentById(final Long commentId, final CommentUpdateDto request) {
         return findCommentById(commentId)
                 .toEither(COMMENT_NOT_FOUND)
                 .map(comment -> comment.toUpdate(request))

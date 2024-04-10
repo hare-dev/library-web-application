@@ -1,10 +1,10 @@
 package com.haredev.library.book.domain;
 
-import com.haredev.library.book.domain.dto.CommentDto;
+import com.haredev.library.book.domain.dto.CommentPublicDetailsDto;
 
 class CommentMapper {
-    CommentDto toDto(Comment comment) {
-        return CommentDto.builder()
+    CommentPublicDetailsDto toDto(Comment comment) {
+        return CommentPublicDetailsDto.builder()
                 .description(comment.getDescription())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())

@@ -4,7 +4,7 @@ import com.haredev.library.book.domain.BookFacade;
 import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.BookCreateDto;
 import com.haredev.library.book.domain.dto.CommentCreateDto;
-import com.haredev.library.book.domain.dto.CommentDto;
+import com.haredev.library.book.domain.dto.CommentPublicDetailsDto;
 import com.haredev.library.book.domain.dto.update.BookUpdateDto;
 import com.haredev.library.book.domain.dto.update.CommentUpdateDto;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
@@ -48,19 +48,19 @@ final class BookController {
 
     @PostMapping("/books/{bookId}/comments/add")
     ResponseEntity<?> addCommentToBook(@RequestBody @Valid final CommentCreateDto request, @PathVariable Long bookId) {
-        Either<BookError, CommentDto> response = bookFacade.addCommentToBook(request, bookId);
+        Either<BookError, CommentPublicDetailsDto> response = bookFacade.addCommentToBook(request, bookId);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("/books/comments/{commentId}")
+    @GetMapping("/books/comments/{id}")
     ResponseEntity<?> findCommentById(@PathVariable final Long commentId) {
-        Either<BookError, CommentDto> response = bookFacade.findCommentById(commentId);
+        Either<BookError, CommentPublicDetailsDto> response = bookFacade.findCommentById(commentId);
         return ResponseResolver.resolve(response);
     }
 
     @GetMapping("/books/{bookId}/comments")
     ResponseEntity<?> getCommentsFromBook(@PathVariable final Long bookId) {
-        Either<BookError, List<CommentDto>> response = bookFacade.getBookByIdWithComments(bookId);
+        Either<BookError, List<CommentPublicDetailsDto>> response = bookFacade.getBookByIdWithComments(bookId);
         return ResponseResolver.resolve(response);
     }
 
@@ -78,7 +78,7 @@ final class BookController {
 
     @PutMapping("/books/comments/{commentId}")
     ResponseEntity<?> updateComment(@PathVariable final Long commentId, @RequestBody final @Valid CommentUpdateDto toUpdate) {
-        Either<BookError, CommentDto> response = bookFacade.updateCommentById(commentId, toUpdate);
+        Either<BookError, CommentPublicDetailsDto> response = bookFacade.updateCommentById(commentId, toUpdate);
         return ResponseResolver.resolve(response);
     }
 }

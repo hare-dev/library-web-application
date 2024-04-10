@@ -6,47 +6,39 @@ import com.haredev.library.book.domain.dto.update.BookUpdateDto
 import groovy.transform.CompileStatic
 
 @CompileStatic
-final class SampleBooks {
-    static final Long notExistBookWithThisId = 5000L
+trait SampleBooks {
+    BookCreateDto twilight = createBookSample(1L, "Twilight", "Stephenie Meyer", "0-596-52068-9", 2000, BookCover.SOFT)
+    BookCreateDto jumanji = createBookSample(2L, "Jumanji", "Van Allsburg Chris", "978 0 596 52068 7", 1996, BookCover.HARD)
+    final Long bookWithThisIdNotExist = 999999L
 
-    static BookCreateDto createBookSampleToUpdate(final Long bookId, final String title,
-                                                  final String author, final String isbn) {
+    private BookCreateDto createBookSample(final Long id, final String title, final String author,
+                                           final String isbn,
+                                           final Integer yearPublication,
+                                           final BookCover bookCover) {
         return BookCreateDto.builder()
-                .id(bookId)
+                .id(id)
                 .title(title)
                 .author(author)
                 .isbn(isbn)
+                .yearPublication(yearPublication)
+                .bookCover(bookCover)
                 .build()
     }
 
-    static BookCreateDto createBookSampleToUpdate() {
+    static BookCreateDto createBookSampleWithTheSameIsbn(final Long id) {
         return BookCreateDto.builder()
-                .id(1L)
-                .title("EXAMPLE_TITLE")
-                .author("EXAMPLE_AUTHOR")
-                .isbn("EXAMPLE_ISBN")
-                .description("EXAMPLE_DESCRIPTION")
-                .yearPublication(2000)
-                .bookCover(BookCover.SOFT)
+                .id(id)
+                .isbn("the_same_example_isbn")
                 .build()
     }
 
-    static BookUpdateDto createBookWithDataToUpdateSample() {
+    static BookUpdateDto createBookSampleWithDataToUpdate() {
         return BookUpdateDto.builder()
-                .title("UPDATED_TITLE")
-                .author("UPDATED_AUTHOR")
-                .isbn("UPDATED_ISBN")
-                .description("UPDATED_DESCRIPTION")
-                .yearPublication(2023)
+                .title("updated_tittle")
+                .author("updated_author")
+                .isbn("updated_isbn")
+                .yearPublication(1990)
                 .bookCover(BookCover.HARD)
                 .build()
     }
-
-    static BookCreateDto createBookSampleWithTheSameIsbn() {
-        return BookCreateDto.builder()
-                .id(1L)
-                .isbn("EXAMPLE_ISBN")
-                .build()
-    }
 }
-

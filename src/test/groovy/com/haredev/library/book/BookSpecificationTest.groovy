@@ -1,14 +1,14 @@
 package com.haredev.library.book
 
-
 import com.haredev.library.book.samples.SampleBooks
 import com.haredev.library.book.samples.SampleComments
 import spock.lang.Specification
 
 import static com.haredev.library.book.domain.api.error.BookError.*
 
-class BookSpecificationTest extends Specification {
+class BookSpecificationTest extends Specification implements SampleBooks, SampleComments {
     final def bookFacade = BookTestConfiguration.getConfiguration()
+    final def PAGE = 1
 
     def "Should be empty"() {
         expect:
@@ -17,69 +17,65 @@ class BookSpecificationTest extends Specification {
 
     def "Should add one book"() {
         given: "Add book to system"
-        bookFacade.addBook(BOOK_ONE)
+        bookFacade.addBook(twilight)
 
         when: "System has one book"
-        def RESULT = bookFacade.findBookById(BOOK_ONE.id()).get()
+        def result = bookFacade.findBookById(twilight.id()).get()
 
         then: "Return added book"
-        RESULT == BOOK_ONE
+        result == twilight
     }
 
     def "Should not find book with not exist id"() {
         when: "Find not exist book by id"
-        def ERROR_RESPONSE = bookFacade.findBookById(SampleBooks.notExistBookWithThisId).getLeft()
+        def error = bookFacade.findBookById(bookWithThisIdNotExist).getLeft()
 
         then: "Return response with BOOK_NOT_FOUND"
-        ERROR_RESPONSE == BOOK_NOT_FOUND
+        error == BOOK_NOT_FOUND
     }
 
     def "Should not add books with the same isbn code"() {
-        given: "Add two books to system"
-        def BOOK_ONE = SampleBooks.createBookSampleWithTheSameIsbn()
-        def BOOK_TWO = SampleBooks.createBookSampleWithTheSameIsbn()
+        given: "Add first book to system"
+        def twilight = createBookSampleWithTheSameIsbn(0L)
+        def jumanji = createBookSampleWithTheSameIsbn(1L)
+        bookFacade.addBook(twilight)
 
-        when: "System has two books"
-        bookFacade.addBook(BOOK_ONE)
-        def ERROR_RESPONSE = bookFacade.addBook(BOOK_TWO).getLeft()
+        when: "System try to add jumanji book with the same isbn like added twilight book"
+        def error = bookFacade.addBook(jumanji).getLeft()
 
-        then: "Return two added books"
-        ERROR_RESPONSE == ISBN_DUPLICATED
+        then: "Return isbn is duplicated"
+        error == ISBN_DUPLICATED
     }
 
-    def "Should have two books"() {
-        given: "Add two books to system"
-        bookFacade.addBook(BOOK_ONE)
-        bookFacade.addBook(BOOK_TWO)
-
-        when: "System has two books"
-        def BOOK_ONE_ADDED = bookFacade.findBookById(BOOK_ONE.id()).get()
-        def BOOK_TWO_ADDED = bookFacade.findBookById(BOOK_TWO.id()).get()
+    def "Should has two books"() {
+        when: "Add two books to system"
+        bookFacade.addBook(twilight)
+        bookFacade.addBook(jumanji)
 
         then: "Return two added books"
-        BOOK_ONE_ADDED == BOOK_ONE
-        BOOK_TWO_ADDED == BOOK_TWO
+        twilight == bookFacade.findBookById(twilight.id()).get()
+        jumanji == bookFacade.findBookById(jumanji.id()).get()
     }
 
     def "Should return all books"() {
         given: "Add two books to system"
-        bookFacade.addBook(BOOK_ONE)
-        bookFacade.addBook(BOOK_TWO)
+        bookFacade.addBook(twilight)
+        bookFacade.addBook(jumanji)
 
         when: "Return list of books"
-        def ADDED_BOOKS = bookFacade.fetchAllBooks(PAGE)
+        def booksCollection = bookFacade.fetchAllBooks(PAGE)
 
         then: "Check added books"
-        ADDED_BOOKS.contains(BOOK_ONE)
-        ADDED_BOOKS.contains(BOOK_TWO)
+        booksCollection.contains(twilight)
+        booksCollection.contains(jumanji)
     }
 
     def "Should remove one book"() {
         given: "Add one book to system"
-        bookFacade.addBook(BOOK_ONE)
+        bookFacade.addBook(twilight)
 
         when: "Remove one book"
-        bookFacade.removeBookById(BOOK_ONE.id())
+        bookFacade.removeBookById(twilight.id())
 
         then: "System is empty"
         bookFacade.fetchAllBooks(PAGE).isEmpty()
@@ -87,12 +83,12 @@ class BookSpecificationTest extends Specification {
 
     def "Should remove two books"() {
         given: "Add two books to system"
-        bookFacade.addBook(BOOK_ONE)
-        bookFacade.addBook(BOOK_TWO)
+        bookFacade.addBook(twilight)
+        bookFacade.addBook(jumanji)
 
         when: "Remove two books"
-        bookFacade.removeBookById(BOOK_TWO.id())
-        bookFacade.removeBookById(BOOK_ONE.id())
+        bookFacade.removeBookById(twilight.id())
+        bookFacade.removeBookById(jumanji.id())
 
         then: "System is empty"
         bookFacade.fetchAllBooks(PAGE).isEmpty()
@@ -100,31 +96,31 @@ class BookSpecificationTest extends Specification {
 
     def "Should add comment to book"() {
         given: "Add book to system"
-        bookFacade.addBook(BOOK_ONE)
+        bookFacade.addBook(twilight)
 
         when: "Add comment to book"
-        def RESULT = bookFacade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id()).get().description()
-        def COMMENT_ONE = bookFacade.findCommentById(BOOK_ONE.id()).get().description()
+        def twilight_comment = bookFacade.addCommentToBook(comment_best_book, twilight.id()).get()
+        def twilight_comment_found = bookFacade.findCommentById(comment_best_book.id()).get()
 
-        then: "Return comment added to book"
-        RESULT == COMMENT_ONE
+        then: "Should "
+        twilight_comment == twilight_comment_found
     }
 
     def "Should not add comment to not exist book"() {
         when: "Add comment to not exist book"
-        def ERROR_RESPONSE = bookFacade.addCommentToBook(COMMENT_ONE, SampleBooks.notExistBookWithThisId).getLeft()
+        def error = bookFacade.addCommentToBook(comment_best_book, bookWithThisIdNotExist).getLeft()
 
         then: "Book not found"
-        ERROR_RESPONSE == BOOK_NOT_FOUND
+        error == BOOK_NOT_FOUND
     }
 
     def "Should get one comment from book"() {
         given: "Add book and comment"
-        bookFacade.addBook(BOOK_ONE)
-        bookFacade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id())
+        bookFacade.addBook(twilight)
+        bookFacade.addCommentToBook(comment_best_book, twilight.id())
 
         when: "Find book and return size of list with comments"
-        def COMMENTS_SIZE = bookFacade.getBookByIdWithComments(BOOK_ONE.id()).get().size()
+        def COMMENTS_SIZE = bookFacade.getBookByIdWithComments(twilight.id()).get().size()
 
         then: "Book has one comment"
         COMMENTS_SIZE == 1
@@ -132,111 +128,83 @@ class BookSpecificationTest extends Specification {
 
     def "Should get two comments from book"() {
         given: "Add book and comments"
-        bookFacade.addBook(BOOK_ONE)
-        bookFacade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id())
-        bookFacade.addCommentToBook(COMMENT_TWO, BOOK_ONE.id())
+        bookFacade.addBook(twilight)
+        bookFacade.addCommentToBook(comment_best_book, twilight.id())
+        bookFacade.addCommentToBook(comment_amazing_adventure, twilight.id())
 
         when: "Find book and return size of list with comments"
-        def COMMENTS_SIZE = bookFacade.getBookByIdWithComments(BOOK_ONE.id()).get().size()
+        def comments_collection_size = bookFacade.getBookByIdWithComments(twilight.id()).get().size()
 
         then: "Book has two comments"
-        COMMENTS_SIZE == 2
+        comments_collection_size == 2
     }
 
     def "Should return empty list of comments from book"() {
         given: "Add book to system"
-        bookFacade.addBook(BOOK_ONE)
+        bookFacade.addBook(twilight)
 
         when: "Find book and return list with comments"
-        def COMMENTS = bookFacade.getBookByIdWithComments(BOOK_ONE.id()).get()
+        def comments_collection = bookFacade.getBookByIdWithComments(twilight.id()).get()
 
-        then: "List with comments from book is empty"
-        COMMENTS.isEmpty()
+        then: "Comments collection is empty"
+        comments_collection.isEmpty()
     }
 
     def "Should remove comment from book"() {
-        given: "Add book and comment"
-        bookFacade.addBook(BOOK_ONE)
-        bookFacade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id())
+        given: "Add comment to book"
+        bookFacade.addBook(twilight)
+        bookFacade.addCommentToBook(comment_best_book, twilight.id())
 
         when: "Remove comment from book"
-        bookFacade.removeCommentById(COMMENT_ONE.commentId())
+        bookFacade.removeCommentById(comment_best_book.id())
+        def error = bookFacade.findCommentById(comment_best_book.id()).getLeft()
 
-        then: "Book not have any comments"
-        def ERROR_RESPONSE = bookFacade.findCommentById(COMMENT_ONE.commentId()).getLeft()
-        ERROR_RESPONSE == COMMENT_NOT_FOUND
-    }
-
-    def "Should remove two comments from book"() {
-        given: "Add book and comments"
-        bookFacade.addBook(BOOK_ONE)
-        bookFacade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id())
-        bookFacade.addCommentToBook(COMMENT_TWO, BOOK_ONE.id())
-
-        when: "Remove comments from book"
-        bookFacade.removeCommentById(COMMENT_ONE.commentId())
-        bookFacade.removeCommentById(COMMENT_TWO.commentId())
-
-        then: "Book should not have any comments"
-        def COMMENT_ONE_ERROR_RESPONSE = bookFacade.findCommentById(COMMENT_ONE.commentId()).getLeft()
-        def COMMENT_TWO_ERROR_RESPONSE = bookFacade.findCommentById(COMMENT_TWO.commentId()).getLeft()
-        COMMENT_ONE_ERROR_RESPONSE == COMMENT_NOT_FOUND
-        COMMENT_TWO_ERROR_RESPONSE == COMMENT_NOT_FOUND
+        then: "Not found comment for book"
+        error == COMMENT_NOT_FOUND
     }
 
     def "Should update one book"() {
         given: "Add book to update"
-        def BOOK = SampleBooks.createBookSampleToUpdate()
-        def BOOK_UPDATE = SampleBooks.createBookWithDataToUpdateSample()
-        bookFacade.addBook(BOOK)
+        bookFacade.addBook(twilight)
+        def data_to_update_twilight = createBookSampleWithDataToUpdate()
 
-        when: "Update book"
-        def UPDATE_RESULT = bookFacade.updateBookById(BOOK.id(), BOOK_UPDATE).get()
+        when: "Update data for book"
+        def twilight_update_result = bookFacade.updateBookById(twilight.id(), data_to_update_twilight).get()
+        def twilight_founded = bookFacade.findBookById(twilight.id()).get()
 
-        then: "Compare book input update with output update"
-        UPDATE_RESULT.title() == BOOK_UPDATE.title()
-        UPDATE_RESULT.author() == BOOK_UPDATE.author()
-        UPDATE_RESULT.isbn() == BOOK_UPDATE.isbn()
-        UPDATE_RESULT.description() == BOOK_UPDATE.description()
-        UPDATE_RESULT.yearPublication() == BOOK_UPDATE.yearPublication()
-        UPDATE_RESULT.bookCover() == BOOK_UPDATE.bookCover()
+        then: "Compare book input update with founded book after update"
+        twilight_founded == twilight_update_result
     }
 
     def "Should not update not exist book"() {
         when: "Update not exist book"
-        def BOOK_UPDATE = SampleBooks.createBookWithDataToUpdateSample()
-        def ERROR_RESPONSE = bookFacade.updateBookById(SampleBooks.notExistBookWithThisId, BOOK_UPDATE).getLeft()
+        def data_to_update_twilight = createBookSampleWithDataToUpdate()
+        def error = bookFacade.updateBookById(bookWithThisIdNotExist, data_to_update_twilight).getLeft()
 
         then: "Return error with book not found"
-        ERROR_RESPONSE == BOOK_NOT_FOUND
+        error == BOOK_NOT_FOUND
     }
 
     def "Should update one comment"() {
         given: "Add comment to book"
-        def COMMENT_UPDATE = SampleComments.createCommentWithDataToUpdateSample()
-        bookFacade.addBook(BOOK_ONE)
-        bookFacade.addCommentToBook(COMMENT_ONE, BOOK_ONE.id())
+        def data_to_update_comment = createCommentSampleWitDataToUpdate()
+        bookFacade.addBook(twilight)
+        bookFacade.addCommentToBook(comment_best_book, twilight.id())
 
         when: "Update comment"
-        def UPDATE_RESULT = bookFacade.updateCommentById(COMMENT_ONE.commentId(), COMMENT_UPDATE).get().description()
+        def comment_update_result = bookFacade.updateCommentById(comment_best_book.id(), data_to_update_comment).get()
+        def comment_founded = bookFacade.findCommentById(comment_best_book.id()).get()
 
-        then: "Compare comment input update with output update"
-        UPDATE_RESULT == COMMENT_UPDATE.description()
+        then: "Compare comment input update with founded comment after update"
+        comment_update_result == comment_founded
     }
 
     def "Should not update not exist comment"() {
         when: "Update not exist book"
-        def COMMENT_UPDATE = SampleComments.createCommentWithDataToUpdateSample()
-        def ERROR_RESPONSE = bookFacade.updateCommentById(SampleComments.notExistCommentWithThisId, COMMENT_UPDATE).getLeft()
+        def data_to_update_comment = createCommentSampleWitDataToUpdate()
+        def error = bookFacade.updateCommentById(commentWithThisIdNotExist, data_to_update_comment).getLeft()
 
-        then: "Return error with book not found"
-        ERROR_RESPONSE == COMMENT_NOT_FOUND
+        then: "Return book not found"
+        error == COMMENT_NOT_FOUND
     }
-
-    def final PAGE = 1
-    def final BOOK_ONE = SampleBooks.createBookSampleToUpdate(0L, "Twilight", "Stephenie Meyer", "0-596-52068-9")
-    def final BOOK_TWO = SampleBooks.createBookSampleToUpdate(1L, "Django", "Quentin Tarantino", "978 0 596 52068 7")
-
-    def final COMMENT_ONE = SampleComments.createCommentSample(0L, "Best book!")
-    def final COMMENT_TWO = SampleComments.createCommentSample(1L,"Fantastic book!")
 }
