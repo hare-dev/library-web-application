@@ -1,84 +1,80 @@
 package com.haredev.library.book.controller;
 
 import com.haredev.library.book.domain.BookFacade;
-import com.haredev.library.book.domain.api.error.BookError;
 import com.haredev.library.book.domain.dto.BookCreateDto;
 import com.haredev.library.book.domain.dto.CommentCreateDto;
-import com.haredev.library.book.domain.dto.CommentPublicDetailsDto;
 import com.haredev.library.book.domain.dto.update.BookUpdateDto;
 import com.haredev.library.book.domain.dto.update.CommentUpdateDto;
 import com.haredev.library.infrastructure.errors.ResponseResolver;
-import io.vavr.control.Either;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/books")
 final class BookController {
     private final BookFacade bookFacade;
 
-    @PostMapping("/books/add")
+    @PostMapping
     ResponseEntity<?> addBook(@Valid @RequestBody final BookCreateDto request) {
-        Either<BookError, BookCreateDto> response = bookFacade.addBook(request);
+        var response = bookFacade.addBook(request);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("/books/{bookId}")
-    ResponseEntity<?> findBookById(@PathVariable final Long bookId) {
-        Either<BookError, BookCreateDto> response = bookFacade.findBookById(bookId);
+    @GetMapping("/{id}")
+    ResponseEntity<?> findBookById(@PathVariable final Long id) {
+        var response = bookFacade.findBookById(id);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("/books")
+    @GetMapping
     ResponseEntity<?> fetchAllBooks(@RequestParam(required = false) final Integer page) {
         int pageNumber = page != null && page >= 0 ? page : 0;
-        List<BookCreateDto> response = bookFacade.fetchAllBooks(pageNumber);
+        var response = bookFacade.fetchAllBooks(pageNumber);
         return ResponseResolver.resolve(response);
     }
 
-    @DeleteMapping("/books/{bookId}")
-    ResponseEntity<?> removeBook(@PathVariable final Long bookId) {
-        bookFacade.removeBookById(bookId);
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> removeBook(@PathVariable final Long id) {
+        bookFacade.removeBookById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/books/{bookId}/comments/add")
-    ResponseEntity<?> addCommentToBook(@RequestBody @Valid final CommentCreateDto request, @PathVariable Long bookId) {
-        Either<BookError, CommentPublicDetailsDto> response = bookFacade.addCommentToBook(request, bookId);
+    @PostMapping("/{id}/comments")
+    ResponseEntity<?> addCommentToBook(@RequestBody @Valid final CommentCreateDto request, @PathVariable Long id) {
+        var response = bookFacade.addCommentToBook(request, id);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("/books/comments/{id}")
-    ResponseEntity<?> findCommentById(@PathVariable final Long commentId) {
-        Either<BookError, CommentPublicDetailsDto> response = bookFacade.findCommentById(commentId);
+    @GetMapping("/comments/{id}")
+    ResponseEntity<?> findCommentById(@PathVariable final Long id) {
+        var response = bookFacade.findCommentById(id);
         return ResponseResolver.resolve(response);
     }
 
-    @GetMapping("/books/{bookId}/comments")
-    ResponseEntity<?> getCommentsFromBook(@PathVariable final Long bookId) {
-        Either<BookError, List<CommentPublicDetailsDto>> response = bookFacade.getBookByIdWithComments(bookId);
+    @GetMapping("/{id}/comments")
+    ResponseEntity<?> findCommentsByBookId(@PathVariable final Long id) {
+        var response = bookFacade.getBookByIdWithComments(id);
         return ResponseResolver.resolve(response);
     }
 
-    @DeleteMapping("/books/comments/{commentId}")
-    ResponseEntity<?> removeCommentById(@PathVariable final Long commentId) {
-        bookFacade.removeCommentById(commentId);
+    @DeleteMapping("/comments/{id}")
+    ResponseEntity<?> removeCommentById(@PathVariable final Long id) {
+        bookFacade.removeCommentById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/books/{bookId}")
-    ResponseEntity<?> updateBook(@PathVariable final Long bookId, @RequestBody @Valid final BookUpdateDto toUpdate) {
-        Either<BookError, BookCreateDto> response = bookFacade.updateBookById(bookId, toUpdate);
+    @PutMapping("/{id}")
+    ResponseEntity<?> updateBook(@PathVariable final Long id, @RequestBody @Valid final BookUpdateDto toUpdate) {
+        var response = bookFacade.updateBookById(id, toUpdate);
         return ResponseResolver.resolve(response);
     }
 
-    @PutMapping("/books/comments/{commentId}")
-    ResponseEntity<?> updateComment(@PathVariable final Long commentId, @RequestBody final @Valid CommentUpdateDto toUpdate) {
-        Either<BookError, CommentPublicDetailsDto> response = bookFacade.updateCommentById(commentId, toUpdate);
+    @PutMapping("/comments/{id}")
+    ResponseEntity<?> updateComment(@PathVariable final Long id, @RequestBody final @Valid CommentUpdateDto toUpdate) {
+        var response = bookFacade.updateCommentById(id, toUpdate);
         return ResponseResolver.resolve(response);
     }
 }
