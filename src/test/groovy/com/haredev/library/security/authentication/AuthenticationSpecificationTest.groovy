@@ -1,7 +1,7 @@
 package com.haredev.library.security.authentication
 
 import com.haredev.library.notification.NotificationFacade
-import com.haredev.library.security.samples.AuthenticationCredentialsSample
+import com.haredev.library.security.authentication.samples.AuthenticationCredentialsSample
 
 import com.haredev.library.user.UserApplicationTestConfiguration
 import spock.lang.Specification

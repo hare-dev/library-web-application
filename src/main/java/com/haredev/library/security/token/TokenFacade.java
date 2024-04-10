@@ -15,9 +15,10 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 public class TokenFacade {
-
     @Value("${token.secretKey}")
     private final String secretKey;
+    @Value("${token.expirationTime}")
+    private final Long expirationTimeInMilliseconds;
 
     public String extractLogin(String token) {
         return extractAllClaims(token).getSubject();
@@ -41,7 +42,7 @@ public class TokenFacade {
                 .builder()
                 .subject(username)
                 .issuedAt(Date.from(Time.instance().now()))
-                .expiration(Date.from(Time.instance().now().plus(10, ChronoUnit.MINUTES)))
+                .expiration(Date.from(Time.instance().now().plus(expirationTimeInMilliseconds, ChronoUnit.MILLIS)))
                 .signWith(
                         getSignInKey(),
                         Jwts.SIG.HS256)

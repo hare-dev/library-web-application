@@ -1,4 +1,4 @@
-package com.haredev.library.security.samples
+package com.haredev.library.security.authentication.samples
 
 import com.haredev.library.security.authentication.controller.input.AuthenticationRequest
 import com.haredev.library.user.controller.input.RegistrationRequest

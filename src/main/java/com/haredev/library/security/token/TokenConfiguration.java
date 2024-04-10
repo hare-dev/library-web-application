@@ -6,10 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 class TokenConfiguration {
-
     @Bean
     TokenFacade tokenFacade(@Value("${token.secretKey}")
-                            final String secretKey) {
-        return new TokenFacade(secretKey);
+                            final String secretKey,
+                            @Value("${token.expirationTime}")
+                            final Long expirationTimeInMilliseconds) {
+        return new TokenFacade(secretKey, expirationTimeInMilliseconds);
     }
 }

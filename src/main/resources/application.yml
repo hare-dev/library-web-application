@@ -46,6 +46,7 @@ logging:
 
 token:
   secretKey: ${TOKEN_SECRET_KEY}
+  expirationTimeInMilliseconds: ${TOKEN_EXPIRATION_TIME}
 
   # Swagger UI
 

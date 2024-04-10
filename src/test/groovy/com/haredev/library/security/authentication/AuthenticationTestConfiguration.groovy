@@ -7,7 +7,7 @@ import com.haredev.library.user.domain.UserFacade
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
-import static com.haredev.library.security.samples.TokenPropertiesSample.secretKey
+import static com.haredev.library.security.token.samples.AuthenticationTokenPropertiesSample.secretKey
 
 final class AuthenticationTestConfiguration {
     static final AuthenticationFacade getConfiguration() {
