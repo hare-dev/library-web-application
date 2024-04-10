@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 final class BookQueryController {
     private final BookQueryFacade bookQueryFacade;
 
-    @GetMapping
+    @GetMapping("/category/criminal")
     ResponseEntity<?> fetchCriminalCategoryBooks() {
         return ResponseResolver.resolve(bookQueryFacade.findAllByCriminalCategory());
     }
 
-    @GetMapping
+    @GetMapping("/cover/soft")
     ResponseEntity<?> fetchSoftCoverBooks() {
         return ResponseResolver.resolve(bookQueryFacade.findAllBySoftCover());
     }

@@ -17,7 +17,7 @@ import java.util.Date;
 public class TokenFacade {
     @Value("${token.secretKey}")
     private final String secretKey;
-    @Value("${token.expirationTime}")
+    @Value("${token.expirationTimeInMilliseconds}")
     private final Long expirationTimeInMilliseconds;
 
     public boolean isTokenValid(String token, String username) {

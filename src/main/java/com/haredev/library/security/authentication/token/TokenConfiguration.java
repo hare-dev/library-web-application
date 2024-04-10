@@ -9,7 +9,7 @@ class TokenConfiguration {
     @Bean
     TokenFacade tokenFacade(@Value("${token.secretKey}")
                             final String secretKey,
-                            @Value("${token.expirationTime}")
+                            @Value("${token.expirationTimeInMilliseconds}")
                             final Long expirationTimeInMilliseconds) {
         return new TokenFacade(secretKey, expirationTimeInMilliseconds);
     }
