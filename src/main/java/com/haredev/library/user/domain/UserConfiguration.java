@@ -1,6 +1,5 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.notification.NotificationFacade;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -8,16 +7,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 class UserConfiguration {
-    UserFacade userFacade(final NotificationFacade notificationFacade) {
+    UserFacade userFacade(final VerificationMailSenderClient verificationMailSenderClient) {
         final VerificationTokenRepository verificationTokenRepository = new InMemoryVerificationTokenRepository();
         final UserRepository userRepository = new InMemoryUserRepository();
-        return userFacade(userRepository, verificationTokenRepository, notificationFacade);
+        return userFacade(userRepository, verificationTokenRepository, verificationMailSenderClient);
     }
 
     @Bean
     UserFacade userFacade(final UserRepository userRepository,
                           final VerificationTokenRepository verificationTokenRepository,
-                          final NotificationFacade notificationFacade) {
+                          final VerificationMailSenderClient verificationMailSenderClient) {
         final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         final UserFactory userFactory = new UserFactory(passwordEncoder);
         final UserManager userManager = new UserManager(userRepository);
@@ -37,7 +36,7 @@ class UserConfiguration {
                 userManager,
                 userFactory,
                 verificationRegistration,
-                notificationFacade);
+                verificationMailSenderClient);
         return new UserFacade(userMapper, userManager, userUpdater, userPromoter, userRegistration, verificationRegistration);
     }
 }

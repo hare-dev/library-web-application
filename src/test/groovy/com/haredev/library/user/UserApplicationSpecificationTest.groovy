@@ -1,7 +1,7 @@
 package com.haredev.library.user
 
 import com.haredev.library.TimeManager
-import com.haredev.library.notification.NotificationFacade
+import com.haredev.library.user.domain.VerificationMailSenderClient
 import com.haredev.library.user.domain.api.AccountStatus
 import com.haredev.library.user.domain.api.Authority
 import pl.amazingcode.timeflow.TestTime
@@ -14,8 +14,8 @@ import static com.haredev.library.user.domain.api.error.UserError.*
 import static com.haredev.library.user.samples.SampleUsers.*
 
 class UserApplicationSpecificationTest extends Specification {
-    final def notificationFacade = Mock(NotificationFacade);
-    final def userFacade = UserApplicationTestConfiguration.getConfiguration(notificationFacade)
+    final def verificationMailSenderClient = Mock(VerificationMailSenderClient);
+    final def userFacade = UserApplicationTestConfiguration.getConfiguration(verificationMailSenderClient)
 
     def setup() {
         TimeManager.setClock()

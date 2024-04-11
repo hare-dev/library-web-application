@@ -1,15 +1,11 @@
 package com.haredev.library.user
 
-import com.haredev.library.notification.NotificationFacade
-import com.haredev.library.user.domain.InMemoryUserRepository
-import com.haredev.library.user.domain.InMemoryVerificationTokenRepository
-import com.haredev.library.user.domain.UserConfiguration
-import com.haredev.library.user.domain.UserFacade
+import com.haredev.library.user.domain.*
 
 class UserApplicationTestConfiguration {
-    static final UserFacade getConfiguration(final NotificationFacade notificationFacade) {
+    static final UserFacade getConfiguration(final VerificationMailSenderClient verificationMailSenderClient) {
         return new UserConfiguration().userFacade(
                 new InMemoryUserRepository(),
-                new InMemoryVerificationTokenRepository(), notificationFacade)
+                new InMemoryVerificationTokenRepository(), verificationMailSenderClient)
     }
 }

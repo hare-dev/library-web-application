@@ -1,8 +1,8 @@
 package com.haredev.library.user.domain;
 
 import com.haredev.library.user.controller.output.RegistrationResponse;
-import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
 import com.haredev.library.user.domain.dto.UserLoginDto;
+import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
 
 class UserMapper {
     RegistrationResponse toRegistrationResponse(final UserApplication userApplication,

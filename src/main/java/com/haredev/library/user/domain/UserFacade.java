@@ -3,8 +3,8 @@ package com.haredev.library.user.domain;
 import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.error.UserError;
-import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
 import com.haredev.library.user.domain.dto.UserLoginDto;
+import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 

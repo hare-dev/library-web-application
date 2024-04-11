@@ -1,6 +1,5 @@
 package com.haredev.library.user.domain;
 
-import com.haredev.library.notification.NotificationFacade;
 import com.haredev.library.user.controller.input.RegistrationRequest;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.api.error.UserError;
@@ -17,13 +16,13 @@ class UserRegistration {
     private final UserManager userManager;
     private final UserFactory userFactory;
     private final VerificationRegistration verificationRegistration;
-    private final NotificationFacade notificationFacade;
+    private final VerificationMailSenderClient VerificationMailSenderClient;
 
     public Either<UserError, RegistrationResponse> registerUser(final RegistrationRequest userRequest) {
         if (validateUsernameDuplication(userRequest.username())) {
             var user = createUser(userRequest);
             var token = verificationRegistration.createVerificationToken(user).getToken();
-            notificationFacade.sendRegistrationVerificationMail(user.getUsername(), user.getEmail(), token);
+            VerificationMailSenderClient.send(user.getUsername(), user.getEmail(), token);
             return right(userMapper.toRegistrationResponse(user, token));
         }
         return left(DUPLICATED_USERNAME);

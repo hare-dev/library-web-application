@@ -1,5 +1,6 @@
-package com.haredev.library.notification;
+package com.haredev.library.user.infrastructure.mail;
 
+import com.haredev.library.user.domain.VerificationMailSenderClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +12,7 @@ import java.util.Properties;
 
 @Configuration
 @RequiredArgsConstructor
-public class NotificationConfiguration {
+class GmailSenderConfiguration {
     @Value("${spring.mail.username}")
     private final String emailSender;
     @Value("${spring.mail.host}")
@@ -20,14 +21,12 @@ public class NotificationConfiguration {
     private final int emailPort;
     @Value("${spring.mail.password}")
     private final String emailPassword;
-    @Value("${server.port}")
-    private final int applicationPort;
 
     @Bean
-    NotificationFacade registrationVerificationMailSender() {
-        final RegistrationVerificationMailCreator registrationVerificationMailCreator =
-                new RegistrationVerificationMailCreator(emailSender, applicationPort);
-        return new NotificationFacade(registrationVerificationMailCreator, javaMailSender());
+    VerificationMailSenderClient verificationMailSenderClient() {
+        final VerificationMailCreator verificationMailCreator =
+                new VerificationMailCreator();
+        return new VerificationMailSender(verificationMailCreator, javaMailSender());
     }
 
     @Bean

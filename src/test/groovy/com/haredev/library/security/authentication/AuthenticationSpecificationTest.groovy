@@ -1,17 +1,16 @@
 package com.haredev.library.security.authentication
 
-import com.haredev.library.notification.NotificationFacade
 import com.haredev.library.security.authentication.samples.AuthenticationCredentialsSample
-
 import com.haredev.library.user.UserApplicationTestConfiguration
+import com.haredev.library.user.domain.VerificationMailSenderClient
 import spock.lang.Specification
 
 import static com.haredev.library.security.authentication.errors.AuthenticationError.WRONG_AUTHENTICATION_LOGIN_OR_PASSWORD
 
 class AuthenticationSpecificationTest extends Specification implements AuthenticationCredentialsSample {
-    final def notificationFacade = Mock(NotificationFacade)
-    final def userFacade = UserApplicationTestConfiguration.getConfiguration(notificationFacade)
-    final def authenticationFacade = AuthenticationTestConfiguration.getConfiguration(notificationFacade)
+    final def verificationMailSenderClient = Mock(VerificationMailSenderClient)
+    final def userFacade = UserApplicationTestConfiguration.getConfiguration(verificationMailSenderClient)
+    final def authenticationFacade = AuthenticationTestConfiguration.getConfiguration(verificationMailSenderClient)
 
     def "Should sign in user"() {
         when: "Register user"
