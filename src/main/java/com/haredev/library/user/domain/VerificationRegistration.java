@@ -6,7 +6,6 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 
-import static com.haredev.library.user.domain.api.error.UserError.USER_NOT_FOUND;
 import static com.haredev.library.user.domain.api.error.UserError.VERIFICATION_TOKEN_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -27,8 +26,8 @@ class VerificationRegistration {
                 .toEither(VERIFICATION_TOKEN_NOT_FOUND)
                 .flatMap(verificationTokenValidator::isConfirmedOrExpired)
                 .peek(VerificationToken::confirmVerificationAt)
-                .map(verificationTokenRepository::save)
-                .peek(user -> activateAccount(user.getUserApplication().getId()))
+                .peek(verificationTokenRepository::save)
+                .peek(user -> activateAccount(user.getUserApplication()))
                 .map(user -> userMapper.toUserDetailsDto(user.getUserApplication()));
     }
 
@@ -36,11 +35,9 @@ class VerificationRegistration {
         return Option.ofOptional(verificationTokenRepository.findByToken(token));
     }
 
-    private Either<UserError, UserPublicDetailsDto> activateAccount(final Long userId) {
-        return userManager.findUserById(userId).
-                toEither(USER_NOT_FOUND)
+    private void activateAccount(final UserApplication userApplication) {
+        Option.of(userApplication)
                 .peek(UserApplication::activateAccount)
-                .map(userManager::saveUser)
-                .map(userMapper::toUserDetailsDto);
+                .peek(userManager::saveUser);
     }
 }
