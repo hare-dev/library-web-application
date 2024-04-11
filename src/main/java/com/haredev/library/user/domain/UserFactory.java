@@ -16,7 +16,7 @@ class UserFactory {
 
     public final UserApplication buildUser(final RegistrationRequest request) {
         return UserApplication.builder()
-                .id(request.userId())
+                .id(request.id())
                 .username(request.username())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))

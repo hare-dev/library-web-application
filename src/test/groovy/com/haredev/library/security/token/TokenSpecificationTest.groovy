@@ -1,25 +1,21 @@
 package com.haredev.library.security.token
 
-import com.haredev.library.TimeManager
+import com.haredev.library.TestTimeProvider
 import com.haredev.library.security.authentication.token.TokenFacade
 import spock.lang.Specification
 
-import java.time.Duration
-import java.time.temporal.ChronoUnit
-
 import static com.haredev.library.security.token.samples.AuthenticationTokenPropertiesSample.secretKey
 import static com.haredev.library.security.token.samples.AuthenticationTokenPropertiesSample.tokenExpiration
-import static pl.amazingcode.timeflow.TestTime.testInstance
 
-class TokenSpecificationTest extends Specification {
+class TokenSpecificationTest extends Specification implements TestTimeProvider {
     final def tokenFacade = new TokenFacade(secretKey, tokenExpiration)
 
     def setup() {
-        TimeManager.setClock()
+        setClock()
     }
 
     def cleanup() {
-        TimeManager.resetClock()
+        resetClock()
     }
 
     def "Should get username"() {
@@ -52,7 +48,7 @@ class TokenSpecificationTest extends Specification {
         def expect_result = false
 
         when: "Validate token"
-        jumpInMinutesForward(15)
+        jumpInDaysForward(15)
         def result = tokenFacade.isTokenValid(token, getUsername())
 
         then: "Token is expired"
@@ -70,10 +66,5 @@ class TokenSpecificationTest extends Specification {
     private static String getUsername() {
         final String username = "test-user"
         return username
-    }
-
-    private static void jumpInMinutesForward(final Integer minutes) {
-        final Duration duration = Duration.of(minutes, ChronoUnit.MINUTES)
-        testInstance().fastForward(duration)
     }
 }

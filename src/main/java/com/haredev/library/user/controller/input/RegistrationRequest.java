@@ -8,7 +8,7 @@ import lombok.Builder;
 
 @Builder
 public record RegistrationRequest(
-    Long userId,
+    Long id,
     @NotNull
     @NotBlank(message = "Username cannot be empty")
     String username,

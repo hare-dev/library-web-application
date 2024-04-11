@@ -2,15 +2,23 @@ package com.haredev.library.security.authentication.samples
 
 import com.haredev.library.security.authentication.controller.input.AuthenticationRequest
 import com.haredev.library.user.controller.input.RegistrationRequest
-import com.haredev.library.user.samples.SampleUsers
 import groovy.transform.CompileStatic
 
 @CompileStatic
 trait AuthenticationCredentialsSample {
-    RegistrationRequest user = SampleUsers.createUserSample(0L, "user", "a12345678Z!@", "user_example@gmail.com")
+    final RegistrationRequest user = createUserSample(0L, "user", "a12345678Z!@", "user_example@gmail.com")
     AuthenticationRequest authentication_correct_credentials = createCorrectCredentialsSample(user.username(), user.password())
     AuthenticationRequest authentication_with_incorrect_password = createIncorrectPasswordSample(user.username())
     AuthenticationRequest authentication_with_incorrect_username = createIncorrectUsernameSample(user.password())
+
+    private RegistrationRequest createUserSample(final Long id, final String username, final String password, final String email) {
+        return RegistrationRequest.builder()
+                .id(id)
+                .username(username)
+                .password(password)
+                .email(email)
+                .build();
+    }
 
     private AuthenticationRequest createCorrectCredentialsSample(final String username, final String password) {
         return AuthenticationRequest.builder()

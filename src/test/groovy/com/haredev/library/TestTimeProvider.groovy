@@ -3,14 +3,15 @@ package com.haredev.library
 import groovy.transform.CompileStatic
 
 import java.time.Clock
+import java.time.Duration
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 
 import static pl.amazingcode.timeflow.TestTime.testInstance
 import static pl.amazingcode.timeflow.Time.instance
 
 @CompileStatic
-class TimeManager {
-
+trait TestTimeProvider {
     static void resetClock() {
         testInstance().resetClock();
     }
@@ -18,5 +19,10 @@ class TimeManager {
     static Clock setClock() {
         final ZoneId ZONE_ID = TimeZone.getTimeZone("Europe/Warsaw").toZoneId();
         return Clock.fixed(instance().now(), ZONE_ID);
+    }
+
+    static final void jumpInDaysForward(final Integer days) {
+        final Duration duration = Duration.of(days, ChronoUnit.DAYS)
+        testInstance().fastForward(duration)
     }
 }

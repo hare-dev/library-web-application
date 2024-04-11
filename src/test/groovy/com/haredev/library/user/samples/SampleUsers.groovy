@@ -4,13 +4,14 @@ import com.haredev.library.user.controller.input.RegistrationRequest
 import groovy.transform.CompileStatic
 
 @CompileStatic
-final class SampleUsers {
-    static final Long notExistUserWithThisId = 5000L;
-    static final String notExistToken = 12345;
+trait SampleUsers {
+    final RegistrationRequest user = createUserSample(0L, "user", "a12345678Z!@", "user_example@gmail.com")
+    final Long user_with_this_id_not_exist = 5000L
+    final String verification_token_with_this_id_not_exist = 12345
 
-    static RegistrationRequest createUserSample(final Long userId, final String username, final String password, final String email) {
+    private RegistrationRequest createUserSample(final Long id, final String username, final String password, final String email) {
         return RegistrationRequest.builder()
-                .userId(userId)
+                .id(id)
                 .username(username)
                 .password(password)
                 .email(email)

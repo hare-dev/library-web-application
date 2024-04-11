@@ -1,204 +1,192 @@
 package com.haredev.library.user
 
-import com.haredev.library.TimeManager
+
+import com.haredev.library.TestTimeProvider
 import com.haredev.library.user.domain.VerificationMailSenderClient
 import com.haredev.library.user.domain.api.AccountStatus
 import com.haredev.library.user.domain.api.Authority
-import pl.amazingcode.timeflow.TestTime
+import com.haredev.library.user.samples.SampleUsers
 import spock.lang.Specification
 
-import java.time.Duration
-import java.time.temporal.ChronoUnit
-
 import static com.haredev.library.user.domain.api.error.UserError.*
-import static com.haredev.library.user.samples.SampleUsers.*
 
-class UserApplicationSpecificationTest extends Specification {
+class UserApplicationSpecificationTest extends Specification implements SampleUsers, TestTimeProvider {
     final def verificationMailSenderClient = Mock(VerificationMailSenderClient);
     final def userFacade = UserApplicationTestConfiguration.getConfiguration(verificationMailSenderClient)
+    final def PAGE = 20
 
     def setup() {
-        TimeManager.setClock()
+        setClock()
     }
 
     def cleanup() {
-        TimeManager.resetClock()
+        resetClock()
     }
 
     def "Should be empty"() {
         expect:
-        userFacade.fetchAllUsers(page).isEmpty()
+        userFacade.fetchAllUsers(PAGE).isEmpty()
     }
 
     def "Should register one user"() {
-        given: "Add user to system"
-        def USERNAME = userFacade.registerAsUser(USER).get().username()
+        given: "Register one user"
+        def username = userFacade.registerAsUser(user).get().username()
 
         when: "Find user by username"
-        def EXPECTED_USERNAME = userFacade.findByUsername(USER.username()).get().username()
+        def expected_username = userFacade.findByUsername(username).get().username()
 
         then: "Compare registered user with founded user"
-        EXPECTED_USERNAME == USERNAME
+        expected_username == username
     }
 
     def "Should not register user because username is duplicated"() {
-        when: "Add users with the same username to system"
-        userFacade.registerAsUser(USER)
-        def RESPONSE_ERROR = userFacade.registerAsUser(USER).getLeft()
+        when: "Register users with the same username"
+        userFacade.registerAsUser(user)
+        def error = userFacade.registerAsUser(user).getLeft()
 
-        then: "Return error because username is duplicated"
-        RESPONSE_ERROR == DUPLICATED_USERNAME
+        then: "Return username is duplicated"
+        error == DUPLICATED_USERNAME
     }
 
     def "Should find user by id"() {
-        given: "Add user to system"
-        def USER = userFacade.registerAsUser(USER).get()
+        given: "Register one user"
+        def user = userFacade.registerAsUser(user).get()
+        def username = user.username()
 
         when: "Find user by id"
-        def EXPECTED_USERNAME = userFacade.findUserById(USER.id()).get().username()
+        def expected_username = userFacade.findUserById(user.id()).get().username()
 
         then: "Compare added user with founded user"
-        EXPECTED_USERNAME == USER.username()
+        expected_username == username
     }
 
     def "Should not find user by id"() {
-        when: "Try to find user with not exist id"
-        def ERROR_RESPONSE = userFacade.findUserById(notExistUserWithThisId).getLeft()
+        when: "Find not exist user by id"
+        def error = userFacade.findUserById(user_with_this_id_not_exist).getLeft()
 
-        then: "Return error with not found user"
-        ERROR_RESPONSE == USER_NOT_FOUND
+        then: "Return user not found"
+        error == USER_NOT_FOUND
     }
 
     def "Should return list with users"() {
-        given: "Add two users"
-        userFacade.registerAsUser(USER)
+        given: "Register two users"
+        userFacade.registerAsUser(user)
 
-        when: "Return list with users"
-        def EXPECTED_SIZE = userFacade.fetchAllUsers(page).size()
+        when: "Return users collection"
+        def expected_size = userFacade.fetchAllUsers(PAGE).size()
 
-        then: "Compare expected size with list size"
-        EXPECTED_SIZE == 1
+        then: "System has one user"
+        expected_size == 1
     }
 
     def "Should remove one user"() {
-        given: "Add one user"
-        userFacade.registerAsUser(USER)
+        given: "Register one user"
+        userFacade.registerAsUser(user)
 
         when: "Remove one user"
-        userFacade.removeUserById(USER.userId())
+        userFacade.removeUserById(user.id())
 
-        then: "No user in system"
-        userFacade.fetchAllUsers(page).isEmpty()
+        then: "System has no users"
+        userFacade.fetchAllUsers(PAGE).isEmpty()
     }
 
     def "Should promote user to be admin"() {
-        given: "Add one user"
-        userFacade.registerAsUser(USER)
+        given: "Register one user"
+        userFacade.registerAsUser(user)
 
         when: "Promote user to be admin"
-        def EXPECTED_AUTHORITIES = userFacade.promoteToAdmin(USER.userId()).get().authorities()
+        def expected_authorities = userFacade.promoteToAdmin(user.id()).get().authorities()
 
-        then: "User has two authorities"
-        EXPECTED_AUTHORITIES == Set.of(Authority.ADMIN, Authority.USER)
+        then: "User has admin and user authorities"
+        expected_authorities == Set.of(Authority.ADMIN, Authority.USER)
     }
 
     def "Should not promote user to be admin with admin authority"() {
-        given: "Add one user"
-        def userId = userFacade.registerAsUser(USER).get().id()
+        given: "Register one user"
+        def user = userFacade.registerAsUser(user).get()
 
         when: "Promote user with admin authority to be admin"
-        userFacade.promoteToAdmin(userId)
-        def RESPONSE_ERROR = userFacade.promoteToAdmin(userId).getLeft()
+        userFacade.promoteToAdmin(user.id())
+        def error = userFacade.promoteToAdmin(user.id()).getLeft()
 
-        then: "User is already admin response error"
-        RESPONSE_ERROR == USER_IS_ALREADY_ADMIN
+        then: "Return user is already admin"
+        error == USER_IS_ALREADY_ADMIN
     }
 
-    def "Should not promote for not exist user to be admin"() {
-        when: "Try to promote not exist user"
-        def RESPONSE_ERROR = userFacade.promoteToAdmin(notExistUserWithThisId).getLeft()
+    def "Should not promote not exist user to be admin"() {
+        when: "Promote not exist user to be admin"
+        def error = userFacade.promoteToAdmin(user_with_this_id_not_exist).getLeft()
 
         then: "Return user not found"
-        RESPONSE_ERROR == USER_NOT_FOUND
+        error == USER_NOT_FOUND
     }
 
-    def "Should change username for user or admin"() {
-        given: "Add one user"
-        userFacade.registerAsUser(USER)
-        final String NEW_USERNAME = "user_updated"
+    def "Should change username"() {
+        given: "Register one user"
+        userFacade.registerAsUser(user)
+        def new_username = "user_updated"
 
         when: "Change username for user"
-        def EXPECTED_USERNAME = userFacade.changeUsername(USER.userId(), NEW_USERNAME).get().username()
+        userFacade.changeUsername(user.id(), new_username)
+        def expected_username = userFacade.findUserById(user.id()).get().username()
 
-        then: "Compare old username with new username"
-        EXPECTED_USERNAME == NEW_USERNAME
+        then: "Compare username before and after update"
+        expected_username == new_username
     }
 
-    def "Should not change username for not exist user or admin"() {
-        when: "Try change username for not exists user or admin"
-        final String newUserUsername = "user_updated"
-        def RESPONSE_ERROR = userFacade.changeUsername(notExistUserWithThisId, newUserUsername).getLeft()
+    def "Should not change username for not exist user"() {
+        when: "Change username for not exist user"
+        def new_username = "user_updated"
+        def error = userFacade.changeUsername(user_with_this_id_not_exist, new_username).getLeft()
 
         then: "Return user not found"
-        RESPONSE_ERROR == USER_NOT_FOUND
+        error == USER_NOT_FOUND
     }
 
     def "Should register one user and confirm registration"() {
-        given: "Register user"
-        def REGISTRATION_RESPONSE = userFacade.registerAsUser(USER).get()
-        def VERIFICATION_TOKEN = REGISTRATION_RESPONSE.verificationToken()
-        def USER_ID = REGISTRATION_RESPONSE.id()
+        given: "Register one user and create verification token"
+        def registration_response = userFacade.registerAsUser(user).get()
+        def verification_token = registration_response.verificationToken()
 
-        when: "Create verification token for user and confirm registration"
-        def EXPECTED_ACTIVATION_STATUS = userFacade.confirmRegistration(VERIFICATION_TOKEN).get().accountStatus()
-        def USER_ACTIVATION_STATUS = AccountStatus.ACTIVATED
+        when: "Confirm user registration"
+        def expected_activation_status = userFacade.confirmRegistration(verification_token).get().accountStatus()
+        def user_activation_status_after_correct_activation = AccountStatus.ACTIVATED
 
-        then: "User is activated"
-        EXPECTED_ACTIVATION_STATUS == USER_ACTIVATION_STATUS
+        then: "User account is activated"
+        expected_activation_status == user_activation_status_after_correct_activation
     }
 
     def "Should not confirm registration with not exist token"() {
-        given: "Register user"
-        userFacade.registerAsUser(USER)
-
-        when: "Create verification token and try to confirm registration with not exist token"
-        def RESPONSE_ERROR = userFacade.confirmRegistration(notExistToken).getLeft()
+        when: "Confirm registration with not exist token"
+        def error = userFacade.confirmRegistration(verification_token_with_this_id_not_exist).getLeft()
 
         then: "Return verification token not found"
-        RESPONSE_ERROR == VERIFICATION_TOKEN_NOT_FOUND
+        error == VERIFICATION_TOKEN_NOT_FOUND
     }
 
-    def "Should not confirm registration for user which is already activated"() {
-        given: "Register user"
-        def REGISTRATION_RESPONSE = userFacade.registerAsUser(USER).get()
-        def VERIFICATION_TOKEN = REGISTRATION_RESPONSE.verificationToken()
+    def "Should not confirm registration for activated user account"() {
+        given: "Register one user and create verification token"
+        def registration_response = userFacade.registerAsUser(user).get()
+        def verification_token = registration_response.verificationToken()
 
-        when: "Create verification token which is already confirmed"
-        userFacade.confirmRegistration(VERIFICATION_TOKEN)
-        def RESPONSE_ERROR = userFacade.confirmRegistration(VERIFICATION_TOKEN).getLeft()
+        when: "Confirm user registration"
+        userFacade.confirmRegistration(verification_token)
+        def error = userFacade.confirmRegistration(verification_token).getLeft()
 
-        then: "Return verification token not found"
-        RESPONSE_ERROR == VERIFICATION_TOKEN_IS_ALREADY_CONFIRMED
+        then: "Return verification token is already confirmed"
+        error == VERIFICATION_TOKEN_IS_ALREADY_CONFIRMED
     }
 
-    def "Should not confirm user registration with expired verification token"() {
-        given: "Register user"
-        def REGISTRATION_RESPONSE = userFacade.registerAsUser(USER).get()
-        def VERIFICATION_TOKEN = REGISTRATION_RESPONSE.verificationToken()
+    def "Should not confirm user registration for expired verification token"() {
+        given: "Register one user and create verification token"
+        def registration_response = userFacade.registerAsUser(user).get()
+        def verification_token = registration_response.verificationToken()
 
-        when: "Create verification token and try to confirm registration with expired token"
-        jumpInDaysForward(5)
-        def RESPONSE_ERROR = userFacade.confirmRegistration(VERIFICATION_TOKEN).getLeft()
+        when: "Confirm registration with expired token"
+        jumpInDaysForward(15)
+        def error = userFacade.confirmRegistration(verification_token).getLeft()
 
         then: "Return verification token is expired"
-        RESPONSE_ERROR == VERIFICATION_TOKEN_IS_EXPIRED
-    }
-
-    static final int page = 20
-    def final USER = createUserSample(0L, "user", "a12345678Z!@", "user_example@gmail.com")
-
-    private static final void jumpInDaysForward(final Integer days) {
-        final Duration duration = Duration.of(days, ChronoUnit.DAYS)
-        TestTime.testInstance().fastForward(duration)
+        error == VERIFICATION_TOKEN_IS_EXPIRED
     }
 }
