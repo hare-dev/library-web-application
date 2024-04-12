@@ -9,15 +9,11 @@ import org.springframework.scheduling.annotation.Async;
 
 @RequiredArgsConstructor
 final class VerificationMailSender implements VerificationMailSenderClient {
-    private final VerificationMailCreator verificationMailCreator;
     private final JavaMailSender mailSender;
 
     @SneakyThrows
     @Async
-    public void send(final String name,
-                     final String receiver,
-                     final String token) {
-        SimpleMailMessage message = verificationMailCreator.createVerificationMail(name, receiver, token);
-        mailSender.send(message);
+    public void send(SimpleMailMessage verificationMail) {
+        mailSender.send(verificationMail);
     }
 }

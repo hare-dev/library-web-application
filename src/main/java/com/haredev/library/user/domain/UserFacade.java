@@ -27,7 +27,8 @@ public class UserFacade {
     }
 
     public Either<UserError, UserPublicDetailsDto> confirmRegistration(final String token) {
-        return verificationRegistration.confirmVerificationToken(token);
+        return verificationRegistration.confirmVerificationToken(token)
+                .map(userMapper::toUserDetailsDto);
     }
 
     public Either<UserError, UserLoginDto> findByUsername(final String username) {

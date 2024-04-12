@@ -12,7 +12,7 @@ import java.util.Properties;
 
 @Configuration
 @RequiredArgsConstructor
-class GmailSenderConfiguration {
+class MailSenderConfiguration {
     @Value("${spring.mail.username}")
     private final String emailSender;
     @Value("${spring.mail.host}")
@@ -24,9 +24,7 @@ class GmailSenderConfiguration {
 
     @Bean
     VerificationMailSenderClient verificationMailSenderClient() {
-        final VerificationMailCreator verificationMailCreator =
-                new VerificationMailCreator();
-        return new VerificationMailSender(verificationMailCreator, javaMailSender());
+        return new VerificationMailSender(javaMailSender());
     }
 
     @Bean

@@ -23,11 +23,12 @@ class UserConfiguration {
         final UserMapper userMapper = new UserMapper();
         final UserPromoter userPromoter = new UserPromoter(userManager, userMapper);
         final UserUpdater userUpdater = new UserUpdater(userManager, userMapper);
+        final VerificationMailCreator verificationMailCreator = new VerificationMailCreator();
         final VerificationTokenFactory verificationTokenFactory = new VerificationTokenFactory();
         final VerificationTokenValidator verificationTokenValidator = new VerificationTokenValidator();
         final VerificationRegistration verificationRegistration = new VerificationRegistration(
-                userMapper,
                 userManager,
+                verificationMailCreator,
                 verificationTokenFactory,
                 verificationTokenValidator,
                 verificationTokenRepository);

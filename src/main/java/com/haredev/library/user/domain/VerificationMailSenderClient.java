@@ -1,5 +1,7 @@
 package com.haredev.library.user.domain;
 
+import org.springframework.mail.SimpleMailMessage;
+
 public interface VerificationMailSenderClient {
-    void send(final String name, final String receiver, final String token);
+    void send(final SimpleMailMessage verificationMailMessage);
 }

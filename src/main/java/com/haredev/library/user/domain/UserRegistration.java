@@ -20,9 +20,10 @@ class UserRegistration {
 
     public Either<UserError, RegistrationResponse> registerUser(final RegistrationRequest userRequest) {
         if (validateUsernameDuplication(userRequest.username())) {
-            var user = createUser(userRequest);
-            var token = verificationRegistration.createVerificationToken(user).getToken();
-            VerificationMailSenderClient.send(user.getUsername(), user.getEmail(), token);
+            final var user = createUser(userRequest);
+            final var token = verificationRegistration.createVerificationToken(user).getToken();
+            final var verificationMail = verificationRegistration.createVerificationMail(user, token);
+            VerificationMailSenderClient.send(verificationMail);
             return right(userMapper.toRegistrationResponse(user, token));
         }
         return left(DUPLICATED_USERNAME);

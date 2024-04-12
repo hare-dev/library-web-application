@@ -3,7 +3,9 @@ package com.haredev.library.user.domain;
 import com.haredev.library.user.controller.output.RegistrationResponse;
 import com.haredev.library.user.domain.dto.UserLoginDto;
 import com.haredev.library.user.domain.dto.UserPublicDetailsDto;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 class UserMapper {
     RegistrationResponse toRegistrationResponse(final UserApplication userApplication,
                                                 final String verificationToken) {

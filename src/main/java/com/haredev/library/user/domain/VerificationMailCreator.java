@@ -1,10 +1,10 @@
-package com.haredev.library.user.infrastructure.mail;
+package com.haredev.library.user.domain;
 
 import lombok.NoArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 
 @NoArgsConstructor
-final class VerificationMailCreator {
+class VerificationMailCreator {
     public SimpleMailMessage createVerificationMail(final String name,
                                                     final String receiver,
                                                     final String token) {
