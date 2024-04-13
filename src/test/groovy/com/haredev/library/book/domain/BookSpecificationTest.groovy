@@ -1,7 +1,8 @@
-package com.haredev.library.book
+package com.haredev.library.book.domain
 
-import com.haredev.library.book.samples.SampleBooks
-import com.haredev.library.book.samples.SampleComments
+import com.haredev.library.book.BookTestConfiguration
+import com.haredev.library.book.domain.samples.SampleBooks
+import com.haredev.library.book.domain.samples.SampleComments
 import spock.lang.Specification
 
 import static com.haredev.library.book.domain.api.error.BookError.*

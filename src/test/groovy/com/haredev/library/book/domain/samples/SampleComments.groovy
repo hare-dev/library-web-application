@@ -1,4 +1,4 @@
-package com.haredev.library.book.samples
+package com.haredev.library.book.domain.samples
 
 import com.haredev.library.book.domain.dto.CommentCreateDto
 import com.haredev.library.book.domain.dto.update.CommentUpdateDto

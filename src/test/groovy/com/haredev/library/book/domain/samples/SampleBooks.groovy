@@ -1,4 +1,4 @@
-package com.haredev.library.book.samples
+package com.haredev.library.book.domain.samples
 
 import com.haredev.library.book.domain.api.BookCover
 import com.haredev.library.book.domain.dto.BookCreateDto
