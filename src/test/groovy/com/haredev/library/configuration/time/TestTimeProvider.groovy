@@ -1,4 +1,4 @@
-package com.haredev.library
+package com.haredev.library.configuration.time
 
 import groovy.transform.CompileStatic
 

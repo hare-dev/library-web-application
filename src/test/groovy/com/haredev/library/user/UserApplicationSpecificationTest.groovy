@@ -1,7 +1,7 @@
 package com.haredev.library.user
 
 
-import com.haredev.library.TestTimeProvider
+import com.haredev.library.configuration.time.TestTimeProvider
 import com.haredev.library.user.domain.VerificationMailSenderClient
 import com.haredev.library.user.domain.api.AccountStatus
 import com.haredev.library.user.domain.api.Authority

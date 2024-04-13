@@ -1,6 +1,6 @@
 package com.haredev.library.security.token
 
-import com.haredev.library.TestTimeProvider
+import com.haredev.library.configuration.time.TestTimeProvider
 import com.haredev.library.security.authentication.token.TokenFacade
 import spock.lang.Specification
 
